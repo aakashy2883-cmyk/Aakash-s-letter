@@ -672,7 +672,7 @@ export default function App() {
     const TRAIN_CONTENT_WIDTH = LOCO_WIDTH + (MilestoneData.length * (CAR_WIDTH + SPACING)) + (40 + 20); // Loco + Milestones + End Car
 
     // Text to be revealed
-    const journeyText = "Kanna! Our journey has many sweet moments, and yes, some bitter ones, but that’s how life goes. With you, this journey feels incredibly special, and I want to create so many more moments together. I can't wait to start our life together.";
+    const journeyText = ``;
 
     return (
         <div className="h-screen w-full bg-gradient-to-br from-indigo-700 to-gray-900 flex flex-col items-center p-4 relative animate-scene-entry">
@@ -692,7 +692,7 @@ export default function App() {
             {/* TEXT TO BE REVEALED (Center screen, Z-index 10) */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10 w-3/4 max-w-md">
                 {/* Text Visibility controlled by the train's wipe animation */}
-                <h3 className="text-xl font-bold text-pink-300 whitespace-nowrap overflow-hidden transition-all duration-300">
+                <h3 className="text-xl font-bold text-pink-300 whitespace-pre-line overflow-hidden transition-all duration-300">
                     {journeyText}
                 </h3>
             </div>
