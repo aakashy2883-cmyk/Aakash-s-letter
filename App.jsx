@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Heart, Stars, Music, Camera, ArrowLeft, Gift, Wind, Mail, Clock, MapPin, Home } from 'lucide-react';
+import { Heart, Stars, Music, Camera, ArrowLeft, Gift, Wind, Mail, Clock, MapPin, Home, Zap, Train } from 'lucide-react';
 
 /**
  * UTILITY COMPONENTS & ICONS
  * Custom SVGs to match the "Cartoon/Chibi" aesthetic from the screenshots.
  */
 
-// --- New Components for Animation ---
+// --- Utility Components Definitions (Relocated to top for reliability) ---
 
 // FALLING MAIL component
 const FallingMail = () => (
@@ -81,9 +81,29 @@ const CutePenguin = ({ onClick, isHugging }) => (
   </svg>
 );
 
+// Love Tree SVG for the Path Scene
+const LoveTree = ({ isLeft }) => (
+  <svg viewBox="0 0 100 100" className={`absolute w-12 h-12 top-1/2 transform -translate-y-1/2 hidden md:block ${isLeft ? 'right-full translate-x-4' : 'left-full -translate-x-4'}`}>
+    {/* Trunk */}
+    <rect x="45" y="60" width="10" height="40" fill="#8B4513" />
+    {/* Foliage (Heart Shape) */}
+    <path d="M 10 50 Q 50 0 90 50 Q 60 70 50 60 Q 40 70 10 50 Z" fill="#4CAF50" />
+    {/* Hearts (Love Symbols) */}
+    <Heart x="40" y="25" width="10" height="10" fill="#F472B6" className="text-white" />
+    <Heart x="65" y="35" width="8" height="8" fill="#F472B6" className="text-white" />
+    <Heart x="20" y="40" width="8" height="8" fill="#F472B6" className="text-white" />
+  </svg>
+);
 
-// --- Existing Character and Utility Components (kept minimal) ---
+// PineTree SVG (Used in early scene backgrounds)
+const PineTree = ({ className }) => (
+  <svg viewBox="0 0 100 100" className={className}>
+    <path d="M 50 10 L 10 90 H 90 Z" fill="#e2e8f0" stroke="#475569" strokeWidth="2" />
+    <rect x="45" y="90" width="10" height="10" fill="#475569" />
+  </svg>
+);
 
+// CuteBoy definition remains but is not used in EnvelopeAnimationScene
 const CuteBoy = () => (
   <svg viewBox="0 0 100 100" className="w-32 h-32 absolute bottom-0 left-4 animate-bounce-slow">
     <circle cx="50" cy="50" r="40" fill="#fecaca" /> 
@@ -99,13 +119,6 @@ const CuteBoy = () => (
   </svg>
 );
 
-const PineTree = ({ className }) => (
-  <svg viewBox="0 0 100 100" className={className}>
-    <path d="M 50 10 L 10 90 H 90 Z" fill="#e2e8f0" stroke="#475569" strokeWidth="2" />
-    <rect x="45" y="90" width="10" height="10" fill="#475569" />
-  </svg>
-);
-
 const CatPeeking = () => (
   <svg viewBox="0 0 100 100" className="w-16 h-16 absolute bottom-0 right-12 translate-x-1/2">
     <path d="M 20 100 L 20 50 Q 50 30 80 50 L 80 100 Z" fill="#fff" stroke="#000" strokeWidth="2"/>
@@ -117,6 +130,7 @@ const CatPeeking = () => (
   </svg>
 );
 
+// --- UPDATED Confetti Component ---
 const LoveConfetti = ({ type = 'hearts' }) => {
   const particles = [];
   const count = type === 'hearts' ? 30 : 50;
@@ -210,17 +224,119 @@ const TimelineMarker = ({ icon: Icon, title, message }) => {
     );
 };
 
+// Train Car Component (UPDATED TO USE COLOR PROP)
+const TrainCar = ({ date, special, index, color }) => (
+    <div 
+        style={{ backgroundColor: color }}
+        className={`relative w-28 h-20 rounded-lg shadow-lg border-b-4 ${special ? 'border-red-500' : 'border-gray-400'} flex flex-col items-center justify-center p-1 shrink-0`}
+    >
+        {/* Connection Bar is handled by the parent flex gap */}
+        
+        {/* Date Display */}
+        <p className={`text-sm font-bold ${special ? 'text-white' : 'text-gray-800'} transition-all duration-500`}>
+            {date}
+        </p>
+        {special && (
+             <Heart className='w-4 h-4 fill-white text-white animate-pulse' />
+        )}
+        {/* Wheels */}
+        <div className="absolute bottom-0 flex justify-around w-full px-2 -translate-y-2"> {/* Adjusted vertical positioning */}
+            <div className="w-4 h-4 bg-gray-800 rounded-full border-2 border-gray-600 animate-wheel"></div>
+            <div className="w-4 h-4 bg-gray-800 rounded-full border-2 border-gray-600 animate-wheel delay-300"></div>
+        </div>
+    </div>
+);
+
+// Locomotive Component
+const Locomotive = ({ isMoving, onStart }) => (
+    <div 
+        className={`relative w-36 h-28 bg-red-600 rounded-lg shadow-xl border-b-4 border-red-800 shrink-0 ${!isMoving ? 'cursor-pointer hover:bg-red-700' : ''}`}
+        onClick={!isMoving ? onStart : undefined}
+    >
+        {/* Cabin */}
+        <div className="absolute right-0 top-0 w-1/2 h-1/2 bg-red-700 rounded-tr-lg">
+            {/* Boy in the cabin */}
+            <div className="absolute w-full h-full bg-blue-300/50 rounded-tr-lg border-2 border-red-900 overflow-hidden flex justify-center items-end">
+                <div className="w-8 h-8 bg-pink-300 rounded-full border border-gray-900 mb-1">
+                    {/* Face */}
+                    <div className="w-full h-full flex items-center justify-center">
+                        <span className="text-lg">😊</span>
+                    </div>
+                </div>
+                {!isMoving && (
+                     <div className="absolute inset-0 bg-black/30 flex items-center justify-center text-white font-bold text-xs">
+                        Click to Start!
+                     </div>
+                )}
+            </div>
+        </div>
+        {/* Boiler/Hood */}
+        <div className="absolute left-0 top-1/4 w-2/3 h-1/2 bg-red-800 rounded-l-md"></div>
+        {/* Headlight */}
+        <div className="absolute left-1 top-1/2 w-4 h-3 bg-yellow-300 rounded-r-sm"></div>
+        {/* Smoke Stack */}
+        <div className="absolute left-1/4 -top-2 w-5 h-6 bg-gray-700 rounded-t-lg"></div>
+        
+        {/* Animated Smoke */}
+        {isMoving && <div className="absolute left-1/4 -top-8 w-6 h-6 bg-white/60 rounded-full animate-smoke"></div>}
+
+        {/* Wheels */}
+        <div className="absolute bottom-0 flex justify-around w-full px-2 -translate-y-2">
+            <div className="w-5 h-5 bg-gray-800 rounded-full border-2 border-gray-600 animate-wheel"></div>
+            <div className="w-5 h-5 bg-gray-800 rounded-full border-2 border-gray-600 animate-wheel delay-100"></div>
+        </div>
+    </div>
+);
+
+
+// --- New Path Component Data (UPDATED COLORS) ---
+const MilestoneData = [
+  { date: "Aug 29", special: true, color: "#FFD700" }, // Gold
+  { date: "Aug 31", special: false, color: "#000000" }, // Black
+  { date: "Sept 5", special: false, color: "#A0A0A0" }, // Grey
+  { date: "Sept 6", special: false, color: "#404040" }, // Dark Grey
+  { date: "Sept 7", special: false, color: "#008000" }, // Green
+  { date: "Sept 8", special: true, color: "#20B2AA" }, // Sea Green
+  { date: "Sept 15", special: false, color: "#A0A0A0" }, // Grey
+  { date: "Sept 16", special: false, color: "#A52A2A" }, // Brown
+  { date: "Sept 26", special: false, color: "#EE82EE" }, // Violet
+  { date: "Sept 27", special: false, color: "#FFFF00" }, // Yellow
+  { date: "Sept 28", special: true, color: "#008000" }, // Green
+  { date: "Oct 6", special: true, color: "#800080" }, // Purple
+  { date: "Oct 18", special: false, color: "#0000FF" }, // Blue
+  { date: "Nov 1", special: false, color: "#FF0000" }, // Red
+  { date: "Nov 2", special: false, color: "#00008B" }, // Dark Blue
+  { date: "Nov 3", special: false, color: "#FFD700" }, // Dark Yellow (Using Gold for clarity)
+  { date: "Nov 8", special: false, color: "#800000" }, // Maroon red
+  { date: "Nov 9", special: false, color: "#FF0000" }, // Red
+  { date: "Nov 15", special: true, color: "#008000" }, // Green
+  { date: "Nov 16", special: false, color: "#20B2AA" }, // Sea Green
+  { date: "Nov 21", special: false, color: "#A0A0A0" }, // Grey
+  { date: "Nov 22", special: false, color: "#A52A2A" }, // Brown
+  { date: "Nov 23", special: false, color: "#FF0000" }, // Red
+  { date: "Dec 1", special: false, color: "#A0A0A0" }, // Grey
+];
+
+
 /**
  * MAIN APP COMPONENT
  */
 export default function App() {
   const [step, setStep] = useState('parachute');
-  const [openedGifts, setOpenedGifts] = useState({ bouquet: false, cake: false, memories: false, timeline: false });
+  const [openedGifts, setOpenedGifts] = useState({ bouquet: false, memories: false, promise: false, timeline: false, path: false }); // 5 gifts
   const [candlesBlown, setCandlesBlown] = useState(false);
   const [showConfetti, setShowConfetti] = useState(true); 
 
   // Local state for the Penguin interaction
   const [isPandaHugging, setIsPandaHugging] = useState(false);
+
+  // --- TRAIN STATE ---
+  const [isTrainMoving, setIsTrainMoving] = useState(false); 
+  
+  const startTrainJourney = () => {
+      setIsTrainMoving(true);
+  };
+  // --------------------
 
   // Constants
   const bouquetReasons = [
@@ -231,8 +347,8 @@ export default function App() {
     "For existing exactly."
   ];
 
-  // Check if all gifts are opened to unlock "End"
-  const allOpened = openedGifts.bouquet && openedGifts.cake && openedGifts.memories && openedGifts.timeline;
+  // Check if all gifts are opened to unlock "End" (Now requires 5 gifts)
+  const allOpened = openedGifts.bouquet && openedGifts.memories && openedGifts.promise && openedGifts.timeline && openedGifts.path;
 
   const handleNextStep = (next) => {
     setStep(next);
@@ -350,11 +466,11 @@ export default function App() {
     </div>
   );
 
-  // 5. Gifts Selection (4 Gifts)
+  // 5. Gifts Selection (5 Gifts)
   const GiftSelection = () => (
     <div className="h-screen w-full bg-rose-100 flex flex-col items-center justify-center p-4 animate-scene-entry">
       <h2 className="text-3xl text-rose-800 font-bold mb-12 font-handwriting">Pick a gift!</h2>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 items-center justify-center">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-8 items-center justify-center">
         {/* Gift 1: Bouquet */}
         <button 
           onClick={() => { handleNextStep('bouquet'); markGiftOpened('bouquet'); }}
@@ -373,18 +489,26 @@ export default function App() {
 
         {/* Gift 3: Promise/Declaration */}
         <button 
-          onClick={() => { handleNextStep('cake'); markGiftOpened('cake'); setCandlesBlown(false); }}
-          className={`transform transition-all duration-300 hover:-translate-y-4 delay-200 ${openedGifts.cake ? 'opacity-50' : 'animate-bounce-custom'}`}
+          onClick={() => { handleNextStep('promise'); markGiftOpened('promise'); setCandlesBlown(false); }}
+          className={`transform transition-all duration-300 hover:-translate-y-4 delay-200 ${openedGifts.promise ? 'opacity-50' : 'animate-bounce-custom'}`}
         >
            <GiftBox color="bg-rose-700" ribbon="bg-rose-500" />
         </button>
         
-        {/* Gift 4: Our Timeline */}
+        {/* Gift 4: Our Future Timeline */}
         <button 
           onClick={() => { handleNextStep('timeline'); markGiftOpened('timeline'); }}
           className={`transform transition-all duration-300 hover:-translate-y-4 delay-300 ${openedGifts.timeline ? 'opacity-50' : 'animate-bounce-custom'}`}
         >
            <GiftBox color="bg-purple-600" ribbon="bg-purple-400" />
+        </button>
+
+         {/* Gift 5: Our Relationship Path */}
+        <button 
+          onClick={() => { handleNextStep('path'); markGiftOpened('path'); }}
+          className={`transform transition-all duration-300 hover:-translate-y-4 delay-400 ${openedGifts.path ? 'opacity-50' : 'animate-bounce-custom'}`}
+        >
+           <GiftBox color="bg-yellow-600" ribbon="bg-yellow-400" />
         </button>
       </div>
 
@@ -430,7 +554,7 @@ export default function App() {
     </div>
   );
 
-  // 7. Memories Scene
+  // 7. Memories Scene (UPDATED CONTENT)
   const MemoriesScene = () => (
     <div className="h-screen w-full bg-gradient-to-b from-red-800 to-pink-900 p-4 flex flex-col items-center justify-center relative overflow-hidden animate-scene-entry">
       <h2 className="4xl text-pink-200 font-handwriting mb-8 rotate-[-2deg]">Our Memories</h2>
@@ -454,7 +578,7 @@ export default function App() {
            </div>
         </div>
         <div className="w-full md:w-1/2 text-white p-4 md:p-8 text-right mt-12 md:mt-0">
-           <p className="italic text-lg">"As we are in a long distance relation now,our photographs are the memories which I look for every time I miss you!!! I still hear our conversations when I see our pictures!!!! The day we met first is nothing short of a festival... You didn't even know it, but you made that day lighter. You're the reason for my smile.I LOVE YOU SO MUCH"</p>
+           <p className="italic text-lg">"As we are in a long-distance relationship now, our photographs are the memories which I look for every time I miss you. I still hear our conversations when I see our pictures! The day we met first is nothing short of a festival... You didn't even know it, but you made that day lighter. You're the reason for my smile."</p>
            <button onClick={() => handleNextStep('gifts')} className="mt-8 bg-white/20 backdrop-blur-sm border border-white/40 text-white px-6 py-2 rounded-full hover:bg-white/30 transition">
              Go back to Gift Room
            </button>
@@ -467,7 +591,7 @@ export default function App() {
   );
 
   // 8. Promise Scene (Third Gift)
-  const LoveDeclarationScene = () => (
+  const PromiseScene = () => (
     <div className="h-screen w-full bg-gradient-to-tr from-pink-900 to-rose-900 flex flex-col items-center justify-center text-white relative animate-scene-entry">
       <div className="text-center mb-12 max-w-lg px-4">
          <h2 className="4xl font-bold mb-4 text-pink-200 font-handwriting">My Promise to You</h2>
@@ -498,7 +622,6 @@ export default function App() {
         { icon: Clock, title: "A Lifetime of Comfort", message: "The simple joy of growing old together." },
     ];
     
-    // State to show the detailed message on hover
     const [hoverMessage, setHoverMessage] = useState(null);
 
     return (
@@ -539,7 +662,108 @@ export default function App() {
     );
   };
   
-  // 10. End Scene (I Love You Page - Final gift navigation point)
+  // 10. NEW Train Journey Scene (Fifth Gift - Milestones)
+  const TrainJourneyScene = () => {
+    // Calculate total width needed for all cars + locomotive + spacing
+    const CAR_WIDTH = 100;
+    const LOCO_WIDTH = 140;
+    const SPACING = 20;
+    const TOTAL_CARS = MilestoneData.length + 1; // +1 for the end car
+    const TRAIN_CONTENT_WIDTH = LOCO_WIDTH + (MilestoneData.length * (CAR_WIDTH + SPACING)) + (40 + 20); // Loco + Milestones + End Car
+
+    // Text to be revealed
+    const journeyText = "The path ahead is beautiful because you are walking with me.";
+
+    return (
+        <div className="h-screen w-full bg-gradient-to-br from-indigo-700 to-gray-900 flex flex-col items-center p-4 relative animate-scene-entry">
+            <h2 className="text-4xl font-handwriting font-bold text-gray-300 mt-8 mb-12">Our Relationship Journey</h2>
+            
+            {/* The fixed, curved track */}
+            <div className="absolute bottom-[20%] w-full h-8 flex justify-center items-center">
+                <svg className="w-full h-full" viewBox="0 0 1000 50">
+                    {/* Background Track (Curved/Bumpy) */}
+                    <path d="M 0 25 C 250 10, 750 40, 1000 25" stroke="#4B5563" strokeWidth="12" fill="none" />
+                    {/* Rails (Inner lines) */}
+                    <path d="M 0 20 C 250 5, 750 35, 1000 20" stroke="#374151" strokeWidth="2" fill="none" />
+                    <path d="M 0 30 C 250 15, 750 45, 1000 30" stroke="#374151" strokeWidth="2" fill="none" />
+                </svg>
+            </div>
+            
+            {/* TEXT TO BE REVEALED (Center screen, Z-index 10) */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10 w-3/4 max-w-md">
+                {/* Text Visibility controlled by the train's wipe animation */}
+                <h3 className="text-xl font-bold text-pink-300 whitespace-nowrap overflow-hidden transition-all duration-300">
+                    {journeyText}
+                </h3>
+            </div>
+            
+            {/* Train Container (Moves Left and covers text) */}
+            <div className="relative w-full h-40 overflow-hidden">
+                <div 
+                    className={`absolute bottom-0 flex`} 
+                    style={{ 
+                        width: `${TRAIN_CONTENT_WIDTH}px`, 
+                        // FIX 1: Adjust vertical position to align wheels with the track 
+                        // Track is at ~20% from bottom of screen, Train container is h-40. Adjusted to 50px from bottom of h-40 div.
+                        bottom: '50px', 
+                        /* Apply a fixed tilt to simulate moving along the curve */
+                        transform: isTrainMoving ? 'rotateZ(-2deg)' : 'rotateZ(0deg)', // Stop rotation when paused
+                        transformOrigin: 'bottom center',
+                        
+                        // FIX 3: Start position (Right of screen) and animation control
+                        left: isTrainMoving ? 'auto' : '100%', 
+                        animation: isTrainMoving ? 'train-journey 35s linear infinite' : 'none', // FIX 2: Speed set to 35s
+                    }}
+                >
+                    
+                    {/* Locomotive (First in line) */}
+                    <Locomotive isMoving={isTrainMoving} onStart={startTrainJourney} />
+
+                    {/* Milestone Cars */}
+                    {MilestoneData.map((milestone, index) => (
+                        <div key={index} className="flex items-center gap-5 shrink-0">
+                            {/* Connector */}
+                            <div className="w-5 h-1 bg-gray-600 top-1/2"></div>
+                            <TrainCar 
+                                index={index} 
+                                date={milestone.date} 
+                                special={milestone.special} 
+                                color={milestone.color} 
+                            />
+                        </div>
+                    ))}
+                    
+                    {/* Final Message Car */}
+                    <div className="flex items-center gap-5 shrink-0">
+                        <div className="w-5 h-1 bg-gray-600 top-1/2"></div>
+                        <div className="w-40 h-20 bg-yellow-400 rounded-lg shadow-lg flex items-center justify-center p-2 border-4 border-yellow-500">
+                           <p className="font-black text-lg text-gray-800 flex items-center gap-1">
+                                Lot more to come! <Heart className='w-5 h-5 fill-red-600'/>
+                           </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Start Button Overlay */}
+            {!isTrainMoving && (
+                <button 
+                    onClick={startTrainJourney}
+                    className="mt-12 bg-pink-600 text-white px-6 py-3 rounded-full font-bold shadow-lg z-50 animate-pulse"
+                >
+                    Start Our Journey
+                </button>
+            )}
+
+            <button onClick={() => handleNextStep('gifts')} className="mt-auto mb-8 bg-white/20 backdrop-blur-sm border border-white/40 text-white px-6 py-2 rounded-full hover:bg-white/30 transition">
+                Go back to Gift Room
+            </button>
+        </div>
+    );
+  };
+
+
+  // 11. End Scene (I Love You Page - Final gift navigation point)
   const EndScene = () => (
     <div className="h-screen w-full bg-rose-100 flex flex-col items-center justify-center text-center p-6 relative overflow-hidden animate-scene-entry">
       {showConfetti && <LoveConfetti type="streamers" />}
@@ -562,7 +786,7 @@ export default function App() {
     </div>
   );
 
-  // 11. Constant Scene (Final Page)
+  // 12. Constant Scene (Final Page)
   const ConstantScene = () => {
     // Handler for Penguin interaction
     const handlePenguinClick = () => {
@@ -591,16 +815,47 @@ export default function App() {
         .font-handwriting { font-family: 'Indie Flower', cursive; }
         .font-sans { font-family: 'Fredoka', sans-serif; }
         
-        /* New Transition Animation for all pages (Smoother/Slower) */
+        /* NEW TRAIN ANIMATIONS */
+        @keyframes train-journey {
+            /* Starts off screen right, moves to off screen left */
+            0% { transform: translateX(100%); } 
+            100% { transform: translateX(-100%); } 
+        }
+        .animate-train-journey {
+            animation: train-journey 35s linear infinite; /* Adjusted speed to 35s */
+            animation-iteration-count: infinite; 
+            animation-fill-mode: forwards;
+        }
+        
+        @keyframes wheel {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .animate-wheel {
+            animation: wheel 0.5s linear infinite; 
+            transform-origin: center;
+        }
+
+        @keyframes smoke {
+            0% { opacity: 0; transform: translate(0, 0) scale(0.5); }
+            50% { opacity: 0.8; }
+            100% { opacity: 0; transform: translate(30px, -30px) scale(1.5); }
+        }
+        .animate-smoke {
+            animation: smoke 2s ease-out infinite; 
+            animation-delay: 0.5s;
+        }
+        /* END TRAIN ANIMATIONS */
+        
+        /* Transition Animation */
         @keyframes scene-entry {
             from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-scene-entry {
-            animation: scene-entry 1.2s ease-out both; /* Increased duration for smoothness */
+            animation: scene-entry 1.2s ease-out both; 
         }
 
-        /* NEW Heart Pulse Animation */
         @keyframes heart-pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.3); }
@@ -712,8 +967,9 @@ export default function App() {
       {step === 'gifts' && <GiftSelection />}
       {step === 'bouquet' && <BouquetScene />}
       {step === 'memories' && <MemoriesScene />}
-      {step === 'cake' && <LoveDeclarationScene />}
+      {step === 'promise' && <PromiseScene />}
       {step === 'timeline' && <TimelineScene />} 
+      {step === 'path' && <TrainJourneyScene />}
       {step === 'end' && <EndScene />}
       {step === 'constant' && <ConstantScene />}
     </div>
