@@ -2368,7 +2368,7 @@ Aakash`
                   style={{
                     left: `${pos[0] * -40}px`,
                     top: `${pos[1] * -40}px`,
-                    backgroundImage: 'url(/heart.png)',
+                    backgroundImage: 'url(heart.png)',
                     display: idx === blocks.length - 1 && i === 2 && blocks.length >= 23 ? 'none' : 'block'
                   }}
                 />
