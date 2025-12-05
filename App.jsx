@@ -915,7 +915,7 @@ export default function App() {
       <div className="h-screen w-full bg-gradient-to-br from-pink-100 to-rose-200 flex items-center justify-center relative overflow-hidden animate-scene-entry">
         {/* Left GIF */}
         <img
-          src="biubiubiu.gif"
+          src="/biubiubiu.gif"
           alt="cute animation"
           className="absolute left-0 bottom-28 w-64 h-64 z-10 pointer-events-none"
           draggable="false"
@@ -952,7 +952,7 @@ export default function App() {
                   style={{
                     left: `${pos[0] * -40}px`,
                     top: `${pos[1] * -40}px`,
-                    backgroundImage: 'url(heart.png)',
+                    backgroundImage: 'url(/heart.png)',
                     display: idx === blocks.length - 1 && i === 2 && blocks.length >= 23 ? 'none' : 'block'
                   }}
                 />
@@ -1110,7 +1110,7 @@ export default function App() {
               Enter the Gift Room
             </button>
             <video
-              src="cute love gif.mp4"
+              src="/cute love gif.mp4"
               autoPlay
               loop
               className="rounded-lg max-w-full h-auto mx-auto"
