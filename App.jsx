@@ -353,7 +353,13 @@ export default function App() {
     memories: false,
     promise: false,
     timeline: false,
-    path: false
+    path: false,
+    letters: false,
+    aug29: false,
+    courage: false,
+    aug18: false,
+    distance: false,
+    family: false,
   });
   const [candlesBlown, setCandlesBlown] = useState(false);
   const [showConfetti, setShowConfetti] = useState(true);
@@ -374,7 +380,7 @@ export default function App() {
     'For existing exactly.'
   ];
 
-  const allOpened = openedGifts.bouquet && openedGifts.memories && openedGifts.promise && openedGifts.timeline && openedGifts.path;
+  const allOpened = openedGifts.bouquet && openedGifts.memories && openedGifts.promise && openedGifts.timeline && openedGifts.path && openedGifts.letters && openedGifts.aug29 && openedGifts.courage && openedGifts.aug18 && openedGifts.distance;
 
   const handleNextStep = (next) => {
     setStep(next);
@@ -523,66 +529,136 @@ export default function App() {
   );
 
   // 5. Gift Selection
-  const GiftSelection = () => (
-    <div className="h-screen w-full bg-rose-100 flex flex-col items-center justify-center p-4 animate-scene-entry">
-      <h2 className="text-3xl text-rose-800 font-bold mb-12 font-handwriting">Pick a gift!</h2>
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-8 items-center justify-center">
-        <button
-          onClick={() => {
-            handleNextStep('bouquet');
-            markGiftOpened('bouquet');
-          }}
-          className={`transform transition-all duration-300 hover:-translate-y-4 ${openedGifts.bouquet ? 'opacity-50' : 'animate-bounce-custom'}`}
-          aria-label="Open bouquet gift"
-        >
-          <GiftBox color="bg-pink-600" ribbon="bg-pink-400" />
-        </button>
+const GiftSelection = () => (
+  <div className="min-h-screen w-full bg-rose-100 flex flex-col items-center justify-center p-4 py-12 animate-scene-entry">
+    <h2 className="text-3xl text-rose-800 font-bold mb-8 font-handwriting">Pick a gift!</h2>
+    <p className="text-rose-600 mb-8 italic">11 special gifts, each with love 💕</p>
 
-        <button
-          onClick={() => {
-            handleNextStep('memories');
-            markGiftOpened('memories');
-          }}
-          className={`transform transition-all duration-300 hover:-translate-y-4 delay-100 ${openedGifts.memories ? 'opacity-50' : 'animate-bounce-custom'}`}
-          aria-label="Open memories gift"
-        >
-          <GiftBox color="bg-red-600" ribbon="bg-red-400" />
-        </button>
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 items-center justify-center max-w-6xl">
+      {/* Gift 1: Aug 18 */}
+      <button
+        onClick={() => {
+          handleNextStep('aug18');
+          markGiftOpened('aug18');
+        }}
+        className={`transform transition-all duration-300 hover:-translate-y-4 ${openedGifts.aug18 ? 'opacity-50' : 'animate-bounce-custom'}`}
+      >
+        <GiftBox color="bg-teal-600" ribbon="bg-teal-400" />
+      </button>
 
-        <button
-          onClick={() => {
-            handleNextStep('promise');
-            markGiftOpened('promise');
-            setCandlesBlown(false);
-          }}
-          className={`transform transition-all duration-300 hover:-translate-y-4 delay-200 ${openedGifts.promise ? 'opacity-50' : 'animate-bounce-custom'}`}
-          aria-label="Open promise gift"
-        >
-          <GiftBox color="bg-rose-700" ribbon="bg-rose-500" />
-        </button>
+      {/* Gift 2: Aug 29 */}
+      <button
+        onClick={() => {
+          handleNextStep('aug29_surprise');
+          markGiftOpened('aug29');
+        }}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-100 ${openedGifts.aug29 ? 'opacity-50' : 'animate-bounce-custom'}`}
+      >
+        <GiftBox color="bg-orange-600" ribbon="bg-orange-400" />
+      </button>
 
-        <button
-          onClick={() => {
-            handleNextStep('timeline');
-            markGiftOpened('timeline');
-          }}
-          className={`transform transition-all duration-300 hover:-translate-y-4 delay-300 ${openedGifts.timeline ? 'opacity-50' : 'animate-bounce-custom'}`}
-          aria-label="Open timeline gift"
-        >
-          <GiftBox color="bg-purple-600" ribbon="bg-purple-400" />
-        </button>
+      {/* Gift 3: Letters */}
+      <button
+        onClick={() => {
+          handleNextStep('letters_of_strength');
+          markGiftOpened('letters');
+        }}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-200 ${openedGifts.letters ? 'opacity-50' : 'animate-bounce-custom'}`}
+      >
+        <GiftBox color="bg-blue-600" ribbon="bg-blue-400" />
+      </button>
 
+      {/* Gift 4: Distance */}
         <button
           onClick={() => {
-            handleNextStep('path');
-            markGiftOpened('path');
-          }}
-          className={`transform transition-all duration-300 hover:-translate-y-4 delay-400 ${openedGifts.path ? 'opacity-50' : 'animate-bounce-custom'}`}
-          aria-label="Open path gift"
-        >
-          <GiftBox color="bg-yellow-600" ribbon="bg-yellow-400" />
-        </button>
-      </div>
+            handleNextStep('distance');
+            markGiftOpened('distance');
+        }}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-300 ${openedGifts.distance ? 'opacity-50' : 'animate-bounce-custom'}`}
+      >
+        <GiftBox color="bg-indigo-600" ribbon="bg-indigo-400" />
+      </button>
+
+      {/* Gift 5: Bouquet */}
+      <button
+        onClick={() => {
+          handleNextStep('bouquet');
+          markGiftOpened('bouquet');
+        }}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-400 ${openedGifts.bouquet ? 'opacity-50' : 'animate-bounce-custom'}`}
+      >
+        <GiftBox color="bg-pink-600" ribbon="bg-pink-400" />
+      </button>
+
+      {/* Gift 6: Memories */}
+      <button
+        onClick={() => {
+          handleNextStep('memories');
+          markGiftOpened('memories');
+        }}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-500 ${openedGifts.memories ? 'opacity-50' : 'animate-bounce-custom'}`}
+      >
+        <GiftBox color="bg-red-600" ribbon="bg-red-400" />
+      </button>
+
+      {/* Gift 7: Promise */}
+      <button
+        onClick={() => {
+          handleNextStep('promise');
+          markGiftOpened('promise');
+          setCandlesBlown(false);
+        }}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-600 ${openedGifts.promise ? 'opacity-50' : 'animate-bounce-custom'}`}
+      >
+        <GiftBox color="bg-rose-700" ribbon="bg-rose-500" />
+      </button>
+
+      {/* Gift 8: Timeline */}
+      <button
+        onClick={() => {
+          handleNextStep('timeline');
+          markGiftOpened('timeline');
+        }}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-700 ${openedGifts.timeline ? 'opacity-50' : 'animate-bounce-custom'}`}
+      >
+        <GiftBox color="bg-purple-600" ribbon="bg-purple-400" />
+      </button>
+
+      {/* Gift 9: Path */}
+      <button
+        onClick={() => {
+          handleNextStep('path');
+          markGiftOpened('path');
+        }}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-800 ${openedGifts.path ? 'opacity-50' : 'animate-bounce-custom'}`}
+      >
+        <GiftBox color="bg-yellow-600" ribbon="bg-yellow-400" />
+      </button>
+
+      {/* Gift 10: Courage */}
+      <button
+        onClick={() => {
+          handleNextStep('courage');
+          markGiftOpened('courage');
+        }}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-900 ${openedGifts.courage ? 'opacity-50' : 'animate-bounce-custom'}`}
+      >
+        <GiftBox color="bg-green-600" ribbon="bg-green-400" />
+      </button>
+
+      {/* ⭐ Gift 11: Four Hearts, One Family ⭐ */}
+      <button
+        onClick={() => {
+          handleNextStep('four_hearts_family');
+          markGiftOpened('family');
+        }}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-[1000ms] ${
+          openedGifts.family ? 'opacity-50' : 'animate-bounce-custom'
+        }`}
+      >
+        <GiftBox color="bg-amber-600" ribbon="bg-amber-300" />
+      </button>
+    </div>
 
       {allOpened && (
         <button
@@ -590,7 +666,7 @@ export default function App() {
             handleNextStep('heart_building');
             setShowConfetti(false);
           }}
-          className="mt-16 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-full font-bold shadow-xl animate-bounce flex items-center gap-2"
+          className="mt-12 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-full font-bold shadow-xl animate-bounce flex items-center gap-2"
           aria-label="Continue"
         >
           Continue <Heart className="w-5 h-5 fill-white" />
@@ -679,8 +755,8 @@ export default function App() {
           <li>To love you for exactly who you are, every single day.</li>
         </ul>
       </div>
-      <button onClick={() => handleNextStep('gifts')} className="absolute bottom-8 left-8 text-white/50 hover:text-white flex items-center gap-2" aria-label="Back to gifts">
-        <ArrowLeft size={20} /> Back
+      <button onClick={() => handleNextStep('gifts')} className="mt-8 bg-white/20 backdrop-blur-sm border border-white/40 text-white px-6 py-2 rounded-full hover:bg-white/30 transition" aria-label="Back to gift room">
+        Go back to Gift Room
       </button>
     </div>
   );
@@ -846,7 +922,1347 @@ export default function App() {
     </div>
   );
 
-  // 12. Heart Building Scene (Animated Heart)
+  // 12. Letters for When You Need Strength Scene
+  const LettersOfStrengthScene = () => {
+    const [selectedLetter, setSelectedLetter] = useState(null);
+    const [isReading, setIsReading] = useState(false);
+
+    const letters = [
+      {
+        id: 1,
+        title: "When Your Parents Question Us",
+        color: "from-pink-500 to-rose-500",
+        icon: "💌",
+        message: `My Dearest Pooja,
+
+Remember August 18? You chose me. And I choose you, every single day.
+
+I know it's hard when your parents don't understand. I know you face questions, doubts, maybe even harsh words. But please remember this:
+
+Your courage is not weakness - it's the strength of our love. Standing up for what your heart knows is right, even when the world tells you otherwise, that's the bravest thing anyone can do.
+
+You're not being stubborn. You're being true. True to us, true to your heart, true to the love we share.
+
+I'm here. Always. Through every difficult conversation, every tense moment, every tear. You stood strong for me when your world shook - now let me be your strength too.
+
+One day, they will see what I see. One day, they will understand. Until then, hold on to us.
+
+I love you. Always and forever.
+
+Your constant support,
+Aakash`
+      },
+      {
+        id: 2,
+        title: "When You Feel Alone",
+        color: "from-purple-500 to-pink-500",
+        icon: "💝",
+        message: `My Beautiful Pooja,
+
+You're not alone. Even with miles between us, even when I can't physically be there, I'm with you.
+
+Do you remember August 29? Your face when you saw me unexpectedly? That surprise, that joy, that happiness - it's all still real. Our love is real. The distance is temporary, but what we have is forever.
+
+When you feel alone, close your eyes and remember:
+- Every message I send is a hug I wish I could give
+- Every call is me holding your hand
+- Every "I love you" is me being right there with you
+
+You are never alone because you live in my heart, and I live in yours.
+
+The loneliness you feel now is just counting down to the moment we never have to say goodbye again.
+
+I'm coming back. I'll always come back.
+
+Forever yours,
+Aakash`
+      },
+      {
+        id: 3,
+        title: "When You Doubt",
+        color: "from-blue-500 to-purple-500",
+        icon: "💕",
+        message: `My Love,
+
+When doubt creeps in, when you wonder if we're doing the right thing, when everything feels uncertain - read this.
+
+You stood strong for me when your world questioned us. You kept trust when it was easier to give up. You believed in us when everyone else doubted.
+
+That wasn't blind faith. That was you knowing, deep in your heart, that what we have is worth fighting for.
+
+I promise you:
+- Every challenge we face is building our forever
+- Every tear you cry now will become a story we tell our children
+- Every moment of doubt will be answered with a lifetime of certainty
+
+You chose wisely. You chose love. You chose bravely. And I will spend my life proving you right.
+
+Never doubt that you are loved, valued, respected, and needed.
+
+Always believing in us,
+Aakash`
+      },
+      {
+        id: 4,
+        title: "When You're Scared",
+        color: "from-rose-500 to-red-500",
+        icon: "❤️",
+        message: `My Brave Pooja,
+
+I know you're scared. I know this path we're on isn't easy. I know facing your family, standing up for us, not knowing what tomorrow brings - it's all terrifying.
+
+But let me tell you what I know:
+
+I know you're the strongest person I've ever met. I know your courage inspires me every day. I know that someone who can stand up for love the way you do can face anything.
+
+Yes, they don't understand yet. Yes, the road ahead has challenges. But we're not walking it alone - we're walking it together.
+
+And here's what I promise:
+- I will work every day to be worthy of your courage
+- I will prove to your parents that you chose right
+- I will build a future where you never have to be scared again
+- I will love you through every fear until only peace remains
+
+You are not alone in this fear. I'm scared too. But I'm more scared of a life without you than I am of any challenge we face together.
+
+Your shield and strength,
+Aakash`
+      },
+      {
+        id: 5,
+        title: "When You Miss Me",
+        color: "from-pink-600 to-rose-600",
+        icon: "💗",
+        message: `My Precious Pooja,
+
+I miss you too. Every moment. Every breath. Every heartbeat whispers your name.
+
+I know the nights are the hardest. I know you reach for your phone hoping for a message, wishing I was there to hold you.
+
+But remember this:
+
+Every goodbye brings us closer to the day when we never have to say goodbye again. Every moment apart is another moment added to our forever.
+
+This distance is temporary. This missing each other is temporary. But my love for you? That's eternal.
+
+When you miss me:
+- Look at our photos and remember the joy
+- Read our messages and feel the love
+- Close your eyes and know I'm thinking of you too
+
+I'm counting down every day, every hour, every minute until I see your face again. Until I can make you smile again. Until I can hold you again.
+
+Keep holding on. I'm holding on too.
+
+Missing you always, loving you forever,
+Aakash`
+      }
+    ];
+
+    const handleOpenLetter = (letter) => {
+      setSelectedLetter(letter);
+      setIsReading(true);
+    };
+
+    const handleCloseLetter = () => {
+      setIsReading(false);
+      setTimeout(() => setSelectedLetter(null), 300);
+    };
+
+    return (
+      <div className="h-screen w-full bg-gradient-to-br from-rose-900 via-pink-900 to-purple-900 flex items-center justify-center p-4 relative overflow-hidden animate-scene-entry">
+        {/* Background decorative hearts */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(20)].map((_, i) => (
+            <Heart
+              key={i}
+              className="absolute text-pink-300 opacity-10 animate-pulse"
+              style={{
+                width: `${Math.random() * 30 + 20}px`,
+                height: `${Math.random() * 30 + 20}px`,
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${Math.random() * 3 + 2}s`
+              }}
+            />
+          ))}
+        </div>
+
+        {!isReading ? (
+          /* Letter Selection View */
+          <div className="max-w-6xl w-full z-10">
+            <div className="text-center mb-12">
+              <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4 font-handwriting">
+                Letters for When You Need Strength
+              </h1>
+              <p className="text-pink-200 text-lg italic">
+                Open whichever letter your heart needs right now
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {letters.map((letter, index) => (
+                <div
+                  key={letter.id}
+                  onClick={() => handleOpenLetter(letter)}
+                  className="cursor-pointer transform transition-all duration-300 hover:scale-105 hover:-translate-y-2"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <div className={`bg-gradient-to-br ${letter.color} p-6 rounded-2xl shadow-2xl border-2 border-white/20 backdrop-blur-sm`}>
+                    <div className="text-5xl mb-4 text-center animate-bounce">{letter.icon}</div>
+                    <h3 className="text-white font-bold text-lg text-center mb-2">
+                      {letter.title}
+                    </h3>
+                    <div className="flex justify-center">
+                      <Mail className="w-6 h-6 text-white/80" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-center mt-12">
+              <button
+                onClick={() => handleNextStep('gifts')}
+                className="bg-white text-pink-600 px-8 py-3 rounded-full font-bold hover:bg-pink-50 transition shadow-xl"
+              >
+                Back to Gift Room 🎁
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* Letter Reading View */
+          <div className="max-w-3xl w-full z-10 animate-scene-entry">
+            <div className="bg-white p-8 sm:p-12 rounded-3xl shadow-2xl border-4 border-pink-200 relative">
+              {/* Close button */}
+              <button
+                onClick={handleCloseLetter}
+                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-pink-100 hover:bg-pink-200 flex items-center justify-center transition"
+                aria-label="Close letter"
+              >
+                <span className="text-2xl text-pink-600">×</span>
+              </button>
+
+              {/* Letter icon */}
+              <div className="text-center mb-6">
+                <span className="text-6xl">{selectedLetter?.icon}</span>
+              </div>
+
+              {/* Letter title */}
+              <h2 className="text-3xl font-bold text-pink-600 text-center mb-8 font-handwriting">
+                {selectedLetter?.title}
+              </h2>
+
+              {/* Letter content */}
+              <div className="prose prose-pink max-w-none">
+                <div className="text-gray-700 leading-relaxed whitespace-pre-line text-base sm:text-lg font-serif">
+                  {selectedLetter?.message}
+                </div>
+              </div>
+
+              {/* Back button */}
+              <div className="text-center mt-8">
+                <button
+                  onClick={handleCloseLetter}
+                  className="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full font-bold hover:from-pink-600 hover:to-rose-600 transition shadow-lg"
+                >
+                  Back to Letters
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // 13. Aug 29 - The Day Everything Changed Scene
+  const Aug29SurpriseScene = () => {
+    const [phase, setPhase] = useState('intro'); // intro -> journey -> arrival -> memory -> end
+    const [showText, setShowText] = useState(false);
+
+    useEffect(() => {
+      if (phase === 'intro') {
+        setTimeout(() => setShowText(true), 500);
+      }
+    }, [phase]);
+
+    const handleStartJourney = () => {
+      setPhase('journey');
+      setTimeout(() => setPhase('arrival'), 3000);
+      setTimeout(() => setPhase('memory'), 6000);
+      // Don't auto-advance from memory - let user read at their own pace
+    };
+
+    return (
+      <div className="h-screen w-full bg-gradient-to-br from-pink-200 via-rose-300 to-pink-400 flex items-center justify-center relative overflow-hidden animate-scene-entry">
+        {/* Intro Phase */}
+        {phase === 'intro' && (
+          <div className="text-center z-10 px-4 animate-fade-in-up">
+            <div className="mb-8">
+              <span className="text-8xl animate-bounce inline-block">📅</span>
+            </div>
+            {showText && (
+              <>
+                <h1 className="text-6xl sm:text-7xl font-bold text-rose-800 mb-6 font-handwriting animate-fade-in-up">
+                  August 29, 2025
+                </h1>
+                <p className="text-2xl sm:text-3xl text-rose-700 mb-8 italic animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                  The Day Everything Changed
+                </p>
+                <p className="text-xl text-rose-600 mb-12 max-w-2xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+                  The day I came to see you without telling you...
+                  <br />
+                  The day I saw your face light up...
+                  <br />
+                  The day I knew this was real.
+                </p>
+                <button
+                  onClick={handleStartJourney}
+                  className="bg-rose-600 text-white px-10 py-4 rounded-full text-xl font-bold hover:bg-rose-700 transition shadow-2xl animate-pulse"
+                >
+                  Relive That Day 💕
+                </button>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Journey Phase */}
+        {phase === 'journey' && (
+          <div className="text-center z-10 px-4 animate-scene-entry">
+            <div className="mb-8">
+              <span className="text-8xl animate-bounce inline-block">🚂</span>
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-bold text-rose-800 mb-6 font-handwriting">
+              The Journey Begins...
+            </h2>
+            <p className="text-xl text-rose-700 italic mb-8 max-w-xl mx-auto">
+              Heart racing, excited, nervous...
+              <br />
+              Counting every mile to see you
+            </p>
+            <div className="flex justify-center items-center gap-3 mb-4">
+              <div className="w-3 h-3 bg-rose-600 rounded-full animate-pulse" />
+              <div className="w-3 h-3 bg-rose-600 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }} />
+              <div className="w-3 h-3 bg-rose-600 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }} />
+            </div>
+            <p className="text-lg text-rose-600">
+              Planning the perfect surprise...
+            </p>
+          </div>
+        )}
+
+        {/* Arrival Phase */}
+        {phase === 'arrival' && (
+          <div className="text-center z-10 px-4 animate-scene-entry">
+            <div className="mb-8">
+              <span className="text-8xl animate-heartbeat inline-block">😲</span>
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-bold text-rose-800 mb-6 font-handwriting">
+              "Wait... is that...?"
+            </h2>
+            <div className="max-w-2xl mx-auto bg-white/90 p-8 rounded-3xl shadow-2xl border-4 border-rose-200">
+              <p className="text-2xl text-rose-700 mb-4 font-bold">
+                Your Face When You Saw Me
+              </p>
+              <div className="flex justify-center gap-8 text-6xl mb-6">
+                <span className="animate-bounce">😲</span>
+                <span className="animate-bounce" style={{ animationDelay: '0.1s' }}>😍</span>
+                <span className="animate-bounce" style={{ animationDelay: '0.2s' }}>🥰</span>
+              </div>
+              <p className="text-lg text-gray-700 leading-relaxed">
+                Shock → Excitement → Pure Happiness
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Memory Phase */}
+        {phase === 'memory' && (
+          <div className="text-center z-10 px-4 animate-scene-entry max-w-4xl mx-auto">
+            <div className="mb-8">
+              <span className="text-8xl animate-pulse inline-block">💝</span>
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-bold text-rose-800 mb-8 font-handwriting">
+              That Moment...
+            </h2>
+            <div className="bg-white/95 p-8 sm:p-12 rounded-3xl shadow-2xl border-4 border-rose-300">
+              <p className="text-xl sm:text-2xl text-gray-800 leading-relaxed mb-6 font-serif italic">
+                "I still remember every detail of that moment.
+                <br /><br />
+                The way your eyes widened when you recognized me.
+                <br />
+                The smile that spread across your face.
+                <br />
+                The happiness that made everything worth it.
+                <br /><br />
+                That's when I knew - I would cross any distance, face any obstacle, just to see that happiness again.
+                <br /><br />
+                August 29 wasn't just our first meeting.
+                <br />
+                It was the day our love became real.
+                <br />
+                It was the day dreams turned into memories.
+                <br />
+                It was the day I knew - you are my forever."
+              </p>
+              <p className="text-right text-2xl text-rose-600 font-handwriting mt-8">
+                - Aakash
+              </p>
+            </div>
+
+            {/* Continue button */}
+            <div className="text-center mt-8">
+              <button
+                onClick={() => setPhase('end')}
+                className="bg-gradient-to-r from-rose-500 to-pink-500 text-white px-10 py-4 rounded-full text-xl font-bold hover:from-rose-600 hover:to-pink-600 transition shadow-2xl animate-pulse"
+              >
+                Continue 💕
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* End Phase */}
+        {phase === 'end' && (
+          <div className="text-center z-10 px-4 animate-scene-entry">
+            <div className="mb-8">
+              <span className="text-8xl animate-heartbeat inline-block">❤️</span>
+            </div>
+            <h2 className="text-5xl sm:text-6xl font-bold text-rose-800 mb-8 font-handwriting">
+              And I'll Keep Coming Back
+            </h2>
+            <p className="text-2xl text-rose-700 mb-12 italic max-w-2xl mx-auto">
+              Every visit, every surprise, every moment...
+              <br />
+              Until the day we never have to say goodbye.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <button
+                onClick={() => setPhase('intro')}
+                className="bg-white text-rose-600 px-8 py-3 rounded-full font-bold hover:bg-rose-50 transition shadow-xl"
+              >
+                Experience Again 🔄
+              </button>
+              <button
+                onClick={() => handleNextStep('gifts')}
+                className="bg-rose-600 text-white px-8 py-3 rounded-full font-bold hover:bg-rose-700 transition shadow-xl"
+              >
+                Back to Gift Room 🎁
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Floating hearts decoration */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(15)].map((_, i) => (
+            <Heart
+              key={i}
+              className="absolute text-rose-400 opacity-20 animate-float-up"
+              style={{
+                width: `${Math.random() * 40 + 20}px`,
+                height: `${Math.random() * 40 + 20}px`,
+                left: `${Math.random() * 100}%`,
+                bottom: `-${Math.random() * 20}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${Math.random() * 10 + 15}s`
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Stars decoration */}
+        <Stars className="absolute top-10 right-10 text-yellow-400 w-12 h-12 animate-spin-slow opacity-70" />
+        <Stars className="absolute bottom-20 left-10 text-yellow-400 w-8 h-8 animate-pulse opacity-70" />
+      </div>
+    );
+  };
+
+  // 14. Thank You for Your Courage Scene
+  const ThankYouCourageScene = () => {
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const sacrifices = [
+      {
+        title: "When Your Parents Found Out",
+        icon: "🏠",
+        text: "Your world shook. They questioned. They doubted. But you didn't run. You stood your ground. You chose us.",
+        color: "from-rose-500 to-pink-500"
+      },
+      {
+        title: "When They Said No",
+        icon: "🚫",
+        text: "It would have been easier to give up. To say 'maybe they're right'. But you trusted your heart. You trusted me. You trusted us.",
+        color: "from-purple-500 to-pink-500"
+      },
+      {
+        title: "Every Secret Meeting",
+        icon: "🤫",
+        text: "Every time we meet, you're being brave. Choosing love over fear. Creating memories despite the risk. That's courage.",
+        color: "from-blue-500 to-purple-500"
+      },
+      {
+        title: "Standing Strong Alone",
+        icon: "💪",
+        text: "When I couldn't be there physically, you faced everything alone. The questions, the pressure, the uncertainty. You never wavered.",
+        color: "from-pink-500 to-red-500"
+      },
+      {
+        title: "Believing in Us",
+        icon: "🌟",
+        text: "When everyone said it wouldn't work, you believed. When distance tested us, you held on. When the future seemed uncertain, you kept faith.",
+        color: "from-orange-500 to-pink-500"
+      }
+    ];
+
+    const handleNext = () => {
+      if (currentPage < sacrifices.length) {
+        setCurrentPage(currentPage + 1);
+      }
+    };
+
+    const handlePrevious = () => {
+      if (currentPage > 0) {
+        setCurrentPage(currentPage - 1);
+      }
+    };
+
+    return (
+      <div className="h-screen w-full bg-gradient-to-br from-purple-900 via-pink-900 to-rose-900 flex items-center justify-center p-4 relative overflow-hidden animate-scene-entry">
+        {/* Floating stars decoration */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(30)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-yellow-300 rounded-full animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${Math.random() * 2 + 1}s`
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="max-w-4xl w-full z-10">
+          {currentPage === 0 ? (
+            /* Title Page */
+            <div className="text-center animate-fade-in-up">
+              <div className="mb-8">
+                <span className="text-8xl animate-heartbeat inline-block">🙏</span>
+              </div>
+              <h1 className="text-5xl sm:text-6xl font-bold text-white mb-8 font-handwriting">
+                Thank You for Your Courage
+              </h1>
+              <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border-2 border-white/30 mb-8">
+                <p className="text-2xl text-pink-100 leading-relaxed mb-6">
+                  Pooja,
+                </p>
+                <p className="text-xl text-pink-100 leading-relaxed mb-4">
+                  What you've done for us isn't small.
+                  <br />
+                  It's not easy.
+                  <br />
+                  It's incredibly brave.
+                </p>
+                <p className="text-lg text-pink-200 italic">
+                  And I see every sacrifice you've made...
+                </p>
+              </div>
+              <button
+                onClick={handleNext}
+                className="bg-white text-pink-600 px-10 py-4 rounded-full text-xl font-bold hover:bg-pink-50 transition shadow-2xl animate-pulse"
+              >
+                Continue 💕
+              </button>
+            </div>
+          ) : currentPage <= sacrifices.length ? (
+            /* Sacrifice Pages */
+            <div className="animate-scene-entry">
+              <div className={`bg-gradient-to-br ${sacrifices[currentPage - 1].color} p-8 sm:p-12 rounded-3xl shadow-2xl border-4 border-white/50`}>
+                <div className="text-center mb-6">
+                  <span className="text-7xl animate-bounce inline-block">{sacrifices[currentPage - 1].icon}</span>
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-6 font-handwriting">
+                  {sacrifices[currentPage - 1].title}
+                </h2>
+                <p className="text-xl sm:text-2xl text-white leading-relaxed text-center">
+                  {sacrifices[currentPage - 1].text}
+                </p>
+              </div>
+
+              {/* Progress indicator */}
+              <div className="flex justify-center gap-2 mt-6">
+                {sacrifices.map((_, idx) => (
+                  <div
+                    key={idx}
+                    className={`w-3 h-3 rounded-full transition-all ${
+                      idx === currentPage - 1 ? 'bg-white w-8' : 'bg-white/30'
+                    }`}
+                  />
+                ))}
+              </div>
+
+              {/* Navigation */}
+              <div className="flex justify-between items-center mt-8">
+                <button
+                  onClick={handlePrevious}
+                  className="bg-white/20 text-white px-6 py-3 rounded-full font-bold hover:bg-white/30 transition"
+                >
+                  ← Previous
+                </button>
+                <span className="text-white font-bold">
+                  {currentPage} of {sacrifices.length}
+                </span>
+                <button
+                  onClick={handleNext}
+                  className="bg-white text-pink-600 px-6 py-3 rounded-full font-bold hover:bg-pink-50 transition"
+                >
+                  Next →
+                </button>
+              </div>
+
+              {/* Back to Gift Room button */}
+              <div className="text-center mt-6">
+                <button
+                  onClick={() => handleNextStep('gifts')}
+                  className="bg-white/20 text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-white/30 transition backdrop-blur-sm border border-white/40"
+                >
+                  Back to Gift Room 🎁
+                </button>
+              </div>
+            </div>
+          ) : (
+            /* Final Thank You Page */
+            <div className="text-center animate-scene-entry">
+              <div className="mb-8">
+                <span className="text-8xl animate-heartbeat inline-block">💝</span>
+              </div>
+              <div className="bg-white/95 p-8 sm:p-12 rounded-3xl shadow-2xl border-4 border-pink-300">
+                <h2 className="text-4xl sm:text-5xl font-bold text-pink-600 mb-8 font-handwriting">
+                  All of This... For Us
+                </h2>
+                <div className="text-left space-y-6 text-gray-800 text-lg leading-relaxed">
+                  <p>
+                    <strong>Thank you</strong> for standing up when it was easier to sit down.
+                  </p>
+                  <p>
+                    <strong>Thank you</strong> for believing when everyone doubted.
+                  </p>
+                  <p>
+                    <strong>Thank you</strong> for fighting when you could have surrendered.
+                  </p>
+                  <p>
+                    <strong>Thank you</strong> for choosing love over fear, us over convenience, forever over comfort.
+                  </p>
+                  <p className="text-xl font-bold text-pink-600 pt-4">
+                    Your courage isn't in vain. Every challenge we face now is building the forever we'll have together.
+                  </p>
+                  <p className="text-lg italic text-gray-600">
+                    One day, they will see what I see. One day, they will understand. Until then, I promise to be worthy of every brave choice you've made.
+                  </p>
+                </div>
+                <p className="text-right text-2xl text-pink-600 font-handwriting mt-8">
+                  Forever grateful,
+                  <br />
+                  Aakash ❤️
+                </p>
+              </div>
+
+              {/* Navigation buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
+                <button
+                  onClick={() => setCurrentPage(0)}
+                  className="bg-white/20 text-white px-6 py-3 rounded-full font-bold hover:bg-white/30 transition backdrop-blur-sm border border-white/40"
+                >
+                  Read Again 🔄
+                </button>
+                <button
+                  onClick={() => handleNextStep('gifts')}
+                  className="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-8 py-3 rounded-full font-bold hover:from-pink-600 hover:to-rose-600 transition shadow-xl"
+                >
+                  Back to Gift Room 🎁
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // 15. Aug 18 - Yes Page
+  const Aug18YesScene = () => {
+    const [phase, setPhase] = useState('intro'); // intro, waiting, theYes, celebration, reflection
+
+    const handleStartJourney = () => {
+      setPhase('waiting');
+      setTimeout(() => setPhase('theYes'), 8000);
+      setTimeout(() => setPhase('celebration'), 11000);
+    };
+
+    return (
+      <div className="min-h-screen w-full bg-gradient-to-br from-rose-400 via-pink-400 to-purple-400 flex items-center justify-center p-4 animate-scene-entry overflow-hidden relative">
+        {/* Floating hearts background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-4xl opacity-20 animate-float"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${5 + Math.random() * 5}s`
+              }}
+            >
+              💕
+            </div>
+          ))}
+        </div>
+
+        <div className="max-w-2xl w-full relative z-10">
+          {/* Intro Phase */}
+          {phase === 'intro' && (
+            <div className="text-center animate-fade-in">
+              <div className="mb-8">
+                <h1 className="text-6xl sm:text-7xl font-bold text-white mb-4 animate-pulse">
+                  August 18
+                </h1>
+                <p className="text-3xl sm:text-4xl text-white/90 font-handwriting">
+                  2025
+                </p>
+              </div>
+
+              <div className="bg-white/20 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/40 shadow-2xl">
+                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
+                  The Day You Said Yes 💝
+                </h2>
+                <p className="text-lg sm:text-xl text-white/90 leading-relaxed mb-8">
+                  After four days of hope, prayers, and endless thoughts...
+                  <br />
+                  You gave me the most beautiful answer.
+                </p>
+                <button
+                  onClick={handleStartJourney}
+                  className="bg-white text-rose-500 px-8 py-3 rounded-full font-bold text-lg hover:scale-110 transition shadow-xl hover:shadow-2xl"
+                >
+                  Relive That Moment 💕
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Waiting Phase - 4 Days */}
+          {phase === 'waiting' && (
+            <div className="text-center animate-fade-in">
+              <div className="bg-white/20 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/40 shadow-2xl">
+                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-8">
+                  Four Days of Waiting ⏳
+                </h2>
+
+                <div className="grid grid-cols-2 gap-4 mb-8">
+                  {['Day 1', 'Day 2', 'Day 3', 'Day 4'].map((day, idx) => (
+                    <div
+                      key={day}
+                      className="bg-white/30 rounded-2xl p-4 backdrop-blur-sm animate-fade-in"
+                      style={{ animationDelay: `${idx * 0.5}s` }}
+                    >
+                      <p className="text-2xl font-bold text-white mb-2">{day}</p>
+                      <p className="text-white/80 text-sm">
+                        {idx === 0 && "Hope fills my heart"}
+                        {idx === 1 && "Thinking of you"}
+                        {idx === 2 && "Prayers and patience"}
+                        {idx === 3 && "Tomorrow is the day..."}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="text-xl text-white/90 italic">
+                  Each moment felt like forever...
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* The Yes Phase */}
+          {phase === 'theYes' && (
+            <div className="text-center animate-fade-in">
+              <div className="bg-white/20 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/40 shadow-2xl">
+                <div className="mb-8 animate-bounce">
+                  <p className="text-8xl sm:text-9xl mb-4">💝</p>
+                </div>
+                <h2 className="text-5xl sm:text-6xl font-bold text-white mb-6 animate-pulse">
+                  "Yes"
+                </h2>
+                <p className="text-2xl sm:text-3xl text-white/90 leading-relaxed font-handwriting">
+                  That one word changed everything
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Celebration Phase */}
+          {phase === 'celebration' && (
+            <div className="text-center animate-fade-in">
+              <div className="bg-white/20 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/40 shadow-2xl">
+                <div className="mb-6">
+                  <p className="text-7xl mb-4 animate-bounce">🎉</p>
+                </div>
+                <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
+                  August 18, 2025
+                </h2>
+                <p className="text-xl sm:text-2xl text-white/90 leading-relaxed mb-6">
+                  The day my dreams came true
+                  <br />
+                  The day you became mine
+                  <br />
+                  The day our forever began
+                </p>
+                <p className="text-lg text-white/80 italic mb-8">
+                  From that day to this day, and for all the days to come... 💕
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <button
+                    onClick={() => setPhase('reflection')}
+                    className="bg-white text-rose-500 px-6 py-3 rounded-full font-bold hover:scale-110 transition shadow-xl"
+                  >
+                    Continue 💕
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Reflection Phase */}
+          {phase === 'reflection' && (
+            <div className="text-center animate-fade-in">
+              <div className="bg-white/20 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/40 shadow-2xl">
+                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
+                  Thank You for Saying Yes 🙏
+                </h2>
+                <div className="text-left space-y-4 mb-8">
+                  <p className="text-lg text-white/90 leading-relaxed">
+                    💕 Thank you for choosing me when you could have walked away
+                  </p>
+                  <p className="text-lg text-white/90 leading-relaxed">
+                    💕 Thank you for believing in us when the path was uncertain
+                  </p>
+                  <p className="text-lg text-white/90 leading-relaxed">
+                    💕 Thank you for giving me the chance to love you
+                  </p>
+                  <p className="text-lg text-white/90 leading-relaxed">
+                    💕 Thank you for making August 18 the most beautiful day of my life
+                  </p>
+                </div>
+                <p className="text-2xl text-white font-bold mb-8 font-handwriting">
+                  I'll cherish this day forever 💝
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <button
+                    onClick={() => setPhase('intro')}
+                    className="bg-white/30 text-white px-6 py-3 rounded-full font-bold hover:bg-white/40 transition backdrop-blur-sm border border-white/40"
+                  >
+                    Experience Again 🔄
+                  </button>
+                  <button
+                    onClick={() => handleNextStep('gifts')}
+                    className="bg-white text-rose-500 px-6 py-3 rounded-full font-bold hover:scale-110 transition shadow-xl"
+                  >
+                    Back to Gift Room 🎁
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // 16. Distance Means So Little
+  const DistanceMeansSoLittleScene = () => {
+    const [phase, setPhase] = useState('intro'); // intro, distance, connection, promise, forever
+
+    const handleStartJourney = () => {
+      setPhase('distance');
+      setTimeout(() => setPhase('connection'), 6000);
+      setTimeout(() => setPhase('promise'), 12000);
+    };
+
+    return (
+      <div className="min-h-screen w-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-4 animate-scene-entry overflow-hidden relative">
+        {/* Starry background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(50)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute bg-white rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                width: `${Math.random() * 3 + 1}px`,
+                height: `${Math.random() * 3 + 1}px`,
+                opacity: Math.random() * 0.7 + 0.3,
+                animation: `twinkle ${Math.random() * 3 + 2}s infinite`
+              }}
+            />
+          ))}
+        </div>
+
+        <style>{`
+          @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+          }
+        `}</style>
+
+        <div className="max-w-2xl w-full relative z-10">
+          {/* Intro Phase */}
+          {phase === 'intro' && (
+            <div className="text-center animate-fade-in">
+              <div className="mb-8">
+                <p className="text-7xl mb-6 animate-pulse">🌍</p>
+                <h1 className="text-5xl sm:text-6xl font-bold text-white mb-4">
+                  Miles Apart
+                </h1>
+                <h2 className="text-3xl sm:text-4xl text-white/90 font-handwriting">
+                  Hearts Together
+                </h2>
+              </div>
+
+              <div className="bg-white/20 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/40 shadow-2xl">
+                <p className="text-xl sm:text-2xl text-white/90 leading-relaxed mb-8">
+                  Kilometers separate us, but nothing can separate our hearts.
+                  <br />
+                  Distance is just a number when love is infinite.
+                </p>
+                <button
+                  onClick={handleStartJourney}
+                  className="bg-white text-purple-600 px-8 py-3 rounded-full font-bold text-lg hover:scale-110 transition shadow-xl hover:shadow-2xl"
+                >
+                  Our Story of Distance 💕
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Distance Phase */}
+          {phase === 'distance' && (
+            <div className="text-center animate-fade-in">
+              <div className="bg-white/20 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/40 shadow-2xl">
+                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-8">
+                  The Distance Between Us 🗺️
+                </h2>
+
+                <div className="relative mb-8">
+                  {/* Visual representation of distance */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="text-center flex-1">
+                      <p className="text-5xl mb-2">📍</p>
+                      <p className="text-white font-bold">You</p>
+                    </div>
+                    <div className="flex-1 relative">
+                      <div className="border-t-4 border-dashed border-white/50 relative">
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap">
+                          Distance
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-center flex-1">
+                      <p className="text-5xl mb-2">📍</p>
+                      <p className="text-white font-bold">Me</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3 text-left">
+                  <p className="text-lg text-white/90">
+                    💔 Different cities, different time zones sometimes
+                  </p>
+                  <p className="text-lg text-white/90">
+                    💔 Can't hold hands when we want to
+                  </p>
+                  <p className="text-lg text-white/90">
+                    💔 Missing you every single day
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Connection Phase */}
+          {phase === 'connection' && (
+            <div className="text-center animate-fade-in">
+              <div className="bg-white/20 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/40 shadow-2xl">
+                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-8">
+                  But We Stay Connected 💝
+                </h2>
+
+                <div className="relative mb-8">
+                  {/* Visual representation of connection */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="text-center flex-1">
+                      <p className="text-5xl mb-2 animate-pulse">💕</p>
+                      <p className="text-white font-bold">You</p>
+                    </div>
+                    <div className="flex-1 relative">
+                      <div className="relative h-1 bg-gradient-to-r from-pink-400 via-red-400 to-pink-400 rounded-full animate-pulse">
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-purple-600 px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap shadow-lg">
+                          ❤️ Love ❤️
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-center flex-1">
+                      <p className="text-5xl mb-2 animate-pulse">💕</p>
+                      <p className="text-white font-bold">Me</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3 text-left">
+                  <p className="text-lg text-white/90">
+                    💝 Good morning texts that brighten my day
+                  </p>
+                  <p className="text-lg text-white/90">
+                    💝 Video calls where I see your beautiful smile
+                  </p>
+                  <p className="text-lg text-white/90">
+                    💝 Messages throughout the day saying "I miss you"
+                  </p>
+                  <p className="text-lg text-white/90">
+                    💝 Good night wishes before we sleep
+                  </p>
+                  <p className="text-lg text-white/90">
+                    💝 Counting days until we meet again
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Promise Phase */}
+          {phase === 'promise' && (
+            <div className="text-center animate-fade-in">
+              <div className="bg-white/20 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/40 shadow-2xl">
+                <div className="mb-6">
+                  <p className="text-7xl mb-4 animate-bounce">🌟</p>
+                </div>
+                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
+                  The Promise of Tomorrow
+                </h2>
+                <div className="text-xl sm:text-2xl text-white/90 leading-relaxed mb-6 space-y-4">
+                  <p>This distance is temporary</p>
+                  <p>Our love is permanent</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-white mt-6">
+                    One day...
+                  </p>
+                  <p>We'll wake up in the same home</p>
+                  <p>I'll make you coffee every morning</p>
+                  <p>Hold your hand whenever I want</p>
+                  <p>Fall asleep next to you every night</p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+                  <button
+                    onClick={() => setPhase('forever')}
+                    className="bg-white text-purple-600 px-6 py-3 rounded-full font-bold hover:scale-110 transition shadow-xl"
+                  >
+                    Continue 💕
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Forever Phase */}
+          {phase === 'forever' && (
+            <div className="text-center animate-fade-in">
+              <div className="bg-white/20 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/40 shadow-2xl">
+                <div className="mb-6">
+                  <p className="text-7xl mb-4">💞</p>
+                </div>
+                <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
+                  Distance Means So Little
+                </h2>
+                <p className="text-2xl sm:text-3xl text-white/90 leading-relaxed mb-6 font-handwriting">
+                  When someone means so much
+                </p>
+
+                <div className="bg-white/10 rounded-2xl p-6 mb-8 backdrop-blur-sm">
+                  <p className="text-lg text-white/90 italic leading-relaxed">
+                    "The pain of parting is nothing compared to the joy of meeting again.
+                    Every mile between us is a testament to how strong our love is.
+                    Every day apart is one day closer to forever together."
+                  </p>
+                </div>
+
+                <p className="text-xl text-white mb-8">
+                  Until that beautiful day, I'll love you from wherever I am 💕
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <button
+                    onClick={() => setPhase('intro')}
+                    className="bg-white/30 text-white px-6 py-3 rounded-full font-bold hover:bg-white/40 transition backdrop-blur-sm border border-white/40"
+                  >
+                    Read Again 🔄
+                  </button>
+                  <button
+                    onClick={() => handleNextStep('gifts')}
+                    className="bg-white text-purple-600 px-6 py-3 rounded-full font-bold hover:scale-110 transition shadow-xl"
+                  >
+                    Back to Gift Room 🎁
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // 17. Four Hearts, One Family
+  const FourHeartsOneFamilyScene = () => {
+    const [phase, setPhase] = useState('intro'); // intro, hearts, unite, family
+
+    const familyMembers = [
+      { name: 'Aakash', color: 'from-blue-400 to-blue-600', trait: 'The Protector' },
+      { name: 'Pooja', color: 'from-pink-400 to-pink-600', trait: 'The Heart' },
+      { name: 'Aadhya', color: 'from-purple-400 to-purple-600', trait: 'The Joy' },
+      { name: 'Parthu', color: 'from-amber-400 to-amber-600', trait: 'The Light' }
+    ];
+
+    const handleStart = () => {
+      setPhase('hearts');
+      setTimeout(() => setPhase('unite'), 8000);
+      setTimeout(() => setPhase('family'), 11000);
+    };
+
+    return (
+      <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4 animate-scene-entry overflow-hidden relative">
+        {/* Sparkles background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(30)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${2 + Math.random() * 2}s`
+              }}
+            >
+              ✨
+            </div>
+          ))}
+        </div>
+
+        <div className="max-w-4xl w-full relative z-10">
+          {/* Intro Phase */}
+          {phase === 'intro' && (
+            <div className="text-center animate-fade-in">
+              <div className="mb-8">
+                <h1 className="text-6xl sm:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-pink-400 to-purple-400 mb-6 animate-pulse">
+                  Our Family
+                </h1>
+                <p className="text-3xl sm:text-4xl text-white/90 font-handwriting mb-4">
+                  Four Hearts, One Love
+                </p>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/30 shadow-2xl">
+                <p className="text-xl sm:text-2xl text-white/90 leading-relaxed mb-8">
+                  Some dreams are worth believing in.
+                  <br />
+                  This is mine... This is ours.
+                  <br />
+                  <span className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-pink-300 mt-4 block">
+                    The Yarrapragada's
+                  </span>
+                </p>
+                <button
+                  onClick={handleStart}
+                  className="bg-gradient-to-r from-amber-500 via-pink-500 to-purple-500 text-white px-8 py-3 rounded-full font-bold text-lg hover:scale-110 transition shadow-xl hover:shadow-2xl"
+                >
+                  Meet Our Family 💕
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Hearts Phase - Individual Hearts */}
+          {phase === 'hearts' && (
+            <div className="animate-fade-in">
+              <h2 className="text-4xl sm:text-5xl font-bold text-white text-center mb-12">
+                Each One Special 💖
+              </h2>
+
+              <div className="grid grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto">
+                {familyMembers.map((member, idx) => (
+                  <div
+                    key={member.name}
+                    className="text-center animate-fade-in"
+                    style={{ animationDelay: `${idx * 0.8}s` }}
+                  >
+                    <div className={`w-32 h-32 sm:w-40 sm:h-40 mx-auto mb-4 bg-gradient-to-br ${member.color} rounded-full flex items-center justify-center animate-pulse shadow-2xl`}
+                      style={{ animationDuration: `${2 + idx * 0.3}s` }}
+                    >
+                      <span className="text-6xl sm:text-7xl">❤️</span>
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                      {member.name}
+                    </h3>
+                    <p className="text-lg text-white/70 italic">
+                      {member.trait}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Unite Phase - Hearts Coming Together */}
+          {phase === 'unite' && (
+            <div className="text-center animate-fade-in">
+              <h2 className="text-4xl sm:text-5xl font-bold text-white mb-12">
+                Together As One 💞
+              </h2>
+
+              <div className="relative w-80 h-80 mx-auto mb-8">
+                {/* Four hearts moving to center */}
+                {familyMembers.map((member, idx) => {
+                  const positions = [
+                    'top-0 left-1/2 -translate-x-1/2',
+                    'bottom-0 left-1/2 -translate-x-1/2',
+                    'left-0 top-1/2 -translate-y-1/2',
+                    'right-0 top-1/2 -translate-y-1/2'
+                  ];
+
+                  return (
+                    <div
+                      key={member.name}
+                      className={`absolute ${positions[idx]} transition-all duration-[3000ms] ease-in-out`}
+                      style={{
+                        animation: 'moveToCenter 3s forwards',
+                        animationDelay: `${idx * 0.2}s`
+                      }}
+                    >
+                      <div className={`w-16 h-16 bg-gradient-to-br ${member.color} rounded-full flex items-center justify-center shadow-xl`}>
+                        <span className="text-3xl">❤️</span>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {/* Central united heart appears */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse">
+                  <div className="w-48 h-48 bg-gradient-to-br from-amber-400 via-pink-500 to-purple-500 rounded-full flex items-center justify-center shadow-2xl opacity-0"
+                    style={{ animation: 'fadeInScale 2s 1s forwards' }}
+                  >
+                    <span className="text-8xl">💖</span>
+                  </div>
+                </div>
+              </div>
+
+              <style>{`
+                @keyframes moveToCenter {
+                  to {
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    opacity: 0;
+                  }
+                }
+                @keyframes fadeInScale {
+                 0% {
+                  opacity: 0;
+                  transform: scale(0.5);
+                }
+                  50% {
+                    opacity: 0.5;
+                    transform: scale(1.1);
+                }
+                100% {
+                    opacity: 1;
+                    transform: scale(1);
+  }
+}
+              `}</style>
+            </div>
+          )}
+
+          {/* Family Phase - Final Message */}
+          {phase === 'family' && (
+            <div className="text-center animate-fade-in">
+              <div className="mb-8">
+                <div className="text-9xl mb-6 animate-heartbeat">💖</div>
+                <h1 className="text-5xl sm:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-pink-400 to-purple-400 mb-4">
+                  The Yarrapragada's
+                </h1>
+                <p className="text-2xl sm:text-3xl text-white/90 font-handwriting mb-8">
+                  Our Beautiful Family
+                </p>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/30 shadow-2xl max-w-2xl mx-auto">
+                <div className="space-y-4 text-left mb-8">
+                  <p className="text-lg text-white/90 leading-relaxed">
+                    💙 <span className="font-bold">Aakash</span> - Your strength, your partner, your forever
+                  </p>
+                  <p className="text-lg text-white/90 leading-relaxed">
+                    💗 <span className="font-bold">Pooja</span> - My love, My courage, My everything
+                  </p>
+                  <p className="text-lg text-white/90 leading-relaxed">
+                    💜 <span className="font-bold">Aadhya</span> - Our first blessing, our little joy
+                  </p>
+                  <p className="text-lg text-white/90 leading-relaxed">
+                    🧡 <span className="font-bold">Parthu</span> - Our second blessing, our little light
+                  </p>
+                </div>
+
+                <div className="border-t border-white/20 pt-6">
+                  <p className="text-xl sm:text-2xl text-white font-bold mb-4 italic">
+                    "Together, we are complete."
+                  </p>
+                  <p className="text-white/80">
+                    This is the family we'll build. This is the love we'll share.
+                    This is our forever. 💕
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+                <button
+                  onClick={() => setPhase('intro')}
+                  className="bg-white/20 text-white px-6 py-3 rounded-full font-bold hover:bg-white/30 transition backdrop-blur-sm border border-white/40"
+                >
+                  Experience Again 🔄
+                </button>
+                <button
+                  onClick={() => handleNextStep('gifts')}
+                  className="bg-gradient-to-r from-amber-500 via-pink-500 to-purple-500 text-white px-6 py-3 rounded-full font-bold hover:scale-110 transition shadow-xl"
+                >
+                  Back to Gift Room 🎁
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // 18. Heart Building Scene (Animated Heart)
   const HeartBuildingScene = () => {
     const [blocks, setBlocks] = useState([]);
     const [isRising, setIsRising] = useState(false);
@@ -1329,9 +2745,15 @@ export default function App() {
       {step === 'timeline' && <TimelineScene />}
       {step === 'path' && <ConstellationScene />}
       {step === 'end' && <EndScene />}
+      {step === 'letters_of_strength' && <LettersOfStrengthScene />}
+      {step === 'aug29_surprise' && <Aug29SurpriseScene />}
+      {step === 'courage' && <ThankYouCourageScene />}
+      {step === 'aug18' && <Aug18YesScene />}
+      {step === 'distance' && <DistanceMeansSoLittleScene />}
       {step === 'heart_building' && <HeartBuildingScene />}
       {step === 'constant' && <ConstantScene />}
       {step === 'do_you_love_me' && <DoYouLoveMeScene />}
+      {step === 'four_hearts_family' && <FourHeartsOneFamilyScene />}
     </div>
   );
 }
