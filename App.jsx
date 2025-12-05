@@ -1110,11 +1110,9 @@ export default function App() {
               Enter the Gift Room
             </button>
             <video
-              src="/cute-love-gif.mp4"
+              src="/cute love gif.mp4"
               autoPlay
               loop
-              muted
-              playsInline
               className="rounded-lg max-w-full h-auto mx-auto"
               style={{ maxHeight: '250px' }}
               aria-label="Love celebration video"
