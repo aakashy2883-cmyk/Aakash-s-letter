@@ -474,7 +474,7 @@ export default function App() {
         </div>
 
         <button
-          onClick={() => handleNextStep('door')}
+          onClick={() => handleNextStep('do_you_love_me')}
           className="mt-8 mx-auto block bg-red-600 text-white px-8 py-3 rounded-full hover:bg-red-700 transition shadow-lg font-bold animate-pulse"
           aria-label="Surprise"
         >
@@ -587,13 +587,13 @@ export default function App() {
       {allOpened && (
         <button
           onClick={() => {
-            handleNextStep('end');
-            setShowConfetti(true);
+            handleNextStep('heart_building');
+            setShowConfetti(false);
           }}
           className="mt-16 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-full font-bold shadow-xl animate-bounce flex items-center gap-2"
-          aria-label="View love declaration"
+          aria-label="Continue"
         >
-          View Love Declaration <Heart className="w-5 h-5 fill-white" />
+          Continue <Heart className="w-5 h-5 fill-white" />
         </button>
       )}
     </div>
@@ -846,7 +846,151 @@ export default function App() {
     </div>
   );
 
-  // 12. Constant Scene (Final Page)
+  // 12. Heart Building Scene (Animated Heart)
+  const HeartBuildingScene = () => {
+    const [blocks, setBlocks] = useState([]);
+    const [isRising, setIsRising] = useState(false);
+    const [showNext, setShowNext] = useState(false);
+
+    const blk_pitn = {
+      block1: [[0, 1], [0, 0], [-1, 0], [-1, -1]],
+      block2: [[0, 1], [0, 0], [-1, 0], [0, -1]],
+      block3: [[-1, 1], [0, 0], [-1, 0], [-1, -1]],
+      block4: [[0, 1], [0, 0], [-1, 0], [-1, -1]],
+      block5: [[-1, 1], [0, 0], [-1, 0], [0, -1]],
+      block6: [[0, -1], [0, 0], [-1, 0], [1, -1]],
+      block7: [[-1, -1], [0, 0], [-1, 0], [1, 0]],
+      block8: [[-1, 1], [0, 0], [-1, 0], [-1, -1]],
+      block9: [[0, -1], [0, 0], [-1, 0], [1, 0]],
+      block10: [[-1, 1], [0, 0], [-1, 0], [1, 0]],
+      block11: [[2, 0], [0, 0], [-1, 0], [1, 0]],
+      block12: [[0, 1], [0, 0], [-1, 0], [0, -1]],
+      block13: [[0, 1], [0, 0], [-1, 0], [-1, -1]],
+      block14: [[1, 1], [0, 0], [-1, 0], [1, 0]],
+      block15: [[1, -1], [0, 0], [-1, 0], [1, 0]],
+      block16: [[-1, -1], [0, 0], [-1, 0], [1, 0]],
+      block17: [[0, 1], [0, 0], [-1, 0], [0, -1]],
+      block18: [[0, 1], [0, 0], [-1, 0], [-1, -1]],
+      block19: [[0, -1], [0, 0], [-1, 0], [1, 0]],
+      block20: [[1, -1], [0, 0], [-1, 0], [1, 0]],
+      block21: [[0, 1], [0, 0], [-1, 0], [-1, -1]],
+      block22: [[1, 1], [0, 0], [-1, 0], [1, 0]],
+      block23: [[0, 2], [0, 0], [0, -1], [0, 1]]
+    };
+
+    const offset_pitn = {
+      block1: [5, 3], block2: [5, 1], block3: [3, 4], block4: [3, 2],
+      block5: [3, -1], block6: [2, 5], block7: [2, 1], block8: [1, -1],
+      block9: [1, -3], block10: [1, 2], block11: [0, 3], block12: [0, 0],
+      block13: [-1, -4], block14: [0, -2], block15: [-2, 4], block16: [-2, 2],
+      block17: [-2, 0], block18: [-3, -2], block19: [-4, 0], block20: [-3, 5],
+      block21: [-5, 3], block22: [-4, 1], block23: [-6, 1]
+    };
+
+    useEffect(() => {
+      // Wait for border animations to complete before starting heart building
+      const startDelay = setTimeout(() => {
+        let index = 0;
+        const timer = setInterval(() => {
+          if (index >= 23) {
+            clearInterval(timer);
+            setTimeout(() => {
+              setIsRising(true);
+              setTimeout(() => setShowNext(true), 2000);
+            }, 500);
+            return;
+          }
+          index++;
+          const blockKey = `block${index}`;
+          setBlocks(prev => [...prev, { key: blockKey, pattern: blk_pitn[blockKey], offset: offset_pitn[blockKey] }]);
+        }, 300);
+
+        return () => clearInterval(timer);
+      }, 10000); // Wait 10 seconds for borders to complete
+
+      return () => clearTimeout(startDelay);
+    }, []);
+
+    return (
+      <div className="h-screen w-full bg-gradient-to-br from-pink-100 to-rose-200 flex items-center justify-center relative overflow-hidden animate-scene-entry">
+        {/* Left GIF */}
+        <img
+          src="biubiubiu.gif"
+          alt="cute animation"
+          className="absolute left-0 bottom-28 w-64 h-64 z-10 pointer-events-none"
+          draggable="false"
+        />
+
+        {/* Heart Container */}
+        <div
+          className="absolute transition-all duration-2000 ease-linear"
+          style={{
+            width: '520px',
+            height: '440px',
+            left: '50%',
+            top: isRising ? '30%' : '50%',
+            marginLeft: '-260px',
+            marginTop: '-220px'
+          }}
+        >
+          {blocks.map((block, idx) => (
+            <div
+              key={idx}
+              className="absolute"
+              style={{
+                left: `calc(50% + ${40 * block.offset[0]}px)`,
+                top: `calc(50% - ${40 * block.offset[1]}px)`,
+                marginLeft: '-20px',
+                marginTop: '-20px',
+                visibility: 'visible'
+              }}
+            >
+              {block.pattern.map((pos, i) => (
+                <div
+                  key={i}
+                  className="absolute w-10 h-10 bg-contain bg-no-repeat"
+                  style={{
+                    left: `${pos[0] * -40}px`,
+                    top: `${pos[1] * -40}px`,
+                    backgroundImage: 'url(heart.png)',
+                    display: idx === blocks.length - 1 && i === 2 && blocks.length >= 23 ? 'none' : 'block'
+                  }}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {/* Love you Pooja text - appears after heart completes */}
+        {blocks.length >= 23 && (
+          <div className="absolute top-[60%] left-1/2 transform -translate-x-1/2 text-center z-30 animate-fade-in-up">
+            <h2 className="text-5xl sm:text-6xl font-bold text-pink-600 font-handwriting animate-pulse-slow">
+              Love you Pooja 💕
+            </h2>
+          </div>
+        )}
+
+        {/* Border animations */}
+        <div className="absolute bottom-8 w-full">
+          <div className="border-t-4 border-black animate-border-expand" />
+          <div className="border-t-4 border-red-500 float-right animate-border-expand-delay" />
+        </div>
+
+        {/* Next button */}
+        {showNext && (
+          <button
+            onClick={() => handleNextStep('constant')}
+            className="absolute bottom-20 left-1/2 transform -translate-x-1/2 bg-pink-600 text-white px-8 py-3 rounded-full font-bold hover:bg-pink-700 transition shadow-xl animate-bounce z-20"
+            aria-label="Continue"
+          >
+            Continue 💕
+          </button>
+        )}
+      </div>
+    );
+  };
+
+  // 13. Constant Scene (Final Page)
   const ConstantScene = () => {
     const handlePenguinClick = () => {
       setIsPenguinHugging(true);
@@ -861,6 +1005,120 @@ export default function App() {
 
         <p className="text-lg italic mt-8 text-pink-100">Click the penguin for a hug!</p>
         <p className="text-lg italic mt-2 text-pink-100">Forever and always, my love.</p>
+      </div>
+    );
+  };
+
+  // 14. Do You Love Me Scene (New Interactive Feature)
+  const DoYouLoveMeScene = () => {
+    const [showQuestion, setShowQuestion] = useState(true);
+    const [showLoader, setShowLoader] = useState(false);
+    const [showResult, setShowResult] = useState(false);
+    const [noButtonPosition, setNoButtonPosition] = useState({ left: '54%', top: '0' });
+    const questionContainerRef = useRef(null);
+
+    const handleNoHover = () => {
+      if (questionContainerRef.current) {
+        const containerWidth = questionContainerRef.current.offsetWidth;
+        const containerHeight = questionContainerRef.current.offsetHeight;
+        const newX = Math.floor(Math.random() * containerWidth);
+        const newY = Math.floor(Math.random() * containerHeight);
+        setNoButtonPosition({ left: `${newX}px`, top: `${newY}px` });
+      }
+    };
+
+    const handleYesClick = () => {
+      setShowQuestion(false);
+      setShowLoader(true);
+      setTimeout(() => {
+        setShowLoader(false);
+        setShowResult(true);
+      }, 3000);
+    };
+
+    return (
+      <div className="h-screen w-full bg-[#ffe6e9] flex items-center justify-center relative overflow-hidden animate-scene-entry">
+        {/* Question Container */}
+        {showQuestion && (
+          <div
+            ref={questionContainerRef}
+            className="question-love-container absolute top-[40%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center"
+          >
+            <div className="tenor-gif-container h-60 mb-12 flex items-center justify-center">
+              <iframe
+                src="https://tenor.com/embed/25789758"
+                width="300"
+                height="240"
+                frameBorder="0"
+                allowFullScreen
+                className="rounded-lg pointer-events-none"
+                title="Cute gif"
+              />
+            </div>
+
+            <h2 className="text-5xl sm:text-6xl mb-4 font-handwriting text-gray-800">Do you love me?</h2>
+            <p className="text-sm text-gray-500 italic mb-6 animate-bounce">
+              Psst... try to click NO 😏
+            </p>
+
+            <div className="button-love-container relative w-full h-20">
+              <button
+                onClick={handleYesClick}
+                className="love-btn yes-love-btn absolute right-[54%] border-none rounded-full px-5 py-2.5 text-lg cursor-pointer transition-all duration-300 bg-[#ff6b81] text-white hover:bg-[#ffa4b1] hover:scale-110 shadow-lg"
+                aria-label="Yes"
+              >
+                Yes
+              </button>
+              <button
+                onMouseEnter={handleNoHover}
+                onTouchStart={handleNoHover}
+                style={noButtonPosition}
+                className="love-btn no-love-btn absolute border-none rounded-full px-5 py-2.5 text-lg cursor-pointer transition-all duration-300 bg-[#ff6b81] text-white hover:bg-[#ffa4b1] hover:scale-110 shadow-lg"
+                aria-label="No"
+              >
+                No
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Heart Loader */}
+        {showLoader && (
+          <div className="heart-loader-main absolute top-[17%] left-1/2 transform -translate-x-1/2 text-[62px]">
+            <div className="heart-loader-heart absolute top-1/2 left-1/2 animate-heart-rotate">
+              <span className="heart-loader-left absolute w-[1em] h-[1em] border border-red-600 bg-red-600 rounded-full transform translate-x-[-28px] translate-y-[-27px] animate-heartL-scale" />
+              <span className="heart-loader-right absolute w-[1em] h-[1em] border border-red-600 bg-red-600 rounded-full transform translate-x-[28px] translate-y-[-27px] animate-heartR-scale" />
+              <span className="heart-loader-square relative block w-[1em] h-[1em] border border-red-600 bg-red-600 transform scale-100 rotate-[-45deg] animate-square-pulse" />
+            </div>
+            <div className="heart-loader-shadow relative top-[97px] left-1/2 block bottom-[-0.5em] w-[1em] h-[0.24em] bg-[#d7d7d7] border border-[#d7d7d7] rounded-full animate-shadow-pulse" />
+          </div>
+        )}
+
+        {/* Result Container */}
+        {showResult && (
+          <div className="love-result-container flex flex-col items-center justify-center h-screen w-full text-center animate-scene-entry max-w-2xl mx-auto px-4">
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-800 font-handwriting mb-4">I knew it😍!</h2>
+            <p className="text-xl sm:text-2xl text-pink-600 font-bold mb-4 animate-bounce">
+              🎁 Gifts are waiting for you 🎁
+            </p>
+            <button
+              onClick={() => handleNextStep('door')}
+              className="mb-6 bg-gradient-to-r from-pink-600 to-rose-600 text-white px-8 py-3 rounded-full font-bold hover:from-pink-700 hover:to-rose-700 transition shadow-xl animate-pulse inline-flex items-center gap-2"
+              aria-label="Enter gift room"
+            >
+              <Gift className="w-5 h-5" />
+              Enter the Gift Room
+            </button>
+            <video
+              src="cute love gif.mp4"
+              autoPlay
+              loop
+              className="rounded-lg max-w-full h-auto mx-auto"
+              style={{ maxHeight: '250px' }}
+              aria-label="Love celebration video"
+            />
+          </div>
+        )}
       </div>
     );
   };
@@ -1002,6 +1260,62 @@ export default function App() {
             transition: none !important;
           }
         }
+
+        /* Do You Love Me Scene Animations */
+        @keyframes heart-rotate {
+          50% { transform: rotate(360deg); }
+          100% { transform: rotate(720deg); }
+        }
+        .animate-heart-rotate {
+          animation: heart-rotate 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+        }
+
+        @keyframes heartL-scale {
+          60% { transform: translate(-28px, -27px) scale(0.4); }
+        }
+        .animate-heartL-scale {
+          animation: heartL-scale 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+        }
+
+        @keyframes heartR-scale {
+          40% { transform: translate(28px, -27px) scale(0.4); }
+        }
+        .animate-heartR-scale {
+          animation: heartR-scale 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+        }
+
+        @keyframes square-pulse {
+          50% {
+            border-radius: 100%;
+            transform: scale(0.5) rotate(-45deg);
+          }
+          100% { transform: scale(1) rotate(-45deg); }
+        }
+        .animate-square-pulse {
+          animation: square-pulse 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+        }
+
+        @keyframes shadow-pulse {
+          50% {
+            transform: scale(0.5);
+            border-color: rgb(228, 228, 228);
+          }
+        }
+        .animate-shadow-pulse {
+          animation: shadow-pulse 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
+        }
+
+        /* Heart Building Scene Animations */
+        @keyframes border-expand {
+          from { width: 0%; }
+          to { width: 100%; }
+        }
+        .animate-border-expand {
+          animation: border-expand 6s linear forwards;
+        }
+        .animate-border-expand-delay {
+          animation: border-expand 4s linear 6s forwards;
+        }
       `}</style>
 
       {step === 'parachute' && <MailFallScene />}
@@ -1015,7 +1329,9 @@ export default function App() {
       {step === 'timeline' && <TimelineScene />}
       {step === 'path' && <ConstellationScene />}
       {step === 'end' && <EndScene />}
+      {step === 'heart_building' && <HeartBuildingScene />}
       {step === 'constant' && <ConstantScene />}
+      {step === 'do_you_love_me' && <DoYouLoveMeScene />}
     </div>
   );
 }
