@@ -52,12 +52,21 @@ async function sendSoakAlmondsReminder() {
   const message = `Time to soak almonds!\n\nDon't forget to soak your almonds for tomorrow morning. Good night!`;
 
   try {
-    const msg = await client.messages.create({
+    // Send to your phone
+    const msg1 = await client.messages.create({
+      body: message,
+      from: twilioPhone,
+      to: yourPhone
+    });
+    console.log(`Soak almonds reminder sent to you: ${msg1.sid}`);
+
+    // Send to her phone
+    const msg2 = await client.messages.create({
       body: message,
       from: twilioPhone,
       to: herPhone
     });
-    console.log(`Soak almonds reminder sent: ${msg.sid}`);
+    console.log(`Soak almonds reminder sent to her: ${msg2.sid}`);
   } catch (error) {
     console.error('❌ Error sending soak reminder:', error.message);
   }
@@ -68,12 +77,21 @@ async function sendEatAlmondsReminder() {
   const message = `Good morning! Time to eat your soaked almonds!\n\nStart your day healthy!`;
 
   try {
-    const msg = await client.messages.create({
+    // Send to your phone
+    const msg1 = await client.messages.create({
+      body: message,
+      from: twilioPhone,
+      to: yourPhone
+    });
+    console.log(`Eat almonds reminder sent to you: ${msg1.sid}`);
+
+    // Send to her phone
+    const msg2 = await client.messages.create({
       body: message,
       from: twilioPhone,
       to: herPhone
     });
-    console.log(`Eat almonds reminder sent: ${msg.sid}`);
+    console.log(`Eat almonds reminder sent to her: ${msg2.sid}`);
   } catch (error) {
     console.error('❌ Error sending eat reminder:', error.message);
   }
