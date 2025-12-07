@@ -49,7 +49,7 @@ async function sendAnniversaryReminders() {
 
 // Function to send almond soak reminder (9 PM)
 async function sendSoakAlmondsReminder() {
-  const message = `Time to soak almonds!\n\nDon't forget to soak your almonds for tomorrow morning. Good night!`;
+  const message = `🥜 Time to soak almonds! 🥜\n\nDon't forget to soak your almonds for tomorrow morning. Good night Kanna! 😊`;
 
   try {
     // Send to your phone
@@ -74,7 +74,7 @@ async function sendSoakAlmondsReminder() {
 
 // Function to send eat almonds reminder (6 AM)
 async function sendEatAlmondsReminder() {
-  const message = `Good morning! Time to eat your soaked almonds!\n\nStart your day healthy!`;
+  const message = `🌅 Good morning Kanna! Time to eat your soaked almonds! 🥜\n\nStart your day healthy! 💪`;
 
   try {
     // Send to your phone
