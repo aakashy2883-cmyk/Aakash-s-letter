@@ -536,37 +536,37 @@ const GiftSelection = () => (
     <p className="text-rose-600 mb-8 italic">12 special gifts, each with love 💕</p>
 
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 items-center justify-center max-w-6xl">
-      {/* ⭐ Gift 1: OUR STORY - THE CINEMATIC JOURNEY ⭐ */}
-      <button
-        onClick={() => {
-          handleNextStep('our_story');
-          markGiftOpened('story');
-        }}
-        className={`transform transition-all duration-300 hover:-translate-y-4 ${openedGifts.story ? 'opacity-50' : 'animate-bounce-custom'}`}
-      >
-        <GiftBox color="bg-gradient-to-br from-violet-600 to-fuchsia-600" ribbon="bg-violet-400" />
-      </button>
-
-      {/* Gift 2: Aug 18 (The Yes) */}
+      {/* Gift 1: Aug 18 */}
       <button
         onClick={() => {
           handleNextStep('aug18');
           markGiftOpened('aug18');
         }}
-        className={`transform transition-all duration-300 hover:-translate-y-4 delay-100 ${openedGifts.aug18 ? 'opacity-50' : 'animate-bounce-custom'}`}
+        className={`transform transition-all duration-300 hover:-translate-y-4 ${openedGifts.aug18 ? 'opacity-50' : 'animate-bounce-custom'}`}
       >
         <GiftBox color="bg-teal-600" ribbon="bg-teal-400" />
       </button>
 
-      {/* Gift 3: Aug 29 (Surprise Visit) */}
+      {/* Gift 2: Aug 29 */}
       <button
         onClick={() => {
           handleNextStep('aug29_surprise');
           markGiftOpened('aug29');
         }}
-        className={`transform transition-all duration-300 hover:-translate-y-4 delay-200 ${openedGifts.aug29 ? 'opacity-50' : 'animate-bounce-custom'}`}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-100 ${openedGifts.aug29 ? 'opacity-50' : 'animate-bounce-custom'}`}
       >
         <GiftBox color="bg-orange-600" ribbon="bg-orange-400" />
+      </button>
+
+      {/* Gift 3: Letters */}
+      <button
+        onClick={() => {
+          handleNextStep('letters_of_strength');
+          markGiftOpened('letters');
+        }}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-200 ${openedGifts.letters ? 'opacity-50' : 'animate-bounce-custom'}`}
+      >
+        <GiftBox color="bg-blue-600" ribbon="bg-blue-400" />
       </button>
 
       {/* Gift 4: Distance */}
@@ -660,17 +660,17 @@ const GiftSelection = () => (
         <GiftBox color="bg-amber-600" ribbon="bg-amber-300" />
       </button>
 
-      {/* Gift 12: Letters */}
+      {/* ⭐ Gift 12: Our Story ⭐ */}
       <button
         onClick={() => {
-          handleNextStep('letters_of_strength');
-          markGiftOpened('letters');
+          handleNextStep('our_story');
+          markGiftOpened('story');
         }}
         className={`transform transition-all duration-300 hover:-translate-y-4 delay-[1100ms] ${
-          openedGifts.letters ? 'opacity-50' : 'animate-bounce-custom'
+          openedGifts.story ? 'opacity-50' : 'animate-bounce-custom'
         }`}
       >
-        <GiftBox color="bg-blue-600" ribbon="bg-blue-400" />
+        <GiftBox color="bg-gradient-to-br from-violet-600 to-fuchsia-600" ribbon="bg-violet-400" />
       </button>
     </div>
 
@@ -2276,1166 +2276,774 @@ Aakash`
     );
   };
 
-
   // ⭐ NEW: Our Story - CINEMATIC TIMELINE JOURNEY ⭐
   const OurStoryScene = () => {
+    const [currentChapter, setCurrentChapter] = useState(0);
+    const [hasStarted, setHasStarted] = useState(false);
     const scrollContainerRef = useRef(null);
-    const [activeSection, setActiveSection] = useState(0);
 
-    // Consistent container classes for responsive alignment
-    const containerClasses = "max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full overflow-y-auto max-h-full";
-    const sectionClasses = "min-h-screen h-screen w-full snap-start flex items-center justify-center relative overflow-hidden py-8 sm:py-12";
+    // Cinematic chapters with rich visual data
+    const chapters = [
+      // Opening Title
+      {
+        id: 0,
+        type: "title",
+        title: "OUR LOVE STORY",
+        subtitle: "The Journey of Aakash & Pooja",
+        tagline: "From a glance to forever",
+        gradient: "from-black via-purple-900 to-black",
+      },
+      // Chapter 1: April 20 - The Glance
+      {
+        chapter: 1,
+        title: "The Glance",
+        subtitle: "Where it all began",
+        date: "April 20",
+        time: "",
+        mood: "shy",
+        gradient: "from-purple-300 via-purple-200 to-purple-100",
+        illustration: "👀",
+        decorations: ["🌸", "💜"],
+        content: [
+          "It was a relative's function.",
+          "Among all the faces, one caught my attention.",
+          "",
+          "You were there. I saw you.",
+          "But we didn't talk. We didn't even see each other face to face.",
+          "",
+          "Just a glance. Just a moment.",
+          "Little did I know, this moment would change everything.",
+        ],
+        position: "left"
+      },
+      // Chapter 2: Instagram Connection
+      {
+        chapter: 2,
+        title: "The Follow",
+        subtitle: "A digital thread",
+        date: "May",
+        time: "",
+        mood: "hopeful",
+        gradient: "from-blue-300 via-cyan-200 to-teal-100",
+        illustration: "📱",
+        decorations: ["💙", "✨"],
+        content: [
+          "Later, life went back to normal.",
+          "But fate had other plans.",
+          "",
+          "One day, I saw your profile on Instagram.",
+          "My brothers were following you.",
+          "",
+          "I sent a follow request.",
+          "You accepted.",
+          "",
+          "We still didn't talk, but something had started...",
+        ],
+        position: "right"
+      },
+      // Chapter 3: May 30 - Birthday
+      {
+        chapter: 3,
+        title: "Birthday Wish",
+        subtitle: "First words",
+        date: "May 30",
+        time: "",
+        mood: "sweet",
+        gradient: "from-pink-300 via-rose-200 to-pink-100",
+        illustration: "🎂",
+        decorations: ["🎈", "💗"],
+        content: [
+          "It was your birthday.",
+          "",
+          "I wished you: 'Happy Birthday!'",
+          "You replied: 'Thank you'",
+          "",
+          "I liked that message.",
+          "That was it. No more conversation.",
+          "",
+          "But your 'thank you' stayed with me.",
+        ],
+        position: "left"
+      },
+      // Chapter 4: June 3 - RCB
+      {
+        chapter: 4,
+        title: "RCB Win",
+        subtitle: "An emoji exchange",
+        date: "June 3",
+        time: "",
+        mood: "playful",
+        gradient: "from-orange-300 via-red-200 to-orange-100",
+        illustration: "🏏",
+        decorations: ["❤️", "🎉"],
+        content: [
+          "I posted a story about RCB winning.",
+          "",
+          "You replied with an emoji.",
+          "I sent another emoji back.",
+          "You liked it and left.",
+          "",
+          "Again, no conversation.",
+          "",
+          "But I was starting to notice you more...",
+        ],
+        position: "right"
+      },
+      // Chapter 5: June 10, 8:06 PM - The Beginning
+      {
+        chapter: 5,
+        title: "The Beginning",
+        subtitle: "The message that changed everything",
+        date: "June 10",
+        time: "8:06 PM",
+        mood: "magical",
+        gradient: "from-yellow-300 via-amber-200 to-yellow-100",
+        illustration: "🕉️",
+        decorations: ["✨", "💫", "🌟"],
+        content: [
+          "This is the day I will never forget.",
+          "",
+          "You posted a story about Lord Krishna.",
+          "At 8:06 PM, I sent you a message:",
+          "'Hey hi, can you please send this picture?'",
+          "",
+          "That's how it started.",
+          "That's how we started building conversations.",
+          "",
+          "From that day till now, we haven't gone a day without talking.",
+        ],
+        position: "center",
+        special: true
+      },
+      // Chapter 6: June 22, 5:55 AM - First Call
+      {
+        chapter: 6,
+        title: "First Voice",
+        subtitle: "Hearing you for the first time",
+        date: "June 22",
+        time: "5:55 AM",
+        mood: "nervous",
+        gradient: "from-green-300 via-emerald-200 to-teal-100",
+        illustration: "📞",
+        decorations: ["💚", "🎵"],
+        content: [
+          "We had been chatting every day.",
+          "Sharing thoughts, lives, everything.",
+          "",
+          "Then at 5:55 AM, I made my first call to you.",
+          "",
+          "That was the first time I heard your voice.",
+          "Apart from the chats, this was real.",
+          "",
+          "From then on, calls became our thing.",
+          "Your voice became my favorite sound.",
+        ],
+        position: "left"
+      },
+      // Chapter 7: Growing Connection
+      {
+        chapter: 7,
+        title: "Growing",
+        subtitle: "Every day, a little closer",
+        date: "June - July",
+        time: "",
+        mood: "warm",
+        gradient: "from-orange-200 via-rose-200 to-pink-100",
+        illustration: "💭",
+        decorations: ["🌺", "💕"],
+        content: [
+          "Days turned into weeks.",
+          "",
+          "We talked about everything and nothing.",
+          "You gave me value I'd never received before.",
+          "You gave me time.",
+          "",
+          "I started admiring you.",
+          "I started feeling something I couldn't name yet.",
+          "",
+          "You were becoming important to me.",
+        ],
+        position: "right"
+      },
+      // Chapter 8: Aug 8 - Athadu & Moon
+      {
+        chapter: 8,
+        title: "Athadu & The Moon",
+        subtitle: "The moment I knew",
+        date: "August 8",
+        time: "",
+        mood: "realization",
+        gradient: "from-indigo-400 via-blue-300 to-slate-200",
+        illustration: "🌕",
+        decorations: ["🎬", "💙", "✨"],
+        content: [
+          "I'm a huge fan of Mahesh Babu.",
+          "Athadu was re-released - one of my favorite movies.",
+          "",
+          "I was in the theatre with my friend.",
+          "You were in your hometown.",
+          "I thought you weren't in a good mood.",
+          "",
+          "So I left the movie. Even in the theatre hall, I started chatting with you.",
+          "",
+          "That's when I realized: You're more important than anything else.",
+        ],
+        position: "left",
+        special: true
+      },
+      // Chapter 8 continued - Moon
+      {
+        chapter: 8.5,
+        title: "Under the Full Moon",
+        subtitle: "Love realized",
+        date: "August 8",
+        time: "Night",
+        mood: "romantic",
+        gradient: "from-slate-600 via-blue-400 to-slate-200",
+        illustration: "🌙",
+        decorations: ["⭐", "💫", "✨"],
+        content: [
+          "While going home from the theatre,",
+          "it was a full moon night.",
+          "",
+          "I looked up at the moon,",
+          "and I thought of you.",
+          "",
+          "That's when I came to the conclusion:",
+          "",
+          "I love her.",
+          "",
+          "I don't know if it was love or not,",
+          "but my feelings for you were real.",
+        ],
+        position: "center",
+        special: true
+      },
+      // Chapter 9: Aug 12 - First 143
+      {
+        chapter: 9,
+        title: "143",
+        subtitle: "The first attempt",
+        date: "August 12",
+        time: "1:43 AM",
+        mood: "anxious",
+        gradient: "from-violet-400 via-purple-300 to-lavender-200",
+        illustration: "🕐",
+        decorations: ["💜", "❓"],
+        content: [
+          "I had so many thoughts:",
+          "How do I express these feelings?",
+          "How will she react?",
+          "What if she doesn't like me?",
+          "What if she stops talking to me?",
+          "",
+          "At 1:43 AM, I asked you to check the time.",
+          "I thought you'd understand - 143 means 'I love you'.",
+          "",
+          "But you didn't understand.",
+          "The opportunity was wasted.",
+        ],
+        position: "right"
+      },
+      // Chapter 10: Aug 14 - She Understood
+      {
+        chapter: 10,
+        title: "She Understood",
+        subtitle: "The second 143",
+        date: "August 14",
+        time: "1:43 AM",
+        mood: "tense-hopeful",
+        gradient: "from-indigo-500 via-purple-400 to-pink-300",
+        illustration: "💭",
+        decorations: ["💜", "💗", "✨"],
+        content: [
+          "Again, 1:43 AM.",
+          "Again, I asked you to check the time.",
+          "",
+          "My plan: If you get serious, I can say",
+          "'143 means I miss you' and mislead you.",
+          "",
+          "But you understood my feelings.",
+          "",
+          "You said: 'Ila evaru ayna propose chesthara?'",
+          "",
+          "You were in a dilemma.",
+          "I told you I won't be a disturbance.",
+          "I'll support you always.",
+        ],
+        position: "left"
+      },
+      // Chapter 11: Aug 18 - I Love You
+      {
+        chapter: 11,
+        title: "I Love You",
+        subtitle: "The Yes",
+        date: "August 18",
+        time: "",
+        mood: "celebration",
+        gradient: "from-pink-400 via-rose-300 to-amber-200",
+        illustration: "💖",
+        decorations: ["🎉", "✨", "💕", "🎊"],
+        content: [
+          "I didn't say 'I love you' in words.",
+          "I didn't bring up the topic again.",
+          "",
+          "Four days later...",
+          "",
+          "YOU said 'I love you' in words.",
+          "",
+          "That was the day you accepted me.",
+          "",
+          "You had doubts. You had trust issues.",
+          "I was a complete stranger.",
+          "",
+          "But you chose to trust me.",
+          "You chose us.",
+        ],
+        position: "center",
+        special: true
+      },
+      // Chapter 12: Aug 29 - Surprise Visit
+      {
+        chapter: 12,
+        title: "Surprise!",
+        subtitle: "4:48 PM",
+        date: "August 29",
+        time: "4:48 PM",
+        mood: "excitement",
+        gradient: "from-cyan-400 via-blue-300 to-teal-200",
+        illustration: "🚂",
+        decorations: ["💙", "😊", "✨"],
+        content: [
+          "I couldn't wait anymore.",
+          "",
+          "Without telling you,",
+          "I traveled from Hyderabad to Kakinada.",
+          "",
+          "At 4:48 PM, I surprised you with a visit.",
+          "",
+          "Your face when you saw me...",
+          "That moment was worth everything.",
+          "",
+          "Finally, we were together.",
+        ],
+        position: "right",
+        special: true
+      },
+      // Chapter 13: Aug 31 - First Date
+      {
+        chapter: 13,
+        title: "Our First Date",
+        subtitle: "A full day together",
+        date: "August 31",
+        time: "Morning to Evening",
+        mood: "romantic",
+        gradient: "from-rose-400 via-pink-300 to-red-200",
+        illustration: "💑",
+        decorations: ["❤️", "🌹", "☀️", "🌙"],
+        content: [
+          "From morning to evening,",
+          "we spent the entire day together.",
+          "",
+          "Every moment felt like magic.",
+          "Every word, every laugh, every silence.",
+          "",
+          "Your presence is something I can't live without.",
+          "",
+          "That day, I knew:",
+          "I want every day to be like this.",
+          "I want to spend my life with you.",
+        ],
+        position: "left",
+        special: true
+      },
+      // Chapter 14: Beautiful Moments
+      {
+        chapter: 14,
+        title: "Beautiful Moments",
+        subtitle: "Sept - Dec",
+        date: "Many dates",
+        time: "",
+        mood: "joyful",
+        gradient: "from-yellow-300 via-pink-300 to-purple-300",
+        illustration: "⭐",
+        decorations: ["✨", "💖", "🌟"],
+        content: [
+          "Aug 29, Aug 31, Sept 5, 6, 7, 8...",
+          "Sept 15, 16, 26, 27, 28...",
+          "Oct 6, 18... Nov 1, 2, 3, 8, 9...",
+          "Nov 15, 16, 21, 22, 23... Dec 1...",
+          "",
+          "Every date is a constellation star.",
+          "Every meeting, a memory.",
+          "",
+          "I even thought of buying a house in Kakinada",
+          "just to be close to you.",
+          "",
+          "Because I can't imagine life without seeing you.",
+        ],
+        position: "right"
+      },
+      // Chapter 15: Sept 29 - The Storm
+      {
+        chapter: 15,
+        title: "The Storm",
+        subtitle: "When challenges came",
+        date: "September 29",
+        time: "8:38 PM",
+        mood: "dark-strong",
+        gradient: "from-gray-600 via-slate-500 to-purple-900",
+        illustration: "⛈️",
+        decorations: ["💪", "🛡️"],
+        content: [
+          "At 8:38 PM, everything changed.",
+          "",
+          "Your parents found out about us.",
+          "",
+          "We were both in shock.",
+          "I was so tensed about you.",
+          "What would your family say?",
+          "",
+          "But you stood strong.",
+          "In all these times, you didn't break.",
+          "",
+          "That's when I knew:",
+          "You're the strongest person I know.",
+        ],
+        position: "center"
+      },
+      // Chapter 16: Oct 1 - Determination
+      {
+        chapter: 16,
+        title: "Meeting Your Brother",
+        subtitle: "Fighting for us",
+        date: "October 1",
+        time: "",
+        mood: "determined",
+        gradient: "from-green-500 via-emerald-400 to-teal-300",
+        illustration: "🤝",
+        decorations: ["💚", "⚡"],
+        content: [
+          "I told my parents about our relationship.",
+          "They accepted.",
+          "",
+          "On Oct 1, I met your brother.",
+          "I told him I won't cheat you.",
+          "I'm an IT employee. I'm serious about us.",
+          "",
+          "He told me not to meet you.",
+          "",
+          "But I thought:",
+          "I can't stay without meeting her.",
+          "And you felt the same.",
+          "",
+          "So we found a way.",
+        ],
+        position: "left"
+      },
+      // Chapter 17: Continuing Despite All
+      {
+        chapter: 17,
+        title: "Still Choosing Us",
+        subtitle: "Love wins",
+        date: "Oct - Dec",
+        time: "",
+        mood: "courageous",
+        gradient: "from-amber-400 via-orange-300 to-rose-400",
+        illustration: "💪",
+        decorations: ["❤️", "🔥", "✨"],
+        content: [
+          "Despite everything,",
+          "we managed.",
+          "",
+          "We found ways to meet.",
+          "We created moments together.",
+          "",
+          "Our last meet was on Dec 1.",
+          "",
+          "Because what we have is worth fighting for.",
+          "What we have is real.",
+          "",
+          "Distance, family, challenges -",
+          "nothing can stop us.",
+        ],
+        position: "right"
+      },
+      // Chapter 18: Future
+      {
+        chapter: 18,
+        title: "To Be Continued...",
+        subtitle: "Our forever",
+        date: "Every day ahead",
+        time: "",
+        mood: "hopeful-dreamy",
+        gradient: "from-pink-300 via-purple-300 to-blue-300",
+        illustration: "💞",
+        decorations: ["✨", "🌈", "💖", "🌟"],
+        content: [
+          "This is our story till today.",
+          "",
+          "I love you so much.",
+          "You're the most important person to me.",
+          "I value you. I support you. Always.",
+          "",
+          "I want to be the perfect husband for you.",
+          "I'll do anything to be with you.",
+          "",
+          "I'm completely into you.",
+          "I'm emotionally dependent on you.",
+          "",
+          "And our story?",
+          "It's just beginning...",
+          "",
+          "💕 Forever Yours, Aakash 💕",
+        ],
+        position: "center",
+        special: true
+      },
+    ];
 
-    // Phone Mockup Component
-    const PhoneMockup = ({ children, gradient = "from-slate-800 to-slate-900" }) => (
-      <div className="relative w-72 h-[600px] mx-auto">
-        <div className={`absolute inset-0 bg-gradient-to-br ${gradient} rounded-[3rem] shadow-2xl border-8 border-gray-900 overflow-hidden`}>
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-black rounded-b-3xl z-50" />
-          <div className="absolute inset-4 top-10 bg-white rounded-[2rem] overflow-y-auto">
-            {children}
-          </div>
-        </div>
-      </div>
-    );
+    const handleNextPage = () => {
+      if (currentPage < storyPages.length - 1 && !isFlipping) {
+        setIsFlipping(true);
+        setTimeout(() => {
+          setCurrentPage(currentPage + 1);
+          setIsFlipping(false);
+        }, 600);
+      }
+    };
 
-    // Chat Bubble Component
-    const ChatBubble = ({ text, sent, time }) => (
-      <div className={`flex ${sent ? 'justify-end' : 'justify-start'} mb-2 px-4 animate-fade-in`}>
-        <div className={`max-w-[70%] ${sent ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'} rounded-2xl px-4 py-2`}>
-          <p className="text-sm">{text}</p>
-          {time && <p className={`text-xs mt-1 ${sent ? 'text-blue-100' : 'text-gray-500'}`}>{time}</p>}
-        </div>
-      </div>
-    );
+    const handlePrevPage = () => {
+      if (currentPage > 0 && !isFlipping) {
+        setIsFlipping(true);
+        setTimeout(() => {
+          setCurrentPage(currentPage - 1);
+          setIsFlipping(false);
+        }, 600);
+      }
+    };
 
-    // Clock Display Component
-    const ClockDisplay = ({ time, label }) => (
-      <div className="text-center">
-        <div className="text-7xl sm:text-8xl font-bold text-white font-mono drop-shadow-2xl mb-4">
-          {time}
-        </div>
-        {label && <p className="text-xl sm:text-2xl text-white/80">{label}</p>}
-      </div>
-    );
+    const currentPageData = storyPages[currentPage];
 
-    // Calendar Page Component
-    const CalendarPage = ({ month, day }) => (
-      <div className="w-64 h-80 bg-white rounded-lg shadow-2xl overflow-hidden ring-4 ring-pink-500 animate-pulse">
-        <div className="bg-gradient-to-r from-red-500 to-red-600 text-white text-center py-4">
-          <p className="text-lg font-bold uppercase">{month}</p>
-        </div>
-        <div className="flex items-center justify-center h-48">
-          <p className="text-9xl font-bold text-gray-800">{day}</p>
-        </div>
-      </div>
-    );
-
-    // Map Journey Component
-    const MapJourney = ({ from, to }) => (
-      <div className="relative w-full max-w-2xl h-96 bg-gradient-to-br from-blue-100 to-green-100 rounded-3xl overflow-hidden shadow-2xl mx-auto">
-        <div className="absolute inset-0 flex items-center justify-around px-12">
-          <div className="text-center animate-pulse">
-            <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center mb-4 shadow-xl">
-              <MapPin className="w-10 h-10 text-white" />
-            </div>
-            <p className="font-bold text-lg">{from}</p>
-          </div>
-          <div className="relative flex-1 h-2 bg-gradient-to-r from-blue-500 to-pink-500 mx-8">
-            <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
-              <div className="text-4xl animate-pulse">🚂</div>
-            </div>
-          </div>
-          <div className="text-center animate-pulse" style={{ animationDelay: '0.5s' }}>
-            <div className="w-20 h-20 bg-pink-500 rounded-full flex items-center justify-center mb-4 shadow-xl">
-              <Heart className="w-10 h-10 text-white fill-white" />
-            </div>
-            <p className="font-bold text-lg">{to}</p>
-          </div>
-        </div>
-      </div>
-    );
+    // Mood-based styling
+    const getMoodStyles = (mood) => {
+      const styles = {
+        dreamy: "shadow-2xl shadow-purple-500/50",
+        shy: "shadow-2xl shadow-purple-300/50",
+        hopeful: "shadow-2xl shadow-blue-300/50",
+        sweet: "shadow-2xl shadow-pink-300/50",
+        playful: "shadow-2xl shadow-orange-300/50",
+        magical: "shadow-2xl shadow-yellow-400/50 ring-4 ring-yellow-300",
+        nervous: "shadow-2xl shadow-green-300/50",
+        warm: "shadow-2xl shadow-rose-300/50",
+        realization: "shadow-2xl shadow-indigo-400/50",
+        romantic: "shadow-2xl shadow-blue-400/50",
+        anxious: "shadow-2xl shadow-violet-400/50",
+        "tense-hopeful": "shadow-2xl shadow-indigo-500/50",
+        celebration: "shadow-2xl shadow-pink-400/50 ring-4 ring-amber-400 animate-pulse",
+        excitement: "shadow-2xl shadow-cyan-400/50",
+        joyful: "shadow-2xl shadow-yellow-300/50",
+        "dark-strong": "shadow-2xl shadow-gray-600/50",
+        determined: "shadow-2xl shadow-green-500/50",
+        courageous: "shadow-2xl shadow-orange-400/50",
+        "hopeful-dreamy": "shadow-2xl shadow-purple-400/50"
+      };
+      return styles[mood] || "shadow-2xl";
+    };
 
     return (
-      <div
-        ref={scrollContainerRef}
-        className="h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory scroll-smooth bg-black"
-      >
-        {/* ===== OPENING TITLE ===== */}
-        <section className="min-h-screen h-screen w-full snap-start flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-black via-purple-900 to-black py-8">
-          {[...Array(100)].map((_, i) => (
+      <div className="min-h-screen w-full bg-gradient-to-br from-slate-800 via-purple-900 to-slate-900 flex items-center justify-center p-4 relative overflow-hidden animate-scene-entry">
+        {/* Floating stars background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(40)].map((_, i) => (
             <div
               key={i}
-              className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+              className="absolute text-yellow-200 opacity-60 animate-pulse"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
+                fontSize: `${Math.random() * 10 + 8}px`,
                 animationDelay: `${Math.random() * 3}s`,
                 animationDuration: `${2 + Math.random() * 3}s`
               }}
-            />
+            >
+              ✨
+            </div>
           ))}
-          <div className={`${containerClasses} text-center`}>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 mb-6 sm:mb-8 animate-pulse font-handwriting leading-tight">
-              Our Love Story
-            </h1>
-            <p className="text-xl sm:text-2xl lg:text-3xl text-white/90 mb-3 sm:mb-4">Aakash & Pooja</p>
-            <p className="text-base sm:text-lg lg:text-xl text-white/70">From a glance to forever</p>
-            <p className="text-sm text-white/50 mt-6 sm:mt-8 animate-bounce">Scroll to begin ↓</p>
+        </div>
+
+        {/* Book Container */}
+        <div className="relative max-w-5xl w-full">
+          {/* Page Counter */}
+          <div className="text-center mb-4 text-white/70 font-handwriting text-lg">
+            Page {currentPage + 1} of {storyPages.length}
           </div>
-        </section>
 
-        {/* ===== CHAPTER 1: APRIL 20 - THE GLANCE ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-purple-900 via-purple-700 to-pink-900`}>
-          <div className="absolute inset-0 opacity-20">
-            {[...Array(20)].map((_, i) => (
-              <div key={i} className="absolute text-6xl" style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animation: 'float 3s ease-in-out infinite',
-                animationDelay: `${Math.random() * 2}s`
-              }}>
-                🌸
+          {/* The Book Page */}
+          <div
+            className={`relative bg-gradient-to-br ${currentPageData.gradient} rounded-2xl p-8 sm:p-12 min-h-[600px] flex flex-col justify-between transition-all duration-600 ${getMoodStyles(currentPageData.mood)} ${
+              isFlipping ? 'animate-page-flip' : ''
+            }`}
+            style={{
+              transformStyle: 'preserve-3d',
+              perspective: '1000px'
+            }}
+          >
+            {/* Decorative elements */}
+            {currentPageData.decorations && (
+              <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl">
+                {currentPageData.decorations.map((deco, idx) => (
+                  <span
+                    key={idx}
+                    className="absolute text-4xl opacity-30 animate-pulse"
+                    style={{
+                      left: idx % 2 === 0 ? '5%' : '90%',
+                      top: `${10 + idx * 20}%`,
+                      animationDelay: `${idx * 0.5}s`
+                    }}
+                  >
+                    {deco}
+                  </span>
+                ))}
               </div>
-            ))}
-          </div>
-          <div className={`${containerClasses} text-center`}>
-            <p className="text-pink-300 text-base sm:text-lg mb-3 sm:mb-4">April 20</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-handwriting leading-tight">The Glance That Started It All</h2>
-            <div className="space-y-2 sm:space-y-3 text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed">
-              <p className="text-lg sm:text-xl italic text-pink-200">It was just another family function.</p>
-              <p>A room full of familiar and unfamiliar faces.</p>
-              <p>But among all of them, there was one...</p>
-              <div className="text-5xl sm:text-6xl lg:text-7xl my-6 sm:my-8 animate-pulse">👀</div>
-              <p className="text-2xl sm:text-3xl text-pink-300">You.</p>
-              <p>Our eyes didn't meet. We didn't exchange words.</p>
-              <p>We didn't even properly see each other.</p>
-              <div className="my-8 p-6 sm:p-8 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/30">
-                <p className="text-2xl sm:text-3xl text-pink-300 font-bold">Just a fleeting glance.</p>
-                <p className="text-xl sm:text-2xl text-white/80 mt-2">But somehow, it was enough.</p>
-              </div>
-              <p className="text-lg sm:text-xl text-white/80 italic">Little did I know...</p>
-              <p className="text-xl sm:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-purple-300 font-bold">
-                That fleeting moment would become the beginning of forever.
-              </p>
-            </div>
-          </div>
-        </section>
+            )}
 
-        {/* ===== CHAPTER 2: INSTAGRAM CONNECTION ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-blue-900 via-cyan-800 to-teal-900`}>
-          <div className={`${containerClasses}`}>
-            <div className="text-center mb-6 sm:mb-8 lg:mb-12">
-              <p className="text-cyan-300 text-lg sm:text-xl mb-4">May</p>
-              <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white mb-4 font-handwriting">The Follow</h2>
-              <p className="text-xl sm:text-2xl text-white/80">A digital thread</p>
-            </div>
-            <PhoneMockup gradient="from-purple-600 to-pink-600">
-              <div className="h-full bg-gradient-to-b from-purple-50 to-pink-50 p-4">
-                <div className="flex items-center justify-center mb-6">
-                  <p className="font-bold text-2xl">Instagram</p>
+            {/* Special badge for important moments */}
+            {currentPageData.special && (
+              <div className="absolute -top-4 -right-4 bg-gradient-to-r from-yellow-400 to-amber-500 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg animate-bounce">
+                ⭐ Special Moment
+              </div>
+            )}
+
+            {/* Page Content */}
+            <div className={`relative z-10 flex flex-col ${
+              currentPageData.position === 'center' ? 'items-center text-center' :
+              currentPageData.position === 'right' ? 'items-end text-right' :
+              'items-start text-left'
+            }`}>
+              {/* Illustration */}
+              <div className="text-8xl sm:text-9xl mb-6 animate-bounce-slow">
+                {currentPageData.illustration}
+              </div>
+
+              {/* Title */}
+              <h1 className="text-4xl sm:text-6xl font-bold text-gray-900 mb-2 font-handwriting drop-shadow-lg">
+                {currentPageData.title}
+              </h1>
+
+              {/* Subtitle */}
+              {currentPageData.subtitle && (
+                <h2 className="text-xl sm:text-2xl text-gray-700 italic mb-4 font-handwriting">
+                  {currentPageData.subtitle}
+                </h2>
+              )}
+
+              {/* Date & Time */}
+              {currentPageData.date && (
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-6 text-gray-800 font-bold">
+                  <span className="text-lg">📅 {currentPageData.date}</span>
+                  {currentPageData.time && (
+                    <span className="text-lg">🕐 {currentPageData.time}</span>
+                  )}
                 </div>
-                <div className="bg-white rounded-xl p-6 shadow-lg text-center">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 mx-auto mb-4 flex items-center justify-center text-white text-4xl font-bold">
-                    P
-                  </div>
-                  <p className="font-bold text-xl mb-2">Pooja</p>
-                  <p className="text-gray-500 text-sm mb-4">Followed by your brothers</p>
-                  <button className="bg-blue-500 text-white px-8 py-2 rounded-lg font-semibold w-full">
-                    Follow
-                  </button>
-                </div>
-                <div className="mt-8 space-y-3 text-center text-gray-600">
-                  <p className="italic">Life moved on after that function.</p>
-                  <p className="italic">But somehow, I couldn't forget that face.</p>
-                  <p className="font-semibold text-gray-800 mt-4">Then one day, I saw your profile.</p>
-                  <p className="text-sm">My brothers were following you.</p>
-                  <p className="text-purple-600 font-semibold mt-4">My heart raced as I clicked "Follow"</p>
-                  <p className="text-pink-600 font-bold text-lg">You accepted.</p>
-                  <p className="text-sm italic mt-4">It was just a follow request...</p>
-                  <p className="text-pink-600 font-semibold">But it felt like the universe was giving me a second chance.</p>
-                </div>
-              </div>
-            </PhoneMockup>
-          </div>
-        </section>
+              )}
 
-        {/* ===== CHAPTER 3: MAY 30 - BIRTHDAY ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-pink-900 via-rose-800 to-red-900`}>
-          <div className={`${containerClasses}`}>
-            <div className="grid md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center">
-              <div className="text-white text-center md:text-left">
-                <p className="text-pink-300 text-lg sm:text-xl mb-4">May 30</p>
-                <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-6 sm:mb-8 font-handwriting">A Simple Birthday Wish</h2>
-                <div className="space-y-4 text-lg sm:text-xl">
-                  <p className="italic text-pink-200">I didn't know you yet.</p>
-                  <p className="italic text-pink-200">We had never spoken.</p>
-                  <p className="mt-6">But when your birthday came,</p>
-                  <p>I gathered the courage to send you a message.</p>
-                  <div className="my-6 p-4 bg-white/10 backdrop-blur-sm rounded-xl border border-white/30">
-                    <p className="text-base italic">"Happy Birthday! 🎂🎉"</p>
-                  </div>
-                  <p>You replied: <span className="text-pink-300 font-semibold">"Thank you 😊"</span></p>
-                  <p className="text-2xl text-yellow-300 font-bold mt-6">I liked that message.</p>
-                  <p className="text-base opacity-75">Just two words from you.</p>
-                  <p className="text-base opacity-75">That was it. No more conversation.</p>
-                  <div className="mt-6 p-4 bg-white/20 backdrop-blur-md rounded-xl">
-                    <p className="text-lg text-white font-semibold">But those two words...</p>
-                    <p className="text-pink-300">They gave me hope.</p>
-                    <p className="text-sm mt-2 italic">Maybe, just maybe, she noticed me too.</p>
-                  </div>
-                </div>
-              </div>
-              <PhoneMockup>
-                <div className="h-full bg-white p-4 flex flex-col">
-                  <div className="flex items-center gap-3 mb-6 pb-3 border-b">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center text-white font-bold">
-                      P
-                    </div>
-                    <span className="font-semibold">Pooja</span>
-                  </div>
-                  <div className="flex-1 space-y-4">
-                    <ChatBubble text="Happy Birthday! 🎂🎉" sent={true} />
-                    <ChatBubble text="Thank you 😊" sent={false} time="Just now" />
-                    <div className="flex justify-end px-4">
-                      <Heart className="w-6 h-6 text-pink-500 fill-pink-500 animate-pulse" />
-                    </div>
-                  </div>
-                </div>
-              </PhoneMockup>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== CHAPTER 4: JUNE 3 - RCB ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-orange-900 via-red-800 to-red-900`}>
-          <div className={`${containerClasses} text-center`}>
-            <p className="text-orange-300 text-lg sm:text-xl mb-4">June 3</p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 sm:mb-8 font-handwriting">Small Moments, Big Feelings</h2>
-            <div className="text-6xl sm:text-7xl lg:text-8xl mb-6 sm:mb-8">🏏</div>
-            <div className="space-y-4 text-xl sm:text-2xl text-white/90">
-              <p className="text-lg italic text-orange-200">It was just another cricket match.</p>
-              <p className="text-lg italic text-orange-200">RCB won, and I was excited.</p>
-
-              <p className="text-xl mt-6">So I posted a story celebrating the win.</p>
-
-              <div className="my-8 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/30">
-                <p className="text-xl text-white mb-3">Then I saw it...</p>
-                <p className="text-2xl text-orange-300 font-bold">You replied with an emoji.</p>
-              </div>
-
-              <p className="text-lg text-white/90">My heart skipped a beat.</p>
-              <p className="text-lg text-white/90">It was just an emoji, but it was from you.</p>
-
-              <div className="my-6 p-6 bg-white/20 backdrop-blur-md rounded-xl">
-                <p className="text-xl text-white italic">I quickly sent another emoji back,</p>
-                <p className="text-xl text-white italic">hoping the conversation would continue.</p>
-                <p className="text-lg text-orange-200 mt-3">But you just liked it and left.</p>
-              </div>
-
-              <p className="text-lg mt-8 text-white/70 italic">Again, no real conversation.</p>
-              <p className="text-lg text-white/70 italic">Just brief exchanges that meant nothing... and everything.</p>
-
-              <div className="my-8 p-8 bg-gradient-to-br from-orange-500/30 to-red-500/30 backdrop-blur-md rounded-3xl border-2 border-orange-400">
-                <p className="text-2xl text-orange-300 font-bold mb-3">But something was changing inside me.</p>
-                <p className="text-xl text-white">I was starting to notice you more.</p>
-                <p className="text-xl text-white mt-2">Every story you posted, every like you gave—</p>
-                <p className="text-xl text-pink-300 font-bold mt-3">I was paying attention to all of it.</p>
-              </div>
-
-              <p className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-orange-300 to-red-300 font-bold mt-6">
-                Without even realizing it, I was already falling for you.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== CHAPTER 5: JUNE 10, 8:06 PM - THE BEGINNING ⭐ ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-yellow-900 via-amber-800 to-orange-900`}>
-          <div className="absolute top-8 right-8 bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-6 py-3 rounded-full font-bold shadow-xl animate-bounce z-50">
-            ⭐ SPECIAL MOMENT
-          </div>
-          {[...Array(30)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-2 h-2 bg-yellow-300 rounded-full animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 2}s`,
-                boxShadow: '0 0 10px 2px rgba(253, 224, 71, 0.5)'
-              }}
-            />
-          ))}
-          <div className={`${containerClasses}`}>
-            <div className="grid md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center z-10">
-              <div className="text-white text-center md:text-left">
-                <div className="mb-6 sm:mb-8">
-                  <p className="text-yellow-300 text-xl sm:text-2xl mb-4">June 10</p>
-                <ClockDisplay time="8:06 PM" label="The moment everything changed" />
-              </div>
-              <h2 className="text-4xl sm:text-6xl font-bold mb-8 font-handwriting">The Moment Everything Changed</h2>
-              <div className="space-y-4 text-lg sm:text-xl">
-                <p className="text-3xl sm:text-4xl text-yellow-300 font-bold">June 10, 8:06 PM.</p>
-                <p className="text-2xl text-yellow-200 italic">This is the moment I will never, ever forget.</p>
-
-                <div className="my-6 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/30">
-                  <p className="text-base italic text-white/80">You posted a story about Lord Krishna.</p>
-                  <p className="text-base mt-2 text-white/80">Simple. Beautiful. Spiritual.</p>
-                  <p className="text-lg mt-4 text-yellow-300">And it gave me the perfect reason to talk to you.</p>
-                </div>
-
-                <p className="text-lg">At exactly 8:06 PM, my heart pounding,</p>
-                <p className="text-lg">I typed out a simple message:</p>
-                <div className="my-6 p-4 bg-yellow-500/20 backdrop-blur-md rounded-xl border-2 border-yellow-400">
-                  <p className="text-xl sm:text-2xl italic text-yellow-100">"Hey hi, can you please send this picture?"</p>
-                </div>
-
-                <div className="text-7xl my-6 animate-pulse">🕉️</div>
-
-                <div className="my-8 p-6 bg-gradient-to-r from-yellow-500/30 to-amber-500/30 backdrop-blur-md rounded-2xl border-2 border-yellow-400">
-                  <p className="text-2xl sm:text-3xl text-yellow-300 font-bold mb-4">That simple message...</p>
-                  <p className="text-xl text-white">Changed my entire life.</p>
-                </div>
-
-                <p className="text-lg text-white/90">You replied. We talked.</p>
-                <p className="text-lg text-white/90">And we never stopped.</p>
-                <p className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300 font-bold mt-6">
-                  From that day till now, not a single day has passed without you.
-                </p>
-              </div>
-            </div>
-              <PhoneMockup>
-              <div className="h-full bg-white p-4">
-                <div className="flex items-center gap-3 mb-6 pb-3 border-b">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center text-white font-bold">
-                    P
-                  </div>
-                  <span className="font-semibold">Pooja</span>
-                </div>
-                <div className="space-y-4">
-                  <div className="bg-purple-100 rounded-lg p-4 text-center">
-                    <div className="text-6xl mb-2">🕉️</div>
-                    <p className="text-sm text-gray-600">Story • 2h ago</p>
-                  </div>
-                  <ChatBubble text="Hey hi, can you please send this picture?" sent={true} time="8:06 PM" />
-                  <div className="text-center text-sm text-gray-500 my-4">
-                    <p className="animate-pulse">Typing...</p>
-                  </div>
-                  <ChatBubble text="Sure!" sent={false} />
-                  <ChatBubble text="Here you go 😊" sent={false} />
-                  <div className="text-center text-pink-600 font-semibold animate-pulse mt-8">
-                    And the conversation began... 💬
-                  </div>
-                </div>
-              </div>
-            </PhoneMockup>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== CHAPTER 6: JUNE 22, 5:55 AM - FIRST CALL ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-green-900 via-emerald-800 to-teal-900`}>
-          <div className={`${containerClasses} text-center`}>
-            <p className="text-emerald-300 text-lg sm:text-xl mb-4">June 22</p>
-            <ClockDisplay time="5:55 PM" label="First Voice" />
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white my-6 sm:my-8 font-handwriting">Hearing Your Voice for the First Time</h2>
-            <div className="my-12 relative">
-              <div className="w-48 h-48 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center animate-pulse shadow-2xl mx-auto">
-                <div className="text-7xl">📞</div>
-              </div>
-              {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="absolute inset-0 border-4 border-green-400 rounded-full animate-ping mx-auto"
-                  style={{
-                    animationDelay: `${i * 0.3}s`,
-                    animationDuration: '2s',
-                    width: '12rem',
-                    height: '12rem',
-                    left: '50%',
-                    transform: 'translateX(-50%)'
-                  }}
-                />
-              ))}
-            </div>
-            <div className="space-y-4 text-xl sm:text-2xl text-white/90">
-              <p className="text-lg italic text-emerald-200">We had been chatting every day for 12 days.</p>
-              <p className="text-lg italic text-emerald-200">Messages brought us close, but I wanted more.</p>
-
-              <div className="my-6 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/30">
-                <p className="text-xl">I wanted to hear you.</p>
-                <p className="text-lg text-white/80 mt-2">To know what you sounded like when you laughed.</p>
-                <p className="text-lg text-white/80">To hear the warmth in your words.</p>
-              </div>
-
-              <p className="text-lg">My hands were trembling as I pressed "Call".</p>
-              <p className="text-lg">My heart was racing.</p>
-
-              <div className="my-8 p-8 bg-gradient-to-br from-green-500/30 to-emerald-500/30 backdrop-blur-md rounded-3xl border-2 border-green-300">
-                <p className="text-3xl sm:text-4xl text-emerald-300 font-bold mb-4">5:55 PM</p>
-                <p className="text-2xl text-white">You answered.</p>
-              </div>
-
-              <p className="text-2xl sm:text-3xl text-emerald-300 font-bold mt-8">And then I heard your voice.</p>
-
-              <div className="my-6 p-6 bg-white/20 backdrop-blur-md rounded-xl">
-                <p className="text-lg italic text-white">Soft. Sweet. Real.</p>
-                <p className="text-lg text-emerald-200 mt-3">All the texts we'd exchanged suddenly had a melody.</p>
-                <p className="text-lg text-emerald-200">All the emojis suddenly had emotion.</p>
-              </div>
-
-              <p className="text-xl">That call wasn't just about talking.</p>
-              <p className="text-xl text-emerald-200">It was about you becoming even more real to me.</p>
-
-              <p className="text-2xl sm:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-emerald-300 font-bold mt-8">
-                From that day, your voice became my favorite sound in the entire world.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== CHAPTER 7: GROWING CONNECTION ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-orange-800 via-rose-700 to-pink-800`}>
-          <div className={`${containerClasses} text-center`}>
-            <p className="text-rose-300 text-lg sm:text-xl mb-4">June - July</p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 sm:mb-8 font-handwriting">Falling Without Realizing</h2>
-            <div className="text-6xl sm:text-7xl lg:text-8xl mb-6 sm:mb-8 animate-pulse">💭</div>
-            <div className="space-y-6 text-xl sm:text-2xl text-white/90">
-              <p className="text-lg italic text-rose-200">Days turned into weeks.</p>
-              <p className="text-lg italic text-rose-200">And with each passing day, something was changing inside me.</p>
-
-              <p className="text-xl mt-6">We talked about everything and nothing.</p>
-              <p className="text-lg text-white/80">Random thoughts at 2 AM.</p>
-              <p className="text-lg text-white/80">Silly jokes that made us laugh for hours.</p>
-              <p className="text-lg text-white/80">Deep conversations about life, dreams, and fears.</p>
-
-              <div className="my-8 p-6 sm:p-8 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20">
-                <p className="text-2xl sm:text-3xl text-rose-300 font-bold mb-4">You gave me something I'd never received before.</p>
-                <p className="text-xl sm:text-2xl text-white/80">You gave me time.</p>
-                <p className="text-lg text-rose-200 mt-3">You gave me attention.</p>
-                <p className="text-lg text-rose-200">You gave me value.</p>
-              </div>
-
-              <p className="text-xl">I found myself thinking about you constantly.</p>
-              <p className="text-lg text-white/80">Wondering what you were doing.</p>
-              <p className="text-lg text-white/80">Smiling when I saw your name on my screen.</p>
-              <p className="text-lg text-white/80">Waiting for your messages like they were the best part of my day.</p>
-
-              <div className="my-6 p-6 bg-white/20 backdrop-blur-md rounded-xl">
-                <p className="text-xl text-white italic">I started admiring you.</p>
-                <p className="text-xl text-rose-300 mt-3">Your kindness. Your smile. Your way of seeing the world.</p>
-              </div>
-
-              <p className="text-xl mt-6">I started feeling something I couldn't name yet.</p>
-              <p className="text-2xl sm:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-pink-300 font-bold mt-4">
-                You weren't just becoming important to me—you were becoming my everything.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== CHAPTER 8: AUG 8 - ATHADU & MOON ⭐ ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-slate-900 via-indigo-900 to-blue-900`}>
-          <div className="absolute top-8 right-8 bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-6 py-3 rounded-full font-bold shadow-xl animate-bounce z-50">
-            ⭐ SPECIAL MOMENT
-          </div>
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`
-              }}
-            />
-          ))}
-          <div className={`${containerClasses}`}>
-            <div className="grid md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center z-10">
-              <div className="text-white space-y-4 sm:space-y-6 text-center md:text-left">
-                <p className="text-blue-300 text-xl sm:text-2xl">August 8</p>
-                <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold font-handwriting">The Night I Chose You Over Everything</h2>
-              <p className="text-lg italic text-blue-200">I'm a huge Mahesh Babu fan.</p>
-              <p className="text-lg italic text-blue-200">Athadu is one of my all-time favorite movies.</p>
-              <p className="text-lg text-white/90">When it got re-released, I was so excited.</p>
-
-              <div className="p-4 sm:p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 my-6">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="text-4xl">🎬</div>
-                  <div>
-                    <p className="text-xl sm:text-2xl font-bold">Athadu Re-Release</p>
-                    <p className="text-sm text-blue-300">Theatre Show</p>
-                  </div>
-                </div>
-                <p className="text-base sm:text-lg text-white/90">I was sitting in the theatre with my friend.</p>
-                <p className="text-base sm:text-lg text-white/90">The movie I'd been waiting for was playing on the big screen.</p>
-                <p className="text-base sm:text-lg text-blue-200 mt-3">But you... you were in your hometown.</p>
-                <p className="text-base sm:text-lg text-blue-200">And I felt like you weren't in a good mood.</p>
-              </div>
-
-              <div className="my-6 p-6 bg-white/20 backdrop-blur-md rounded-xl">
-                <p className="text-lg text-white/90 italic">Something inside me shifted.</p>
-                <p className="text-lg text-blue-200 mt-2">The movie didn't matter anymore.</p>
-                <p className="text-lg text-blue-200">Nothing mattered except talking to you.</p>
-              </div>
-
-              <div className="text-2xl sm:text-3xl text-yellow-300 font-bold mt-6">
-                So I left the movie.
-              </div>
-
-              <p className="text-lg text-white/90">Right there in the theatre hall, I started chatting with you.</p>
-              <p className="text-base text-blue-200 italic">My friend was confused. The movie was playing.</p>
-              <p className="text-base text-blue-200 italic">But I didn't care.</p>
-
-              <div className="my-6 p-8 bg-gradient-to-br from-yellow-500/30 to-blue-500/30 backdrop-blur-md rounded-3xl border-2 border-yellow-400">
-                <p className="text-2xl sm:text-3xl text-yellow-300 font-bold">That's when I knew.</p>
-                <p className="text-xl text-white mt-3">You were already more important to me than my favorite things.</p>
-              </div>
-            </div>
-            <div className="relative">
-              <div className="relative mx-auto w-64 h-64 sm:w-80 sm:h-80">
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-200 to-yellow-400 rounded-full animate-pulse shadow-2xl flex items-center justify-center">
-                  <div className="text-8xl sm:text-9xl">🌕</div>
-                </div>
-                <div className="absolute inset-0 bg-yellow-300 rounded-full blur-3xl opacity-50 animate-pulse" />
-              </div>
-              <div className="mt-8 sm:mt-12 text-center text-white space-y-4">
-                <p className="text-lg sm:text-2xl italic text-blue-200">Later that night, while going home from the theatre...</p>
-                <p className="text-lg sm:text-2xl">I looked up at the sky.</p>
-
-                <div className="my-6 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/30">
-                  <p className="text-xl sm:text-2xl text-yellow-200">It was a full moon night.</p>
-                  <p className="text-lg text-white/80 mt-2">The moon was glowing so bright, so beautiful.</p>
-                  <p className="text-lg text-white/80">Just like you.</p>
-                </div>
-
-                <p className="text-2xl sm:text-3xl text-yellow-300 font-bold mt-6">I looked up at the moon...</p>
-                <p className="text-2xl sm:text-3xl text-yellow-300 font-bold">And all I could think of was you.</p>
-
-                <div className="my-8 p-6 sm:p-8 bg-gradient-to-br from-yellow-500/30 to-pink-500/30 backdrop-blur-md rounded-3xl border-2 border-yellow-400">
-                  <p className="text-lg text-yellow-200 italic mb-4">In that moment, under that beautiful moon,</p>
-                  <p className="text-lg text-yellow-200 italic">everything became crystal clear.</p>
-
-                  <p className="text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-pink-300 to-purple-300 mt-6 mb-6">
-                    I love her.
+              {/* Story Content */}
+              <div className="space-y-3 text-gray-800 text-base sm:text-lg leading-relaxed max-w-2xl">
+                {currentPageData.content.map((line, idx) => (
+                  <p
+                    key={idx}
+                    className={`${line === '' ? 'h-2' : ''} ${
+                      line.includes('💕') || line.includes('❤️') ? 'font-bold text-xl text-rose-700' : ''
+                    }`}
+                  >
+                    {line}
                   </p>
-
-                  <p className="text-base sm:text-lg text-white/90">I didn't know if it was love or something else,</p>
-                  <p className="text-base sm:text-lg text-white/90">I couldn't define what I was feeling.</p>
-                  <p className="text-xl sm:text-2xl text-pink-300 font-bold mt-4">But I knew my feelings for you were real.</p>
-                  <p className="text-xl sm:text-2xl text-pink-300 font-bold">More real than anything I'd ever felt before.</p>
-                </div>
-
-                <p className="text-lg text-yellow-200 italic mt-6">From that night on, whenever I see the moon,</p>
-                <p className="text-lg text-yellow-200 italic">I think of you.</p>
+                ))}
               </div>
             </div>
+
+            {/* Page bottom - navigation hints */}
+            <div className="relative z-10 mt-8 flex justify-between items-center text-gray-700 text-sm italic">
+              <span>{currentPage > 0 ? '← Previous' : ''}</span>
+              <span>{currentPage < storyPages.length - 1 ? 'Next →' : '✨ The End ✨'}</span>
             </div>
           </div>
-        </section>
 
-        {/* ===== CHAPTER 9: AUG 12 - FIRST 143 ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-violet-900 via-purple-800 to-indigo-900`}>
-          <div className={`${containerClasses} text-center`}>
-            <p className="text-violet-300 text-lg sm:text-xl mb-4">August 12</p>
-            <ClockDisplay time="1:43 AM" label="The First Attempt" />
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white my-6 sm:my-8 font-handwriting">My Heart in Three Numbers</h2>
-            <div className="text-6xl sm:text-7xl lg:text-8xl mb-6 sm:mb-8">🕐</div>
-            <div className="space-y-4 text-lg sm:text-2xl text-white/90">
-              <p className="text-lg italic text-violet-200">After that night under the moon,</p>
-              <p className="text-lg italic text-violet-200">I knew what I felt was real.</p>
-              <p className="text-xl mt-6">But how do you tell someone you love them?</p>
-
-              <div className="p-6 sm:p-8 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 space-y-3 my-8">
-                <p className="text-xl text-violet-300 mb-4">My mind was racing with fears:</p>
-                <p className="text-lg text-violet-200">How do I express these feelings?</p>
-                <p className="text-lg text-violet-200">How will she react?</p>
-                <p className="text-lg text-violet-200">What if she doesn't feel the same?</p>
-                <p className="text-lg text-violet-200">What if she stops talking to me?</p>
-                <p className="text-lg text-white/80 mt-4 italic">What if I lose her forever?</p>
-              </div>
-
-              <p className="text-xl">I couldn't say it directly.</p>
-              <p className="text-lg text-white/80">I was too scared. Too nervous.</p>
-
-              <div className="my-8 p-6 bg-white/20 backdrop-blur-md rounded-xl">
-                <p className="text-2xl text-violet-300 font-bold">So I waited for 1:43 AM.</p>
-                <p className="text-lg text-white/90 mt-3">1 letter in "I"</p>
-                <p className="text-lg text-white/90">4 letters in "Love"</p>
-                <p className="text-lg text-white/90">3 letters in "You"</p>
-                <p className="text-xl text-pink-300 font-bold mt-4">143 = I Love You</p>
-              </div>
-
-              <p className="text-xl sm:text-2xl">At exactly 1:43 AM, trembling, I asked you to check the time.</p>
-              <p className="text-lg text-violet-200 italic mt-4">I thought you'd understand.</p>
-              <p className="text-lg text-violet-200 italic">I thought you'd know what I meant.</p>
-
-              <div className="my-8 p-6 bg-gradient-to-br from-violet-500/30 to-indigo-500/30 backdrop-blur-md rounded-2xl border-2 border-violet-400">
-                <p className="text-2xl sm:text-3xl text-violet-300 font-bold">But you didn't understand.</p>
-                <p className="text-lg text-white/80 mt-3">You just saw the time and moved on.</p>
-              </div>
-
-              <p className="text-lg text-white/70 italic">My heart sank.</p>
-              <p className="text-lg text-white/70 italic">The opportunity slipped away.</p>
-              <p className="text-xl text-violet-200 mt-4">But I wasn't ready to give up on you.</p>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== CHAPTER 10: AUG 14 - SHE UNDERSTOOD ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-900`}>
-          <div className={`${containerClasses} text-center`}>
-            <p className="text-indigo-300 text-lg sm:text-xl mb-4">August 14</p>
-            <ClockDisplay time="1:43 AM" label="The Second Attempt" />
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white my-6 sm:my-8 font-handwriting">When You Finally Knew</h2>
-            <div className="space-y-4 text-lg sm:text-2xl text-white/90">
-              <p className="text-lg italic text-indigo-200">Two days passed since my first attempt.</p>
-              <p className="text-lg italic text-indigo-200">My feelings hadn't changed—they'd only grown stronger.</p>
-
-              <div className="my-6 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/30">
-                <p className="text-xl text-white">I decided to try again.</p>
-                <p className="text-lg text-indigo-200 mt-2">Maybe this time...</p>
-              </div>
-
-              <p className="text-2xl text-indigo-300 font-bold mt-6">Again, 1:43 AM.</p>
-              <p className="text-xl">Again, with a racing heart, I asked you to check the time.</p>
-
-              <div className="my-8 p-6 sm:p-8 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
-                <p className="text-base sm:text-lg italic text-white/80 mb-4">I had a backup plan this time:</p>
-                <p className="text-lg text-indigo-300">If you got serious, I could say</p>
-                <p className="text-xl sm:text-2xl text-pink-300 font-bold mt-2">"143 means I miss you"</p>
-                <p className="text-base sm:text-lg italic text-white/80 mt-4">and mislead you, protect myself from rejection.</p>
-              </div>
-
-              <div className="my-8 p-8 bg-gradient-to-br from-pink-500/30 to-indigo-500/30 backdrop-blur-md rounded-3xl border-2 border-pink-400">
-                <p className="text-2xl sm:text-3xl text-pink-300 font-bold mb-4">But this time...</p>
-                <p className="text-2xl sm:text-3xl text-white">You understood.</p>
-                <p className="text-lg text-pink-200 mt-3 italic">You knew what I meant.</p>
-                <p className="text-lg text-pink-200 italic">You felt the weight of those three numbers.</p>
-              </div>
-
-              <p className="text-xl sm:text-2xl mt-8">You said:</p>
-              <p className="text-2xl sm:text-3xl italic text-pink-200 font-semibold">"Ila evaru ayna propose chesthara?"</p>
-              <p className="text-sm text-white/60 mt-2">(Does anyone propose like this?)</p>
-
-              <div className="my-6 p-6 bg-white/20 backdrop-blur-md rounded-xl">
-                <p className="text-xl text-white">You were confused. Uncertain.</p>
-                <p className="text-xl text-indigo-200 mt-2">You were in a dilemma.</p>
-                <p className="text-lg text-white/80 mt-3 italic">I could feel your hesitation.</p>
-              </div>
-
-              <p className="text-xl mt-8">And in that moment, I made you a promise:</p>
-
-              <div className="my-8 p-8 bg-gradient-to-r from-indigo-500/30 to-purple-500/30 backdrop-blur-md rounded-3xl border-2 border-indigo-400">
-                <p className="text-xl sm:text-2xl text-indigo-200">"I won't be a disturbance in your life."</p>
-                <p className="text-xl sm:text-2xl text-pink-300 font-bold mt-4">"I'll support you always, no matter what."</p>
-                <p className="text-lg text-white/90 mt-4">Whether you choose me or not,</p>
-                <p className="text-lg text-white/90">I'll be there for you.</p>
-              </div>
-
-              <p className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-purple-300 font-bold mt-6">
-                Because loving you meant wanting your happiness, above everything else.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== CHAPTER 11: AUG 18 - I LOVE YOU ⭐ ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-pink-900 via-rose-800 to-amber-900 relative overflow-hidden`}>
-          <div className="absolute top-8 right-8 bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-6 py-3 rounded-full font-bold shadow-xl animate-bounce z-50">
-            ⭐ SPECIAL MOMENT
-          </div>
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 2}s`,
-                fontSize: `${Math.random() * 20 + 20}px`
-              }}
+          {/* Navigation Buttons */}
+          <div className="flex justify-between items-center mt-8 gap-4">
+            {/* Previous Button */}
+            <button
+              onClick={handlePrevPage}
+              disabled={currentPage === 0 || isFlipping}
+              className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all ${
+                currentPage === 0 || isFlipping
+                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50'
+                  : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:scale-110 shadow-xl'
+              }`}
+              aria-label="Previous page"
             >
-              {['🎉', '✨', '💕', '🎊'][Math.floor(Math.random() * 4)]}
-            </div>
-          ))}
-          <div className={`${containerClasses} text-center z-10`}>
-            <div className="mb-6 sm:mb-8">
-              <CalendarPage month="AUGUST" day="18" />
-            </div>
-            <h2 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white mb-8 sm:mb-12 font-handwriting">The Day My World Changed</h2>
-            <div className="space-y-6 text-xl sm:text-2xl text-white/90">
-              <p className="text-lg sm:text-xl italic text-pink-200">After I confessed through 143,</p>
-              <p className="text-lg sm:text-xl italic text-pink-200">I waited with a heart full of hope and fear.</p>
-              <p className="text-lg sm:text-xl">I didn't push. I didn't pressure.</p>
-              <p className="text-lg sm:text-xl">I gave you space to feel, to think, to decide.</p>
+              <ArrowLeft className="w-5 h-5" />
+              <span className="hidden sm:inline">Previous</span>
+            </button>
 
-              <div className="my-8 p-6 sm:p-8 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/30">
-                <p className="text-2xl sm:text-3xl text-yellow-200 italic">Four days of waiting...</p>
-                <p className="text-xl sm:text-2xl text-white/80 mt-2">Four days that felt like forever.</p>
-              </div>
-
-              <p className="text-2xl sm:text-3xl text-pink-300 font-bold mt-8">Then, on August 18th...</p>
-
-              <div className="my-12 p-8 sm:p-12 bg-gradient-to-br from-pink-500/30 to-purple-500/30 backdrop-blur-md rounded-3xl border-4 border-pink-300 shadow-2xl">
-                <p className="text-4xl sm:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-pink-300 to-purple-300 mb-6 animate-pulse">
-                  You said "I love you" back.
-                </p>
-                <p className="text-2xl sm:text-3xl text-white mb-4">Three words that changed everything.</p>
-                <p className="text-xl sm:text-2xl text-pink-200">The day you accepted my heart.</p>
-              </div>
-
-              <div className="space-y-4 mt-8">
-                <p className="text-lg sm:text-xl text-white/80">I know it wasn't easy for you.</p>
-                <p className="text-lg sm:text-xl text-white/80">We had barely met in person. I was practically a stranger.</p>
-                <p className="text-lg sm:text-xl text-white/80">You had every reason to doubt, every reason to be cautious.</p>
-              </div>
-
-              <div className="my-8 p-6 sm:p-8 bg-white/20 backdrop-blur-md rounded-3xl border-2 border-pink-400">
-                <p className="text-2xl sm:text-3xl text-pink-300 font-bold mb-4">But you took a leap of faith.</p>
-                <p className="text-xl sm:text-2xl text-white">You chose to trust your heart.</p>
-                <p className="text-xl sm:text-2xl text-white mt-2">You chose to trust me.</p>
-                <p className="text-2xl sm:text-3xl text-yellow-300 font-bold mt-6">You chose us.</p>
-              </div>
-
-              <p className="text-2xl sm:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-purple-300 font-bold mt-12">
-                That courage of yours? That's what I fell in love with.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== CHAPTER 12: AUG 29 - SURPRISE VISIT ⭐ ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-cyan-900 via-blue-800 to-teal-900`}>
-          <div className={`${containerClasses}`}>
-            <div className="absolute top-6 sm:top-8 right-4 sm:right-8 bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold shadow-xl animate-bounce z-50 text-sm sm:text-base">
-              ⭐ SPECIAL MOMENT
-            </div>
-            <div className="text-center mb-6 sm:mb-8 lg:mb-12">
-              <p className="text-cyan-300 text-lg sm:text-xl mb-4">August 29</p>
-              <ClockDisplay time="4:48 PM" label="Surprise!" />
-              <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white mt-6 sm:mt-8 font-handwriting">The Surprise Visit</h2>
-            </div>
-            <div className="mb-12">
-              <MapJourney from="Hyderabad" to="Kakinada" />
-            </div>
-            <div className="text-center space-y-4 text-xl sm:text-2xl text-white/90">
-              <p className="text-lg italic text-cyan-200">We had been talking for almost 3 months.</p>
-              <p className="text-lg italic text-cyan-200">Messages, calls, video chats...</p>
-              <p className="text-xl mt-6">But it wasn't enough anymore.</p>
-
-              <div className="my-8 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/30">
-                <p className="text-xl text-white">I needed to see you.</p>
-                <p className="text-lg text-cyan-200 mt-2">To be in the same space as you.</p>
-                <p className="text-lg text-cyan-200">To see your smile in person, not through a screen.</p>
-              </div>
-
-              <p className="text-2xl text-cyan-300 font-bold mt-6">I couldn't wait anymore.</p>
-              <p className="text-xl">So I made a decision that changed everything.</p>
-
-              <div className="my-8 p-8 bg-gradient-to-br from-cyan-500/30 to-blue-500/30 backdrop-blur-md rounded-3xl border-2 border-cyan-400">
-                <p className="text-2xl sm:text-3xl text-cyan-300 font-bold mb-4">Without telling you...</p>
-                <p className="text-xl sm:text-2xl text-white">I booked a ticket.</p>
-                <p className="text-xl sm:text-2xl text-white mt-2">I traveled from Hyderabad to Kakinada.</p>
-                <p className="text-lg text-cyan-200 mt-4 italic">My heart was pounding the entire journey.</p>
-              </div>
-
-              <p className="text-2xl text-cyan-300 mt-8">At 4:48 PM, I surprised you with a visit.</p>
-
-              <div className="text-8xl my-8 animate-pulse">😊</div>
-
-              <div className="my-8 p-8 bg-white/20 backdrop-blur-md rounded-3xl">
-                <p className="text-2xl sm:text-3xl text-cyan-300 font-bold mb-4">Your face when you saw me...</p>
-                <p className="text-xl text-white">The shock. The disbelief. The joy.</p>
-                <p className="text-2xl text-yellow-300 font-bold mt-4">That moment was worth everything.</p>
-                <p className="text-lg text-white/80 mt-3">Every mile I traveled, every nervous moment—</p>
-                <p className="text-lg text-white/80">it all became worth it when I saw your smile.</p>
-              </div>
-
-              <p className="text-2xl sm:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-300 font-bold mt-8">
-                Finally, after months of digital distance, we were together in the same room.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== CHAPTER 13: AUG 31 - FIRST DATE ⭐ ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-rose-900 via-pink-800 to-red-900`}>
-          <div className={`${containerClasses} text-center`}>
-            <div className="absolute top-6 sm:top-8 right-4 sm:right-8 bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold shadow-xl animate-bounce z-50 text-sm sm:text-base">
-              ⭐ SPECIAL MOMENT
-            </div>
-            <p className="text-rose-300 text-lg sm:text-xl mb-4">August 31</p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 sm:mb-8 font-handwriting">Our First Date</h2>
-            <div className="text-6xl sm:text-7xl lg:text-8xl mb-6 sm:mb-8 animate-pulse">💑</div>
-            <div className="space-y-4 text-xl sm:text-2xl text-white/90">
-              <div className="flex items-center justify-center gap-4 mb-8">
-                <span className="text-5xl">☀️</span>
-                <span className="text-3xl">→</span>
-                <span className="text-5xl">🌙</span>
-              </div>
-
-              <p className="text-2xl sm:text-3xl text-rose-300 font-bold">August 31, 2024</p>
-              <p className="text-xl italic text-rose-200">Our first real date.</p>
-
-              <div className="my-8 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/30">
-                <p className="text-2xl text-rose-300 font-bold mb-4">From sunrise to moonlight,</p>
-                <p className="text-xl text-white">we spent the entire day together.</p>
-                <p className="text-lg text-rose-200 mt-3 italic">Just you and me, exploring the world together.</p>
-              </div>
-
-              <p className="text-lg text-white/90">We walked. We talked. We laughed.</p>
-              <p className="text-lg text-white/90">We shared stories and dreams.</p>
-              <p className="text-lg text-white/90">We created memories that would last forever.</p>
-
-              <div className="my-8 p-8 bg-gradient-to-br from-rose-500/30 to-pink-500/30 backdrop-blur-md rounded-3xl border-2 border-rose-400">
-                <p className="text-xl sm:text-2xl text-rose-200 mb-4">Every moment felt like magic.</p>
-                <p className="text-xl text-white">Every word you spoke.</p>
-                <p className="text-xl text-white">Every time you laughed.</p>
-                <p className="text-xl text-white">Every comfortable silence we shared.</p>
-                <p className="text-2xl sm:text-3xl text-rose-300 font-bold mt-6">It all felt like I was exactly where I was meant to be.</p>
-              </div>
-
-              <div className="my-8 p-6 bg-white/20 backdrop-blur-md rounded-xl">
-                <p className="text-xl text-white italic">That day, everything became clear.</p>
-                <p className="text-2xl text-rose-300 font-bold mt-4">Your presence isn't just something I want—</p>
-                <p className="text-2xl text-rose-300 font-bold">it's something I can't live without.</p>
-              </div>
-
-              <p className="text-xl sm:text-2xl mt-8">As the day came to an end, I knew with certainty:</p>
-
-              <div className="my-8 p-8 bg-gradient-to-r from-rose-500/30 to-amber-500/30 backdrop-blur-md rounded-3xl border-2 border-rose-400">
-                <p className="text-2xl sm:text-3xl text-rose-300 font-bold mb-3">I want every day to be like this.</p>
-                <p className="text-2xl sm:text-3xl text-pink-300 font-bold mb-3">I want every sunrise and sunset with you.</p>
-                <p className="text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-amber-300 font-bold mt-6">
-                  I want to spend my entire life with you.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== CHAPTER 14: BEAUTIFUL MOMENTS ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-yellow-800 via-pink-800 to-purple-900`}>
-          <div className={`${containerClasses} text-center`}>
-            <p className="text-yellow-300 text-lg sm:text-xl mb-4">Sept - Dec</p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 sm:mb-8 font-handwriting">A Constellation of Memories</h2>
-            <div className="text-6xl sm:text-7xl lg:text-8xl mb-6 sm:mb-8">⭐</div>
-            <div className="space-y-4 text-lg sm:text-xl text-white/90">
-              <p className="text-lg italic text-yellow-200">After our first date, I couldn't stay away.</p>
-              <p className="text-lg italic text-yellow-200">I kept coming back to you, again and again.</p>
-
-              <div className="p-6 sm:p-8 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 my-8">
-                <p className="text-xl text-pink-300 font-bold mb-4">Look at all the days I came to see you:</p>
-                <p className="text-yellow-300 font-mono text-base">Aug 29, Aug 31, Sept 5, 6, 7, 8...</p>
-                <p className="text-yellow-300 font-mono text-base">Sept 15, 16, 26, 27, 28...</p>
-                <p className="text-yellow-300 font-mono text-base">Oct 6, 18... Nov 1, 2, 3, 8, 9...</p>
-                <p className="text-yellow-300 font-mono text-base">Nov 15, 16, 21, 22, 23... Dec 1...</p>
-              </div>
-
-              <div className="my-8 p-8 bg-gradient-to-br from-yellow-500/30 to-pink-500/30 backdrop-blur-md rounded-3xl border-2 border-yellow-400">
-                <p className="text-2xl sm:text-3xl text-pink-300 font-bold mb-4">Every date is a star in our constellation.</p>
-                <p className="text-xl text-white">Every meeting, a precious memory.</p>
-                <p className="text-xl text-white mt-2">Every moment with you, a treasure I'll keep forever.</p>
-              </div>
-
-              <p className="text-xl mt-8 text-white/90">I traveled from Hyderabad to Kakinada so many times,</p>
-              <p className="text-xl text-white/90">the journey became second nature.</p>
-
-              <div className="my-8 p-6 bg-white/20 backdrop-blur-md rounded-xl">
-                <p className="text-xl text-yellow-200 italic mb-3">I even started thinking about buying a house in Kakinada.</p>
-                <p className="text-lg text-white/80">Just to be closer to you.</p>
-                <p className="text-lg text-white/80">To turn those occasional visits into everyday moments.</p>
-              </div>
-
-              <p className="text-2xl sm:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-purple-300 font-bold mt-8">
-                Because I can't imagine a life where I don't get to see your face, hear your laugh, hold your hand.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== CHAPTER 15: SEPT 29 - THE STORM ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-gray-900 via-slate-800 to-purple-900 relative overflow-hidden`}>
-          <div className="absolute inset-0 opacity-30">
-            {[...Array(30)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute text-6xl"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animation: 'fall 5s linear infinite',
-                  animationDelay: `${Math.random() * 5}s`
-                }}
-              >
-                ⛈️
-              </div>
-            ))}
-          </div>
-          <div className={`${containerClasses} text-center z-10`}>
-            <p className="text-gray-300 text-lg sm:text-xl mb-4">September 29</p>
-            <ClockDisplay time="8:38 PM" label="When challenges came" />
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white my-6 sm:my-8 font-handwriting">When the Storm Hit</h2>
-            <div className="space-y-4 text-xl sm:text-2xl text-white/90">
-              <p className="text-lg italic text-gray-300">Everything was going so beautifully.</p>
-              <p className="text-lg italic text-gray-300">We were building our own little world together.</p>
-
-              <p className="text-2xl sm:text-3xl text-red-400 font-bold mt-6">Then, at 8:38 PM...</p>
-              <p className="text-2xl text-gray-200">Everything changed.</p>
-
-              <div className="my-8 p-8 bg-gradient-to-br from-red-500/30 to-gray-500/30 backdrop-blur-md rounded-3xl border-2 border-red-400">
-                <p className="text-2xl sm:text-3xl text-red-400 font-bold mb-4">Your parents found out about us.</p>
-                <p className="text-xl text-white mt-4">We were both in shock.</p>
-                <p className="text-xl text-white">The world we'd built felt like it was crumbling.</p>
-              </div>
-
-              <div className="my-6 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/30">
-                <p className="text-lg text-gray-200 italic">I was terrified for you.</p>
-                <p className="text-lg text-gray-200">What would your family say?</p>
-                <p className="text-lg text-gray-200">What would they do?</p>
-                <p className="text-lg text-white/80 mt-3">Would they take you away from me?</p>
-              </div>
-
-              <p className="text-xl text-white/90 mt-8">I felt helpless, scared, worried.</p>
-              <p className="text-xl text-white/90">But then I saw something that changed everything.</p>
-
-              <div className="my-8 p-8 sm:p-12 bg-gradient-to-r from-purple-500/30 to-pink-500/30 backdrop-blur-md rounded-3xl border-4 border-purple-400 shadow-2xl">
-                <p className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-yellow-300 mb-6">
-                  You stood strong.
-                </p>
-                <p className="text-xl sm:text-2xl text-white mb-3">Through all the pressure, all the questions, all the challenges—</p>
-                <p className="text-2xl sm:text-3xl text-pink-300 font-bold">You didn't break.</p>
-                <p className="text-2xl sm:text-3xl text-pink-300 font-bold">You didn't give up on us.</p>
-              </div>
-
-              <div className="my-8 p-6 bg-white/20 backdrop-blur-md rounded-xl">
-                <p className="text-2xl sm:text-3xl text-purple-300 font-bold mb-4">That's when I truly knew:</p>
-                <p className="text-xl text-white">You're not just the person I love—</p>
-                <p className="text-xl text-white">you're the strongest, bravest person I know.</p>
-              </div>
-
-              <p className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 font-bold mt-6">
-                And I promised myself: I'll be just as strong for you.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== CHAPTER 16: OCT 1 - MEETING BROTHER ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-green-900 via-emerald-800 to-teal-900`}>
-          <div className={`${containerClasses} text-center`}>
-            <p className="text-emerald-300 text-lg sm:text-xl mb-4">October 1</p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 sm:mb-8 font-handwriting">Taking Responsibility</h2>
-            <div className="text-6xl sm:text-7xl lg:text-8xl mb-6 sm:mb-8">🤝</div>
-            <div className="space-y-4 text-lg sm:text-2xl text-white/90">
-              <p className="text-lg italic text-emerald-200">After the storm came, I knew what I had to do.</p>
-              <p className="text-xl mt-6">I told my parents about our relationship.</p>
-
-              <div className="my-6 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/30">
-                <p className="text-xl text-emerald-300 font-bold mb-3">And they accepted.</p>
-                <p className="text-lg text-white/80">They supported me.</p>
-                <p className="text-lg text-white/80">They trusted my choice.</p>
-              </div>
-
-              <p className="text-xl mt-8">I wanted to prove myself to your family too.</p>
-              <p className="text-xl">I wanted them to see I was serious about you.</p>
-
-              <div className="my-8 p-8 bg-gradient-to-br from-emerald-500/30 to-teal-500/30 backdrop-blur-md rounded-3xl border-2 border-emerald-400">
-                <p className="text-2xl sm:text-3xl text-emerald-300 font-bold mb-6">On October 1, I met your brother.</p>
-                <p className="text-xl text-white mb-3">I looked him in the eye and told him:</p>
-                <div className="mt-6 space-y-3">
-                  <p className="text-lg text-emerald-200">"I won't cheat her."</p>
-                  <p className="text-lg text-emerald-200">"I'm an IT employee with a stable job."</p>
-                  <p className="text-lg text-emerald-200">"I'm completely serious about us."</p>
-                  <p className="text-xl text-pink-300 font-bold mt-4">"I love your sister with all my heart."</p>
-                </div>
-              </div>
-
-              <div className="my-6 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/30">
-                <p className="text-xl text-white">He listened.</p>
-                <p className="text-xl text-gray-300 mt-3">But then he told me not to meet you.</p>
-              </div>
-
-              <p className="text-lg text-white/90 mt-8 italic">His words hit hard.</p>
-              <p className="text-lg text-white/90 italic">But they couldn't change what I felt.</p>
-
-              <div className="my-8 p-8 bg-white/20 backdrop-blur-md rounded-3xl">
-                <p className="text-2xl text-emerald-300 font-bold mb-4">I thought to myself:</p>
-                <p className="text-xl text-white">"I can't stay without meeting her."</p>
-                <p className="text-xl text-white mt-2">"I need her in my life."</p>
-                <p className="text-2xl text-pink-300 font-bold mt-6">And you felt the same way.</p>
-              </div>
-
-              <p className="text-2xl sm:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-300 font-bold mt-8">
-                So together, we found a way. We always do.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== CHAPTER 17: CONTINUING DESPITE ALL ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-amber-900 via-orange-800 to-rose-900`}>
-          <div className={`${containerClasses} text-center`}>
-            <p className="text-amber-300 text-lg sm:text-xl mb-4">Oct - Dec</p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 sm:mb-8 font-handwriting">Against All Odds</h2>
-            <div className="text-6xl sm:text-7xl lg:text-8xl mb-6 sm:mb-8 flex items-center justify-center gap-3 sm:gap-4">
-              <span className="animate-pulse">💪</span>
-              <span>❤️</span>
-              <span className="animate-pulse" style={{ animationDelay: '0.5s' }}>🔥</span>
-            </div>
-            <div className="space-y-6 text-xl sm:text-2xl text-white/90">
-              <p className="text-lg italic text-amber-200">They told us to stay apart.</p>
-              <p className="text-lg italic text-amber-200">They said it wouldn't work.</p>
-              <p className="text-xl mt-6">But they didn't understand—</p>
-
-              <div className="my-8 p-8 bg-gradient-to-br from-amber-500/30 to-orange-500/30 backdrop-blur-md rounded-3xl border-2 border-amber-400">
-                <p className="text-2xl sm:text-3xl text-amber-300 font-bold mb-4">We weren't giving up that easily.</p>
-                <p className="text-xl text-white">What we have is too precious.</p>
-                <p className="text-xl text-white">What we feel is too real.</p>
-              </div>
-
-              <div className="my-8 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/30">
-                <p className="text-xl sm:text-2xl text-orange-300 font-bold mb-4">Despite everything, we managed.</p>
-                <p className="text-lg text-white/90">We found secret ways to meet.</p>
-                <p className="text-lg text-white/90">We created stolen moments together.</p>
-                <p className="text-lg text-white/90">We held onto each other when the world wanted us apart.</p>
-              </div>
-
-              <p className="text-xl text-white/90 mt-8">Every obstacle made us stronger.</p>
-              <p className="text-xl text-white/90">Every challenge proved our commitment.</p>
-
-              <div className="my-8 p-8 bg-white/20 backdrop-blur-md rounded-3xl">
-                <p className="text-lg text-amber-200 mb-3">Our last meeting was on December 1.</p>
-                <p className="text-xl text-white">Even though we didn't know when we'd meet again,</p>
-                <p className="text-xl text-pink-300 font-bold mt-3">we knew we'd find a way.</p>
-                <p className="text-xl text-pink-300 font-bold">We always do.</p>
-              </div>
-
-              <div className="my-8 p-8 bg-gradient-to-r from-amber-500/30 to-rose-500/30 backdrop-blur-md rounded-3xl border-2 border-amber-400">
-                <p className="text-2xl sm:text-3xl text-amber-300 font-bold mb-4">Because what we have is worth fighting for.</p>
-                <p className="text-2xl text-orange-300 font-bold">What we have is real.</p>
-                <p className="text-2xl text-pink-300 font-bold mt-4">What we have is forever.</p>
-              </div>
-
-              <p className="text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-300 to-rose-300 font-bold mt-8">
-                Distance, family, challenges, time — nothing can stop us.
-              </p>
-
-              <p className="text-2xl text-white/90 mt-6 italic">Because when two hearts are meant to be together,</p>
-              <p className="text-2xl text-white/90 italic">the universe itself conspires to make it happen.</p>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== CHAPTER 18: TO BE CONTINUED ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-pink-900 via-purple-900 to-blue-900 relative overflow-hidden`}>
-          {[...Array(100)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                fontSize: `${Math.random() * 20 + 10}px`
-              }}
-            >
-              {['✨', '🌈', '💖', '🌟'][Math.floor(Math.random() * 4)]}
-            </div>
-          ))}
-          <div className={`${containerClasses} text-center z-10`}>
-            <h2 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white mb-8 sm:mb-12 font-handwriting">Our Forever Begins</h2>
-            <div className="text-7xl sm:text-8xl lg:text-9xl mb-8 sm:mb-12 animate-pulse">💞</div>
-            <div className="space-y-6 text-xl sm:text-2xl text-white/90">
-              <p className="text-2xl sm:text-3xl text-pink-300 font-bold italic">This is our story so far, Kanna.</p>
-
-              <div className="my-12 p-8 sm:p-12 bg-gradient-to-br from-pink-500/30 to-purple-500/30 backdrop-blur-md rounded-3xl border-4 border-pink-300 shadow-2xl space-y-6">
-                <p className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300 animate-pulse">
-                  I love you more than words can express.
-                </p>
-                <div className="space-y-3 text-lg sm:text-xl text-white">
-                  <p>You're not just the most important person to me—</p>
-                  <p className="text-2xl text-pink-300 font-bold">You're my everything.</p>
-                </div>
-                <p className="text-xl sm:text-2xl text-white/90">I value every moment with you.</p>
-                <p className="text-xl sm:text-2xl text-white/90">I support you through every challenge.</p>
-                <p className="text-2xl text-yellow-300 font-bold">Always and forever.</p>
-              </div>
-
-              <div className="space-y-4 my-8">
-                <p className="text-lg sm:text-xl text-white/80">I promise to be the husband you deserve.</p>
-                <p className="text-lg sm:text-xl text-white/80">I'll move mountains to be with you.</p>
-                <p className="text-xl sm:text-2xl text-pink-300">My heart belongs to you completely.</p>
-                <p className="text-xl sm:text-2xl text-purple-300">You've become the reason I smile, the reason I dream.</p>
-              </div>
-
-              <div className="mt-12 mb-8 p-6 sm:p-8 bg-white/10 backdrop-blur-sm rounded-3xl border-2 border-purple-400">
-                <p className="text-2xl sm:text-3xl text-purple-300 mb-4 font-bold">And our story?</p>
-                <p className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-pink-300 to-purple-300 mb-6">
-                  It's just beginning...
-                </p>
-                <p className="text-lg sm:text-xl text-white/80 italic">Every day with you is a new chapter.</p>
-                <p className="text-lg sm:text-xl text-white/80 italic">Every moment, a beautiful page.</p>
-              </div>
-
-              <div className="mt-12 p-8 bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded-2xl">
-                <p className="text-sm sm:text-base text-pink-200 mb-4">From the boy who left his favorite movie for you,</p>
-                <p className="text-sm sm:text-base text-pink-200 mb-4">Who looks at the moon and thinks of you,</p>
-                <p className="text-sm sm:text-base text-pink-200 mb-6">Who will always choose you, no matter what.</p>
-                <p className="text-3xl sm:text-4xl font-bold text-pink-300 mt-6">
-                  💕 Forever Yours, Aakash 💕
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ===== FINAL: BACK TO GIFTS ===== */}
-        <section className={`${sectionClasses} bg-gradient-to-br from-black via-purple-900 to-black`}>
-          <div className="text-center px-8">
-            <h2 className="text-4xl sm:text-6xl font-bold text-white mb-8 sm:mb-12 font-handwriting">The Journey Continues...</h2>
-            <p className="text-xl sm:text-2xl text-white/80 mb-8 sm:mb-12">Every day, every moment, every heartbeat</p>
+            {/* Back to Gifts */}
             <button
               onClick={() => handleNextStep('gifts')}
-              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-8 sm:px-12 py-3 sm:py-4 rounded-full font-bold text-lg sm:text-xl hover:scale-110 transition-all shadow-2xl flex items-center gap-3 mx-auto"
+              className="bg-white/20 backdrop-blur-md border-2 border-white/40 text-white px-6 py-3 rounded-full font-bold hover:bg-white/30 transition-all shadow-xl flex items-center gap-2"
               aria-label="Back to gift room"
             >
-              <Gift className="w-6 h-6" />
-              Back to Gift Room
+              <Gift className="w-5 h-5" />
+              <span className="hidden sm:inline">Gift Room</span>
+            </button>
+
+            {/* Next Button */}
+            <button
+              onClick={handleNextPage}
+              disabled={currentPage === storyPages.length - 1 || isFlipping}
+              className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all ${
+                currentPage === storyPages.length - 1 || isFlipping
+                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50'
+                  : 'bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:scale-110 shadow-xl'
+              }`}
+              aria-label="Next page"
+            >
+              <span className="hidden sm:inline">Next</span>
+              <Heart className="w-5 h-5 fill-current" />
             </button>
           </div>
-        </section>
 
-        {/* Custom Animations */}
+          {/* Progress indicator */}
+          <div className="mt-6 w-full bg-white/20 rounded-full h-2 overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 transition-all duration-500 rounded-full"
+              style={{ width: `${((currentPage + 1) / storyPages.length) * 100}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Page flip animation styles */}
         <style>{`
-          @keyframes fade-in {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-          }
-          @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-          }
-          @keyframes fall {
-            0% { transform: translateY(-100px); }
-            100% { transform: translateY(100vh); }
-          }
-          .animate-fade-in {
-            animation: fade-in 1s ease-out forwards;
-            opacity: 0;
-          }
-          @media (prefers-reduced-motion: reduce) {
-            * {
-              animation-duration: 0.01ms !important;
-              animation-iteration-count: 1 !important;
-              transition-duration: 0.01ms !important;
+          @keyframes page-flip {
+            0% {
+              transform: rotateY(0deg);
             }
+            50% {
+              transform: rotateY(90deg);
+              opacity: 0.5;
+            }
+            100% {
+              transform: rotateY(0deg);
+            }
+          }
+          .animate-page-flip {
+            animation: page-flip 0.6s ease-in-out;
           }
         `}</style>
       </div>
     );
   };
+
   // 18. Heart Building Scene (Animated Heart)
   const HeartBuildingScene = () => {
     const [blocks, setBlocks] = useState([]);
