@@ -22,7 +22,7 @@ async function sendAnniversaryReminders() {
   const now = new Date();
   const monthsSince = (now.getFullYear() - 2025) * 12 + (now.getMonth() - 7); // Aug = 7 (0-indexed)
 
-  const message = `💕 Happy ${monthsSince} Month Anniversary! 💕\n\nIt's been ${monthsSince} beautiful months since August 18, 2025. Here's to many more! ❤️`;
+  const message = `💕 Happy ${monthsSince} Month Anniversary Kanna!!! 💕\n\nIt's been ${monthsSince} beautiful months since August 18, 2025. Here's to many more! ❤️`;
 
   try {
     // Send to your phone
@@ -52,21 +52,13 @@ async function sendSoakAlmondsReminder() {
   const message = `🥜 Time to soak almonds! 🥜\n\nDon't forget to soak your almonds for tomorrow morning. Good night Kanna! 😊`;
 
   try {
-    // Send to your phone
-    const msg1 = await client.messages.create({
-      body: message,
-      from: twilioPhone,
-      to: yourPhone
-    });
-    console.log(`Soak almonds reminder sent to you: ${msg1.sid}`);
-
     // Send to her phone
-    const msg2 = await client.messages.create({
+    const msg = await client.messages.create({
       body: message,
       from: twilioPhone,
       to: herPhone
     });
-    console.log(`Soak almonds reminder sent to her: ${msg2.sid}`);
+    console.log(`Soak almonds reminder sent to her: ${msg.sid}`);
   } catch (error) {
     console.error('❌ Error sending soak reminder:', error.message);
   }
@@ -77,21 +69,13 @@ async function sendEatAlmondsReminder() {
   const message = `🌅 Good morning Kanna! Time to eat your soaked almonds! 🥜\n\nStart your day healthy! 💪`;
 
   try {
-    // Send to your phone
-    const msg1 = await client.messages.create({
-      body: message,
-      from: twilioPhone,
-      to: yourPhone
-    });
-    console.log(`Eat almonds reminder sent to you: ${msg1.sid}`);
-
     // Send to her phone
-    const msg2 = await client.messages.create({
+    const msg = await client.messages.create({
       body: message,
       from: twilioPhone,
       to: herPhone
     });
-    console.log(`Eat almonds reminder sent to her: ${msg2.sid}`);
+    console.log(`Eat almonds reminder sent to her: ${msg.sid}`);
   } catch (error) {
     console.error('❌ Error sending eat reminder:', error.message);
   }
