@@ -526,19 +526,14 @@ export default function App() {
 
   // 4.5. Gazebo Scene - Where It All Began (Following Birthday Cake Pattern)
   const GazeboModel = () => {
-    try {
-      const { scene } = useGLTF('/Wooden_Gazebo_Structu_1209052742_texture.glb');
-      return <primitive object={scene} scale={7} position={[0, -2, 0]} rotation={[0, 0, 0]} />;
-    } catch (error) {
-      console.error('Error loading gazebo model:', error);
-      return null;
-    }
+    const { scene } = useGLTF('./Wooden_Gazebo_Structu_1209052742_texture.glb');
+    return <primitive object={scene} scale={7} position={[0, -2, 0]} rotation={[0, 0, 0]} />;
   };
 
   // Park Background Component
   const ParkBackground = () => {
     const { scene } = useThree();
-    const texture = useTexture('/gandhi-park.jpeg');
+    const texture = useTexture('./gandhi-park.jpeg');
 
     useEffect(() => {
       texture.mapping = THREE.EquirectangularReflectionMapping;
@@ -553,14 +548,27 @@ export default function App() {
 
   const GazeboScene = () => {
     const [textOpacity, setTextOpacity] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-      const timer = setTimeout(() => setTextOpacity(1), 500);
+      const timer = setTimeout(() => {
+        setTextOpacity(1);
+        setIsLoading(false);
+      }, 2000);
       return () => clearTimeout(timer);
     }, []);
 
     return (
       <div className="h-screen w-full relative overflow-hidden" style={{ background: '#0a0a0a' }}>
+        {/* Loading Indicator */}
+        {isLoading && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/80">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-amber-400 mx-auto mb-4"></div>
+              <p className="text-amber-300 text-xl font-handwriting">Loading the gazebo...</p>
+            </div>
+          </div>
+        )}
         {/* Text Overlay Layer (Like birthday cake typing overlay) */}
         <div
           className="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 sm:p-8 pointer-events-none transition-opacity duration-1000"
