@@ -1,4 +1,7 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, Suspense } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
+import { OrbitControls, useGLTF, Environment, Float, useTexture } from '@react-three/drei';
+import * as THREE from 'three';
 import {
   Heart,
   Stars,
@@ -361,6 +364,7 @@ export default function App() {
     distance: false,
     family: false,
     story: false,
+    gazebo: false,
   });
   const [candlesBlown, setCandlesBlown] = useState(false);
   const [showConfetti, setShowConfetti] = useState(true);
@@ -520,6 +524,149 @@ export default function App() {
     </div>
   );
 
+  // 4.5. Gazebo Scene - Where It All Began (Following Birthday Cake Pattern)
+  const GazeboModel = () => {
+    try {
+      const { scene } = useGLTF('/Wooden_Gazebo_Structu_1209052742_texture.glb');
+      return <primitive object={scene} scale={7} position={[0, -2, 0]} rotation={[0, 0, 0]} />;
+    } catch (error) {
+      console.error('Error loading gazebo model:', error);
+      return null;
+    }
+  };
+
+  // Park Background Component
+  const ParkBackground = () => {
+    const { scene } = useThree();
+    const texture = useTexture('/gandhi-park.jpeg');
+
+    useEffect(() => {
+      texture.mapping = THREE.EquirectangularReflectionMapping;
+      scene.background = texture;
+      return () => {
+        scene.background = null;
+      };
+    }, [scene, texture]);
+
+    return null;
+  };
+
+  const GazeboScene = () => {
+    const [textOpacity, setTextOpacity] = useState(0);
+
+    useEffect(() => {
+      const timer = setTimeout(() => setTextOpacity(1), 500);
+      return () => clearTimeout(timer);
+    }, []);
+
+    return (
+      <div className="h-screen w-full relative overflow-hidden" style={{ background: '#0a0a0a' }}>
+        {/* Text Overlay Layer (Like birthday cake typing overlay) */}
+        <div
+          className="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 sm:p-8 pointer-events-none transition-opacity duration-1000"
+          style={{ opacity: textOpacity }}
+        >
+          <div className="text-center max-w-4xl space-y-6">
+            <h1
+              className="text-5xl sm:text-6xl md:text-7xl font-bold text-amber-300 mb-8 font-handwriting animate-pulse-slow"
+              style={{ textShadow: '0 0 40px rgba(251, 191, 36, 0.9), 0 4px 20px rgba(0, 0, 0, 0.8)' }}
+            >
+              Our Forever Started Here
+            </h1>
+
+            <div className="bg-black/70 backdrop-blur-xl p-8 sm:p-10 rounded-3xl border-2 border-amber-400/60 shadow-2xl">
+              <p
+                className="text-2xl sm:text-3xl md:text-4xl text-amber-100 mb-6 italic font-serif leading-relaxed"
+                style={{ textShadow: '0 2px 10px rgba(0, 0, 0, 0.8)' }}
+              >
+                "In this beautiful corner of Gandhi Park..."
+              </p>
+
+              <div
+                className="space-y-5 text-lg sm:text-xl md:text-2xl text-white leading-relaxed"
+                style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.9)' }}
+              >
+                <p>
+                  Under this gentle wooden shelter, two souls found each other.
+                  <br />
+                  Your smile made the whole world disappear.
+                  <br />
+                  In your eyes, I saw my tomorrow, my always, my home.
+                </p>
+
+                <p>
+                  Every word we shared here became a promise.
+                  <br />
+                  Every moment of silence spoke volumes of understanding.
+                  <br />
+                  Every laugh echoed the beginning of our beautiful journey.
+                </p>
+
+                <p className="text-amber-200 font-bold text-2xl sm:text-3xl mt-6">
+                  This isn't just a place we sat and talked—
+                  <br />
+                  This is where I realized I wanted forever with you.
+                  <br />
+                  <span className="text-rose-300">This is where my heart chose you, for always.</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Button */}
+        <div
+          className="absolute bottom-8 left-0 right-0 flex justify-center z-20 pointer-events-auto transition-opacity duration-1000"
+          style={{ opacity: textOpacity }}
+        >
+          <button
+            onClick={() => handleNextStep('gifts')}
+            className="bg-gradient-to-r from-amber-600 to-rose-600 text-white px-12 py-4 rounded-full font-bold text-xl hover:from-amber-700 hover:to-rose-700 transition shadow-2xl transform hover:scale-110"
+            aria-label="Back to gift room"
+          >
+            Back to Gift Room 💕
+          </button>
+        </div>
+
+        {/* 3D Canvas - Full Screen (Like Birthday Cake) */}
+        <Canvas
+          gl={{ alpha: true }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'transparent'
+          }}
+          camera={{ position: [0, 2, 10], fov: 70 }}
+          onCreated={({ gl }) => {
+            gl.setClearColor('#000000', 0);
+          }}
+        >
+          <Suspense fallback={null}>
+            <ParkBackground />
+            <ambientLight intensity={1.5} />
+            <directionalLight position={[10, 10, 10]} intensity={3} color="#ffffff" />
+            <directionalLight position={[-10, 5, -5]} intensity={2.5} color="#ffffff" />
+            <pointLight position={[0, 10, 5]} intensity={2} color="#ffffff" />
+            <GazeboModel />
+            <OrbitControls
+              enableZoom={true}
+              enablePan={false}
+              minDistance={3}
+              maxDistance={12}
+              autoRotate
+              autoRotateSpeed={0.5}
+              enableDamping
+              dampingFactor={0.05}
+            />
+          </Suspense>
+        </Canvas>
+      </div>
+    );
+  };
+
   // GiftBox - simple present
   const GiftBox = ({ color = 'bg-pink-600', ribbon = 'bg-pink-400', ariaLabel = 'Gift box' }) => (
     <div className={`w-32 h-32 ${color} relative rounded-lg shadow-xl flex items-center justify-center`} aria-hidden>
@@ -533,7 +680,7 @@ export default function App() {
 const GiftSelection = () => (
   <div className="min-h-screen w-full bg-rose-100 flex flex-col items-center justify-center p-4 py-12 animate-scene-entry">
     <h2 className="text-3xl text-rose-800 font-bold mb-8 font-handwriting">Pick a gift!</h2>
-    <p className="text-rose-600 mb-8 italic">12 special gifts, each with love 💕</p>
+    <p className="text-rose-600 mb-8 italic">13 special gifts, each with love 💕</p>
 
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 items-center justify-center max-w-6xl">
       {/* ⭐ Gift 1: OUR STORY - THE CINEMATIC JOURNEY ⭐ */}
@@ -547,126 +694,137 @@ const GiftSelection = () => (
         <GiftBox color="bg-gradient-to-br from-violet-600 to-fuchsia-600" ribbon="bg-violet-400" />
       </button>
 
-      {/* Gift 2: Aug 18 (The Yes) */}
+      {/* ⭐ Gift 2: THE GAZEBO - WHERE IT ALL BEGAN ⭐ */}
+      <button
+        onClick={() => {
+          handleNextStep('gazebo');
+          markGiftOpened('gazebo');
+        }}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-100 ${openedGifts.gazebo ? 'opacity-50' : 'animate-bounce-custom'}`}
+      >
+        <GiftBox color="bg-gradient-to-br from-amber-600 to-yellow-600" ribbon="bg-amber-400" />
+      </button>
+
+      {/* Gift 3: Aug 18 (The Yes) */}
       <button
         onClick={() => {
           handleNextStep('aug18');
           markGiftOpened('aug18');
         }}
-        className={`transform transition-all duration-300 hover:-translate-y-4 delay-100 ${openedGifts.aug18 ? 'opacity-50' : 'animate-bounce-custom'}`}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-200 ${openedGifts.aug18 ? 'opacity-50' : 'animate-bounce-custom'}`}
       >
         <GiftBox color="bg-teal-600" ribbon="bg-teal-400" />
       </button>
 
-      {/* Gift 3: Aug 29 (Surprise Visit) */}
+      {/* Gift 4: Aug 29 (Surprise Visit) */}
       <button
         onClick={() => {
           handleNextStep('aug29_surprise');
           markGiftOpened('aug29');
         }}
-        className={`transform transition-all duration-300 hover:-translate-y-4 delay-200 ${openedGifts.aug29 ? 'opacity-50' : 'animate-bounce-custom'}`}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-300 ${openedGifts.aug29 ? 'opacity-50' : 'animate-bounce-custom'}`}
       >
         <GiftBox color="bg-orange-600" ribbon="bg-orange-400" />
       </button>
 
-      {/* Gift 4: Distance */}
+      {/* Gift 5: Distance */}
         <button
           onClick={() => {
             handleNextStep('distance');
             markGiftOpened('distance');
         }}
-        className={`transform transition-all duration-300 hover:-translate-y-4 delay-300 ${openedGifts.distance ? 'opacity-50' : 'animate-bounce-custom'}`}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-400 ${openedGifts.distance ? 'opacity-50' : 'animate-bounce-custom'}`}
       >
         <GiftBox color="bg-indigo-600" ribbon="bg-indigo-400" />
       </button>
 
-      {/* Gift 5: Bouquet */}
+      {/* Gift 6: Bouquet */}
       <button
         onClick={() => {
           handleNextStep('bouquet');
           markGiftOpened('bouquet');
         }}
-        className={`transform transition-all duration-300 hover:-translate-y-4 delay-400 ${openedGifts.bouquet ? 'opacity-50' : 'animate-bounce-custom'}`}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-500 ${openedGifts.bouquet ? 'opacity-50' : 'animate-bounce-custom'}`}
       >
         <GiftBox color="bg-pink-600" ribbon="bg-pink-400" />
       </button>
 
-      {/* Gift 6: Memories */}
+      {/* Gift 7: Memories */}
       <button
         onClick={() => {
           handleNextStep('memories');
           markGiftOpened('memories');
         }}
-        className={`transform transition-all duration-300 hover:-translate-y-4 delay-500 ${openedGifts.memories ? 'opacity-50' : 'animate-bounce-custom'}`}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-600 ${openedGifts.memories ? 'opacity-50' : 'animate-bounce-custom'}`}
       >
         <GiftBox color="bg-red-600" ribbon="bg-red-400" />
       </button>
 
-      {/* Gift 7: Promise */}
+      {/* Gift 8: Promise */}
       <button
         onClick={() => {
           handleNextStep('promise');
           markGiftOpened('promise');
           setCandlesBlown(false);
         }}
-        className={`transform transition-all duration-300 hover:-translate-y-4 delay-600 ${openedGifts.promise ? 'opacity-50' : 'animate-bounce-custom'}`}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-700 ${openedGifts.promise ? 'opacity-50' : 'animate-bounce-custom'}`}
       >
         <GiftBox color="bg-rose-700" ribbon="bg-rose-500" />
       </button>
 
-      {/* Gift 8: Timeline */}
+      {/* Gift 9: Timeline */}
       <button
         onClick={() => {
           handleNextStep('timeline');
           markGiftOpened('timeline');
         }}
-        className={`transform transition-all duration-300 hover:-translate-y-4 delay-700 ${openedGifts.timeline ? 'opacity-50' : 'animate-bounce-custom'}`}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-800 ${openedGifts.timeline ? 'opacity-50' : 'animate-bounce-custom'}`}
       >
         <GiftBox color="bg-purple-600" ribbon="bg-purple-400" />
       </button>
 
-      {/* Gift 9: Path */}
+      {/* Gift 10: Path */}
       <button
         onClick={() => {
           handleNextStep('path');
           markGiftOpened('path');
         }}
-        className={`transform transition-all duration-300 hover:-translate-y-4 delay-800 ${openedGifts.path ? 'opacity-50' : 'animate-bounce-custom'}`}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-900 ${openedGifts.path ? 'opacity-50' : 'animate-bounce-custom'}`}
       >
         <GiftBox color="bg-yellow-600" ribbon="bg-yellow-400" />
       </button>
 
-      {/* Gift 10: Courage */}
+      {/* Gift 11: Courage */}
       <button
         onClick={() => {
           handleNextStep('courage');
           markGiftOpened('courage');
         }}
-        className={`transform transition-all duration-300 hover:-translate-y-4 delay-900 ${openedGifts.courage ? 'opacity-50' : 'animate-bounce-custom'}`}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-[1000ms] ${openedGifts.courage ? 'opacity-50' : 'animate-bounce-custom'}`}
       >
         <GiftBox color="bg-green-600" ribbon="bg-green-400" />
       </button>
 
-      {/* ⭐ Gift 11: Four Hearts, One Family ⭐ */}
+      {/* Gift 12: Four Hearts, One Family */}
       <button
         onClick={() => {
           handleNextStep('four_hearts_family');
           markGiftOpened('family');
         }}
-        className={`transform transition-all duration-300 hover:-translate-y-4 delay-[1000ms] ${
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-[1100ms] ${
           openedGifts.family ? 'opacity-50' : 'animate-bounce-custom'
         }`}
       >
         <GiftBox color="bg-amber-600" ribbon="bg-amber-300" />
       </button>
 
-      {/* Gift 12: Letters */}
+      {/* Gift 13: Letters */}
       <button
         onClick={() => {
           handleNextStep('letters_of_strength');
           markGiftOpened('letters');
         }}
-        className={`transform transition-all duration-300 hover:-translate-y-4 delay-[1100ms] ${
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-[1200ms] ${
           openedGifts.letters ? 'opacity-50' : 'animate-bounce-custom'
         }`}
       >
@@ -3913,6 +4071,7 @@ Aakash`
       {step === 'letter' && <LetterScene />}
       {step === 'door' && <DoorScene />}
       {step === 'gifts' && <GiftSelection />}
+      {step === 'gazebo' && <GazeboScene />}
       {step === 'bouquet' && <BouquetScene />}
       {step === 'memories' && <MemoriesScene />}
       {step === 'promise' && <PromiseScene />}
