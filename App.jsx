@@ -526,14 +526,14 @@ export default function App() {
 
   // 4.5. Gazebo Scene - Where It All Began (Following Birthday Cake Pattern)
   const GazeboModel = () => {
-    const { scene } = useGLTF('./Wooden_Gazebo_Structu_1209052742_texture.glb');
+    const { scene } = useGLTF('/Aakash-s-letter/Wooden_Gazebo_Structu_1209052742_texture.glb');
     return <primitive object={scene} scale={7} position={[0, -2, 0]} rotation={[0, 0, 0]} />;
   };
 
   // Park Background Component
   const ParkBackground = () => {
     const { scene } = useThree();
-    const texture = useTexture('./gandhi-park.jpeg');
+    const texture = useTexture('/Aakash-s-letter/gandhi-park.jpeg');
 
     useEffect(() => {
       texture.mapping = THREE.EquirectangularReflectionMapping;
