@@ -345,7 +345,8 @@ const MilestoneData = [
   { date: 'Nov 21', special: false, color: '#A0A0A0' },
   { date: 'Nov 22', special: false, color: '#A52A2A' },
   { date: 'Nov 23', special: false, color: '#FF0000' },
-  { date: 'Dec 1', special: false, color: '#A0A0A0' }
+  { date: 'Dec 1', special: false, color: '#A0A0A0' },
+  { date: 'Dec 26', special: false, color: '#00008B' }
 ];
 
 /* --- Main App --- */
@@ -365,6 +366,7 @@ export default function App() {
     family: false,
     story: false,
     gazebo: false,
+    tendays: false,
   });
   const [candlesBlown, setCandlesBlown] = useState(false);
   const [showConfetti, setShowConfetti] = useState(true);
@@ -688,7 +690,7 @@ export default function App() {
 const GiftSelection = () => (
   <div className="min-h-screen w-full bg-rose-100 flex flex-col items-center justify-center p-4 py-12 animate-scene-entry">
     <h2 className="text-3xl text-rose-800 font-bold mb-8 font-handwriting">Pick a gift!</h2>
-    <p className="text-rose-600 mb-8 italic">13 special gifts, each with love 💕</p>
+    <p className="text-rose-600 mb-8 italic">14 special gifts, each with love 💕</p>
 
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 items-center justify-center max-w-6xl">
       {/* ⭐ Gift 1: OUR STORY - THE CINEMATIC JOURNEY ⭐ */}
@@ -838,6 +840,19 @@ const GiftSelection = () => (
       >
         <GiftBox color="bg-blue-600" ribbon="bg-blue-400" />
       </button>
+
+      {/* Gift 14: Ten Days of Silence (Dec 11-21) */}
+      <button
+        onClick={() => {
+          handleNextStep('ten_days_silence');
+          markGiftOpened('tendays');
+        }}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-[300ms] ${
+          openedGifts.tendays ? 'opacity-50' : 'animate-bounce-custom'
+        }`}
+      >
+        <GiftBox color="bg-gradient-to-br from-gray-700 to-slate-600" ribbon="bg-gray-500" />
+      </button>
     </div>
 
       {allOpened && (
@@ -846,10 +861,23 @@ const GiftSelection = () => (
             handleNextStep('heart_building');
             setShowConfetti(false);
           }}
-          className="mt-12 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-full font-bold shadow-xl animate-bounce flex items-center gap-2"
+          className="mt-12 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-full font-bold shadow-xl animate-bounce flex items-center gap-2 mx-auto"
           aria-label="Continue"
         >
           Continue <Heart className="w-5 h-5 fill-white" />
+        </button>
+      )}
+
+      {!allOpened && (
+        <button
+          onClick={() => {
+            handleNextStep('heart_building');
+            setShowConfetti(false);
+          }}
+          className="mt-12 bg-gradient-to-r from-rose-500 to-pink-500 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 flex items-center gap-2 mx-auto"
+          aria-label="Continue without opening all gifts"
+        >
+          Continue Anyway <Heart className="w-5 h-5 fill-white" />
         </button>
       )}
     </div>
@@ -2210,7 +2238,325 @@ Aakash`
     );
   };
 
-  // 17. Four Hearts, One Family
+  // 17. Ten Days of Silence Scene
+  const TenDaysOfSilenceScene = () => {
+    const [phase, setPhase] = useState('intro'); // intro -> countdown -> silence -> longing -> reunion -> reflection
+    const [showText, setShowText] = useState(false);
+
+    useEffect(() => {
+      if (phase === 'intro') {
+        setTimeout(() => setShowText(true), 500);
+      }
+    }, [phase]);
+
+    const handleBegin = () => {
+      setPhase('countdown');
+      setTimeout(() => setPhase('silence'), 3000);
+      setTimeout(() => setPhase('longing'), 6000);
+    };
+
+    return (
+      <div className="min-h-screen w-full bg-gradient-to-br from-gray-800 via-slate-700 to-gray-900 flex items-center justify-center relative overflow-hidden animate-scene-entry">
+        {/* Intro Phase */}
+        {phase === 'intro' && (
+          <div className="text-center z-10 px-4 max-w-4xl mx-auto animate-fade-in-up">
+            <div className="mb-8">
+              <span className="text-8xl sm:text-9xl animate-pulse inline-block">📅</span>
+            </div>
+            {showText && (
+              <>
+                <h1 className="text-5xl sm:text-7xl font-bold text-gray-100 mb-6 font-handwriting animate-fade-in-up">
+                  December 11 - December 21
+                </h1>
+                <p className="text-3xl sm:text-4xl text-gray-300 mb-8 italic animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                  Ten Days of Silence
+                </p>
+                <div className="bg-white/10 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border-2 border-gray-400/30 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+                  <p className="text-xl sm:text-2xl text-gray-200 leading-relaxed mb-6">
+                    You went home to your hometown on December 11.
+                    <br />
+                    The plan was simple: you'd return on December 14.
+                    <br />
+                    Three days. That's all it was supposed to be.
+                  </p>
+                  <p className="text-2xl sm:text-3xl text-red-300 font-bold mt-8 mb-4">
+                    But life had different plans...
+                  </p>
+                  <p className="text-xl text-gray-300">
+                    You came back on December 21.
+                    <br />
+                    <span className="text-3xl font-bold text-white">Ten days.</span>
+                  </p>
+                </div>
+                <button
+                  onClick={handleBegin}
+                  className="mt-10 bg-gradient-to-r from-gray-600 to-slate-600 text-white px-10 py-4 rounded-full text-xl font-bold hover:from-gray-700 hover:to-slate-700 transition shadow-2xl animate-pulse"
+                >
+                  Relive Those Days 💔
+                </button>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Countdown Phase */}
+        {phase === 'countdown' && (
+          <div className="text-center z-10 px-4 animate-scene-entry max-w-3xl mx-auto">
+            <div className="mb-8">
+              <span className="text-8xl animate-pulse inline-block">⏳</span>
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-100 mb-8 font-handwriting">
+              The Longest Countdown
+            </h2>
+            <div className="bg-white/10 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border-2 border-gray-400/30">
+              <p className="text-2xl text-gray-200 mb-6 leading-relaxed italic">
+                Day 1... Day 2... Day 3...
+                <br />
+                <span className="text-red-300">Still waiting...</span>
+              </p>
+              <p className="text-xl text-gray-300 mb-4">
+                Day 4... Day 5... Day 6...
+              </p>
+              <p className="text-3xl font-bold text-white mb-4">
+                ...Day 7... Day 8... Day 9... Day 10
+              </p>
+              <div className="flex justify-center items-center gap-3 mt-8">
+                <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse" />
+                <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }} />
+                <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }} />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Silence Phase */}
+        {phase === 'silence' && (
+          <div className="text-center z-10 px-4 animate-scene-entry max-w-4xl mx-auto">
+            <div className="mb-8">
+              <span className="text-8xl animate-pulse inline-block">🔇</span>
+            </div>
+            <h2 className="text-4xl sm:text-6xl font-bold text-gray-100 mb-8 font-handwriting">
+              The Silence Was Deafening
+            </h2>
+            <div className="space-y-6">
+              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl shadow-xl border-2 border-gray-400/30 transform hover:scale-105 transition">
+                <p className="text-xl sm:text-2xl text-gray-200 leading-relaxed">
+                  <span className="text-3xl font-bold text-red-300">No calls.</span>
+                  <br />
+                  For ten whole days, we didn't have our usual calls.
+                  <br />
+                  <span className="text-lg italic text-gray-400">The phone felt heavy in my hand, waiting for your voice...</span>
+                </p>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl shadow-xl border-2 border-gray-400/30 transform hover:scale-105 transition">
+                <p className="text-xl sm:text-2xl text-gray-200 leading-relaxed">
+                  <span className="text-3xl font-bold text-red-300">No real conversations.</span>
+                  <br />
+                  We barely talked. Brief messages. Quick texts.
+                  <br />
+                  <span className="text-lg italic text-gray-400">Nothing like our usual deep talks that made the distance disappear...</span>
+                </p>
+              </div>
+
+              <div className="bg-gradient-to-r from-red-900/40 to-pink-900/40 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border-2 border-red-400/40">
+                <p className="text-2xl sm:text-3xl font-bold text-white mb-4">
+                  This was the first time.
+                </p>
+                <p className="text-xl text-gray-200 leading-relaxed">
+                  The first time since we started talking...
+                  <br />
+                  Since we opened our hearts...
+                  <br />
+                  Since we became "us"...
+                  <br />
+                  <span className="text-2xl font-bold text-red-300">
+                    That we had this much gap between us.
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Longing Phase */}
+        {phase === 'longing' && (
+          <div className="text-center z-10 px-4 animate-scene-entry max-w-4xl mx-auto">
+            <div className="mb-8">
+              <span className="text-8xl animate-heartbeat inline-block">💔</span>
+            </div>
+            <h2 className="text-4xl sm:text-6xl font-bold text-gray-100 mb-8 font-handwriting">
+              I Missed You
+            </h2>
+            <div className="bg-white/10 backdrop-blur-sm p-8 sm:p-12 rounded-3xl shadow-2xl border-2 border-gray-400/30">
+              <p className="text-xl sm:text-2xl text-gray-200 leading-relaxed mb-6 font-serif">
+                I missed you <span className="text-3xl font-bold text-red-300">so much</span>.
+                <br /><br />
+                Every morning, I'd wake up hoping to hear your voice.
+                <br />
+                Every night, I'd go to sleep wishing I could talk to you.
+                <br /><br />
+                <span className="text-2xl text-white font-bold">
+                  Ten days felt like an eternity.
+                </span>
+                <br /><br />
+                I missed your laugh. I missed your stories.
+                <br />
+                I missed the way you say my name.
+                <br />
+                I missed how we could talk about everything and nothing.
+                <br /><br />
+                The silence made me realize something:
+                <br />
+                <span className="text-3xl font-bold text-pink-300 block mt-4">
+                  You're not just someone I love.
+                  <br />
+                  You're the voice I need to hear.
+                  <br />
+                  You're the presence that makes my day complete.
+                </span>
+              </p>
+            </div>
+
+            <button
+              onClick={() => setPhase('reunion')}
+              className="mt-8 bg-gradient-to-r from-pink-600 to-rose-600 text-white px-10 py-4 rounded-full text-xl font-bold hover:from-pink-700 hover:to-rose-700 transition shadow-2xl animate-pulse"
+            >
+              December 21... 💕
+            </button>
+          </div>
+        )}
+
+        {/* Reunion Phase */}
+        {phase === 'reunion' && (
+          <div className="text-center z-10 px-4 animate-scene-entry max-w-4xl mx-auto">
+            <div className="mb-8">
+              <span className="text-8xl animate-bounce inline-block">🎉</span>
+            </div>
+            <h2 className="text-4xl sm:text-6xl font-bold text-pink-300 mb-8 font-handwriting">
+              You Came Back!
+            </h2>
+            <div className="bg-gradient-to-br from-pink-900/40 to-rose-900/40 backdrop-blur-sm p-8 sm:p-12 rounded-3xl shadow-2xl border-2 border-pink-400/40">
+              <p className="text-xl sm:text-2xl text-gray-100 leading-relaxed mb-6 font-serif">
+                December 21, 2024.
+                <br />
+                <span className="text-3xl font-bold text-pink-300">Finally.</span>
+                <br /><br />
+                Hearing your voice again felt like coming home.
+                <br />
+                Talking to you again made everything right.
+                <br /><br />
+                Those ten days taught me something precious:
+                <br />
+                <span className="text-2xl font-bold text-white block mt-4">
+                  Distance is bearable.
+                  <br />
+                  Silence is not.
+                </span>
+                <br />
+                <span className="text-xl text-pink-200">
+                  I can handle miles between us,
+                  <br />
+                  But I can't handle not hearing from you.
+                  <br />
+                  You're not just my love — you're my daily sunshine.
+                </span>
+              </p>
+            </div>
+
+            <button
+              onClick={() => setPhase('reflection')}
+              className="mt-8 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-10 py-4 rounded-full text-xl font-bold hover:from-pink-600 hover:to-rose-600 transition shadow-2xl animate-pulse"
+            >
+              A Promise... 💝
+            </button>
+          </div>
+        )}
+
+        {/* Reflection Phase */}
+        {phase === 'reflection' && (
+          <div className="text-center z-10 px-4 animate-scene-entry max-w-4xl mx-auto">
+            <div className="mb-8">
+              <span className="text-8xl animate-pulse inline-block">💌</span>
+            </div>
+            <h2 className="text-4xl sm:text-6xl font-bold text-pink-300 mb-8 font-handwriting">
+              Never Again
+            </h2>
+            <div className="bg-white/10 backdrop-blur-sm p-8 sm:p-12 rounded-3xl shadow-2xl border-2 border-pink-400/40">
+              <p className="text-xl sm:text-2xl text-gray-100 leading-relaxed font-serif italic">
+                "Those ten days showed me what life feels like without you in it —
+                <br />
+                and I never want to experience that again.
+                <br /><br />
+                No matter where you are,
+                <br />
+                no matter what happens,
+                <br />
+                <span className="text-3xl font-bold text-pink-300 not-italic">
+                  I promise to always stay connected to you.
+                </span>
+                <br /><br />
+                Because you're not just someone I talk to.
+                <br />
+                You're the one I need to talk to.
+                <br />
+                You're my comfort, my joy, my home.
+                <br /><br />
+                <span className="text-2xl font-bold text-white not-italic">
+                  December 11-21 will always remind me:
+                  <br />
+                  <span className="text-pink-300">
+                    How much I love you.
+                    <br />
+                    How much I need you.
+                    <br />
+                    How incomplete my days are without you.
+                  </span>
+                </span>
+                <br /><br />
+                Thank you for coming back.
+                <br />
+                Thank you for being you.
+                <br />
+                Thank you for being mine."
+              </p>
+              <p className="text-right text-3xl text-pink-400 font-handwriting mt-8">
+                - Your Kanna ❤️
+              </p>
+            </div>
+
+            <button
+              onClick={() => handleNextStep('gifts')}
+              className="mt-8 bg-gradient-to-r from-pink-600 to-rose-600 text-white px-10 py-4 rounded-full text-xl font-bold hover:from-pink-700 hover:to-rose-700 transition shadow-2xl flex items-center gap-2 mx-auto"
+            >
+              <ArrowLeft className="w-6 h-6" />
+              Back to Gift Room
+            </button>
+          </div>
+        )}
+
+        {/* Floating Hearts Background Effect */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-4xl animate-heart-float"
+              style={{
+                left: `${Math.random() * 100}%`,
+                bottom: `-10%`,
+                animationDuration: `${Math.random() * 3 + 4}s`,
+                animationDelay: `${Math.random() * 2}s`,
+              }}
+            >
+              💔
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // 18. Four Hearts, One Family
   const FourHeartsOneFamilyScene = () => {
     const [phase, setPhase] = useState('intro'); // intro, hearts, unite, family
 
@@ -4096,6 +4442,7 @@ Aakash`
       {step === 'do_you_love_me' && <DoYouLoveMeScene />}
       {step === 'four_hearts_family' && <FourHeartsOneFamilyScene />}
       {step === 'our_story' && <OurStoryScene />}
+      {step === 'ten_days_silence' && <TenDaysOfSilenceScene />}
     </div>
   );
 }
