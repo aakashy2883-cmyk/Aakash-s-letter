@@ -330,7 +330,7 @@ const MilestoneData = [
   { date: 'Sept 8', special: true, color: '#20B2AA' },
   { date: 'Sept 15', special: false, color: '#A0A0A0' },
   { date: 'Sept 16', special: false, color: '#A52A2A' },
-  { date: 'Sept 26', special: false, color: '#EE82EE' },
+  { date: 'Sept 26', special: false, color: '#800080' },
   { date: 'Sept 27', special: false, color: '#FFFF00' },
   { date: 'Sept 28', special: true, color: '#008000' },
   { date: 'Oct 6', special: true, color: '#800080' },
@@ -346,7 +346,9 @@ const MilestoneData = [
   { date: 'Nov 22', special: false, color: '#A52A2A' },
   { date: 'Nov 23', special: false, color: '#FF0000' },
   { date: 'Dec 1', special: false, color: '#A0A0A0' },
-  { date: 'Dec 26', special: false, color: '#00008B' }
+  { date: 'Dec 26', special: false, color: '#00008B' },
+  { date: 'Dec 27', special: true, color: '#14B8A6' },
+  { date: 'Dec 28', special: false, color: '#000000' }
 ];
 
 /* --- Main App --- */
@@ -367,6 +369,7 @@ export default function App() {
     story: false,
     gazebo: false,
     tendays: false,
+    firstletter: false,
   });
   const [candlesBlown, setCandlesBlown] = useState(false);
   const [showConfetti, setShowConfetti] = useState(true);
@@ -690,7 +693,7 @@ export default function App() {
 const GiftSelection = () => (
   <div className="min-h-screen w-full bg-rose-100 flex flex-col items-center justify-center p-4 py-12 animate-scene-entry">
     <h2 className="text-3xl text-rose-800 font-bold mb-8 font-handwriting">Pick a gift!</h2>
-    <p className="text-rose-600 mb-8 italic">14 special gifts, each with love 💕</p>
+    <p className="text-rose-600 mb-8 italic">15 special gifts, each with love 💕</p>
 
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 items-center justify-center max-w-6xl">
       {/* ⭐ Gift 1: OUR STORY - THE CINEMATIC JOURNEY ⭐ */}
@@ -847,11 +850,24 @@ const GiftSelection = () => (
           handleNextStep('ten_days_silence');
           markGiftOpened('tendays');
         }}
-        className={`transform transition-all duration-300 hover:-translate-y-4 delay-[300ms] ${
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-[1300ms] ${
           openedGifts.tendays ? 'opacity-50' : 'animate-bounce-custom'
         }`}
       >
         <GiftBox color="bg-gradient-to-br from-gray-700 to-slate-600" ribbon="bg-gray-500" />
+      </button>
+
+      {/* Gift 15: Her First Letter (Dec 26) */}
+      <button
+        onClick={() => {
+          handleNextStep('her_first_letter');
+          markGiftOpened('firstletter');
+        }}
+        className={`transform transition-all duration-300 hover:-translate-y-4 delay-[1400ms] ${
+          openedGifts.firstletter ? 'opacity-50' : 'animate-bounce-custom'
+        }`}
+      >
+        <GiftBox color="bg-gradient-to-br from-amber-600 to-orange-500" ribbon="bg-yellow-400" />
       </button>
     </div>
 
@@ -1019,15 +1035,17 @@ const GiftSelection = () => (
   const ConstellationScene = () => {
     const [hoveredDate, setHoveredDate] = useState(null);
 
-    // static scatter points for consistent layout (numbers interpreted as percentages)
+    // Better distributed scatter points with more spacing (numbers interpreted as percentages)
+    // Total: 27 points for 27 milestone dates
     const getNodePosition = (index) => {
       const scatterPoints = [
-        { x: 10, y: 15 }, { x: 35, y: 10 }, { x: 60, y: 20 }, { x: 85, y: 15 },
-        { x: 5, y: 35 }, { x: 25, y: 45 }, { x: 45, y: 30 }, { x: 70, y: 40 },
-        { x: 95, y: 50 }, { x: 15, y: 65 }, { x: 40, y: 75 }, { x: 65, y: 60 },
-        { x: 80, y: 75 }, { x: 50, y: 90 }, { x: 20, y: 90 }, { x: 5, y: 80 },
-        { x: 95, y: 25 }, { x: 75, y: 95 }, { x: 30, y: 5 }, { x: 88, y: 80 },
-        { x: 50, y: 55 }, { x: 70, y: 10 }, { x: 45, y: 95 }, { x: 10, y: 45 }
+        { x: 12, y: 15 }, { x: 38, y: 8 }, { x: 62, y: 18 }, { x: 88, y: 12 },
+        { x: 8, y: 35 }, { x: 28, y: 48 }, { x: 48, y: 28 }, { x: 72, y: 38 },
+        { x: 92, y: 48 }, { x: 18, y: 68 }, { x: 42, y: 78 }, { x: 68, y: 58 },
+        { x: 82, y: 72 }, { x: 52, y: 88 }, { x: 22, y: 85 }, { x: 8, y: 78 },
+        { x: 92, y: 28 }, { x: 78, y: 92 }, { x: 32, y: 5 }, { x: 85, y: 82 },
+        { x: 52, y: 52 }, { x: 72, y: 8 }, { x: 48, y: 92 }, { x: 12, y: 48 },
+        { x: 35, y: 65 }, { x: 58, y: 42 }, { x: 25, y: 22 }
       ];
       return scatterPoints[index] || { x: 50, y: 50 };
     };
@@ -1047,7 +1065,7 @@ const GiftSelection = () => (
         <Stars className="absolute bottom-1/4 left-1/4 w-3 h-3 text-white animate-pulse" />
         <TwinklingMoon />
 
-        <div className="relative w-full max-w-lg h-[60vh] md:h-[70vh]">
+        <div className="relative w-full max-w-2xl lg:max-w-3xl h-[55vh] sm:h-[60vh] md:h-[65vh] lg:h-[70vh] mx-auto px-4">
           {/* No lines drawn - purely nodes */}
           {MilestoneData.map((milestone, index) => {
             const coords = getNodePosition(index);
@@ -1072,12 +1090,12 @@ const GiftSelection = () => (
                 aria-label={`Milestone ${milestone.date}`}
               >
                 <Star
-                  size={isHovered ? 24 : 16}
+                  size={isHovered ? (isSpecial ? 32 : 24) : (isSpecial ? 24 : 16)}
                   stroke={milestone.color}
                   fill={milestone.color}
                   className="transition-transform"
                   style={{
-                    transform: `scale(${isHovered ? 1.4 : 1})`,
+                    transform: `scale(${isHovered ? 1.4 : (isSpecial ? 1.2 : 1)})`,
                     filter: isHovered || isSpecial ? `drop-shadow(0 0 8px ${milestone.color})` : 'drop-shadow(0 0 2px rgba(255,255,255,0.5))'
                   }}
                 />
@@ -2556,7 +2574,324 @@ Aakash`
     );
   };
 
-  // 18. Four Hearts, One Family
+  // 18. Her First Letter Scene (Dec 26)
+  const HerFirstLetterScene = () => {
+    const [phase, setPhase] = useState('intro'); // intro -> unwrapping -> opening -> discovery -> thefirst -> feelings -> treasure
+    const [showText, setShowText] = useState(false);
+
+    useEffect(() => {
+      if (phase === 'intro') {
+        setTimeout(() => setShowText(true), 500);
+      }
+    }, [phase]);
+
+    const handleUnwrap = () => {
+      setPhase('unwrapping');
+      setTimeout(() => setPhase('opening'), 2000);
+      setTimeout(() => setPhase('discovery'), 4000);
+    };
+
+    return (
+      <div className="min-h-screen w-full bg-gradient-to-br from-amber-50 via-rose-50 to-orange-50 flex items-center justify-center relative overflow-hidden animate-scene-entry p-4">
+        {/* Intro Phase */}
+        {phase === 'intro' && (
+          <div className="text-center z-10 px-4 max-w-4xl mx-auto animate-fade-in-up">
+            <div className="mb-8">
+              <span className="text-8xl sm:text-9xl animate-bounce inline-block">🎁</span>
+            </div>
+            {showText && (
+              <>
+                <h1 className="text-5xl sm:text-7xl font-bold text-amber-900 mb-6 font-handwriting animate-fade-in-up">
+                  December 26, 2024
+                </h1>
+                <p className="text-3xl sm:text-4xl text-rose-700 mb-8 italic animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                  A Day I'll Never Forget
+                </p>
+                <div className="bg-white/60 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border-2 border-amber-200 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+                  <p className="text-xl sm:text-2xl text-gray-800 leading-relaxed mb-6">
+                    You handed me something unexpected...
+                    <br />
+                    <br />
+                    A gift.
+                    <br />
+                    <span className="text-2xl sm:text-3xl font-bold text-rose-600">
+                      But not just any gift.
+                    </span>
+                  </p>
+                  <div className="text-8xl animate-pulse my-8">
+                    🎀
+                  </div>
+                </div>
+                <button
+                  onClick={handleUnwrap}
+                  className="mt-10 bg-gradient-to-r from-amber-600 to-rose-600 text-white px-10 py-4 rounded-full text-xl font-bold hover:from-amber-700 hover:to-rose-700 transition shadow-2xl animate-pulse"
+                >
+                  Open the Gift 🎁
+                </button>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Unwrapping Phase */}
+        {phase === 'unwrapping' && (
+          <div className="text-center z-10 px-4 animate-scene-entry max-w-3xl mx-auto">
+            <div className="mb-8 relative">
+              <div className="text-9xl animate-spin-slow inline-block">🎁</div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-6xl animate-ping">✨</div>
+              </div>
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-bold text-amber-900 mb-8 font-handwriting">
+              Unwrapping...
+            </h2>
+            <p className="text-xl text-rose-700 italic">
+              My hands were shaking with excitement...
+            </p>
+          </div>
+        )}
+
+        {/* Opening Phase */}
+        {phase === 'opening' && (
+          <div className="text-center z-10 px-4 animate-scene-entry max-w-3xl mx-auto">
+            <div className="mb-8">
+              <span className="text-9xl inline-block transform scale-110">📦</span>
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-bold text-amber-900 mb-8 font-handwriting">
+              Opening the box...
+            </h2>
+            <div className="flex justify-center gap-4 text-5xl">
+              <span className="animate-bounce">✨</span>
+              <span className="animate-bounce" style={{ animationDelay: '0.1s' }}>💫</span>
+              <span className="animate-bounce" style={{ animationDelay: '0.2s' }}>⭐</span>
+            </div>
+          </div>
+        )}
+
+        {/* Discovery Phase */}
+        {phase === 'discovery' && (
+          <div className="text-center z-10 px-4 animate-scene-entry max-w-4xl mx-auto">
+            <div className="mb-8">
+              <span className="text-8xl animate-pulse inline-block">💌</span>
+            </div>
+            <h2 className="text-4xl sm:text-6xl font-bold text-rose-700 mb-8 font-handwriting">
+              Inside... A Letter
+            </h2>
+            <div className="bg-gradient-to-br from-amber-100 to-rose-100 p-8 sm:p-12 rounded-3xl shadow-2xl border-4 border-amber-300">
+              <p className="text-xl sm:text-2xl text-gray-800 leading-relaxed mb-6 font-serif">
+                There it was.
+                <br />
+                <span className="text-3xl font-bold text-rose-600">YOUR letter.</span>
+                <br />
+                <br />
+                Your handwriting.
+                <br />
+                Your words.
+                <br />
+                Your thoughts, folded carefully and placed in my hands.
+                <br />
+                <br />
+                <span className="text-2xl text-amber-800 italic">
+                  I couldn't believe it was real.
+                </span>
+              </p>
+            </div>
+
+            <button
+              onClick={() => setPhase('thefirst')}
+              className="mt-8 bg-gradient-to-r from-rose-500 to-pink-500 text-white px-10 py-4 rounded-full text-xl font-bold hover:from-rose-600 hover:to-pink-600 transition shadow-2xl animate-pulse"
+            >
+              The First... 💝
+            </button>
+          </div>
+        )}
+
+        {/* The First Phase */}
+        {phase === 'thefirst' && (
+          <div className="text-center z-10 px-4 animate-scene-entry max-w-4xl mx-auto">
+            <div className="mb-8">
+              <span className="text-8xl animate-heartbeat inline-block">🏆</span>
+            </div>
+            <h2 className="text-4xl sm:text-6xl font-bold text-amber-900 mb-8 font-handwriting">
+              This Was THE FIRST
+            </h2>
+            <div className="bg-white/80 backdrop-blur-sm p-8 sm:p-12 rounded-3xl shadow-2xl border-4 border-rose-300">
+              <p className="text-xl sm:text-2xl text-gray-800 leading-relaxed mb-6 font-serif">
+                <span className="text-3xl font-bold text-rose-600 block mb-4">
+                  The FIRST time
+                </span>
+                you gave me a letter WITH a gift.
+                <br />
+                <br />
+                The first time I held your words in a tangible form.
+                <br />
+                The first time your thoughts became something I could keep forever.
+                <br />
+                The first time you gave me a piece of your heart I could carry with me.
+                <br />
+                <br />
+                <span className="text-2xl font-bold text-amber-800">
+                  It wasn't just a letter.
+                  <br />
+                  It was a FIRST.
+                  <br />
+                  And firsts are forever.
+                </span>
+              </p>
+            </div>
+
+            <button
+              onClick={() => setPhase('feelings')}
+              className="mt-8 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-10 py-4 rounded-full text-xl font-bold hover:from-amber-600 hover:to-orange-600 transition shadow-2xl animate-pulse"
+            >
+              How It Made Me Feel... 💖
+            </button>
+          </div>
+        )}
+
+        {/* Feelings Phase */}
+        {phase === 'feelings' && (
+          <div className="text-center z-10 px-4 animate-scene-entry max-w-4xl mx-auto">
+            <div className="mb-8">
+              <span className="text-8xl animate-bounce inline-block">😊</span>
+            </div>
+            <h2 className="text-4xl sm:text-6xl font-bold text-rose-700 mb-8 font-handwriting">
+              I Was SO Happy
+            </h2>
+            <div className="bg-gradient-to-br from-rose-100 via-pink-100 to-orange-100 p-8 sm:p-12 rounded-3xl shadow-2xl border-4 border-rose-300">
+              <p className="text-xl sm:text-2xl text-gray-800 leading-relaxed font-serif">
+                <span className="text-3xl font-bold text-rose-600">
+                  I can't describe the happiness I felt.
+                </span>
+                <br />
+                <br />
+                Reading your words...
+                <br />
+                Knowing you took the time to write them...
+                <br />
+                Knowing you cared enough to give me something so personal...
+                <br />
+                <br />
+                <span className="text-2xl text-amber-800 italic">
+                  That letter meant EVERYTHING.
+                </span>
+                <br />
+                <br />
+                In that moment, I felt:
+                <br />
+                <span className="text-xl font-bold text-pink-600">
+                  Loved. Valued. Special. Cherished.
+                </span>
+                <br />
+                <br />
+                You made me feel like the most important person in the world.
+                <br />
+                <span className="text-2xl font-bold text-rose-700">
+                  Because to you, I am.
+                </span>
+              </p>
+            </div>
+
+            <button
+              onClick={() => setPhase('treasure')}
+              className="mt-8 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-10 py-4 rounded-full text-xl font-bold hover:from-pink-600 hover:to-rose-600 transition shadow-2xl animate-pulse"
+            >
+              My Treasure... 💎
+            </button>
+          </div>
+        )}
+
+        {/* Treasure Phase */}
+        {phase === 'treasure' && (
+          <div className="text-center z-10 px-4 animate-scene-entry max-w-4xl mx-auto">
+            <div className="mb-8">
+              <span className="text-8xl animate-pulse inline-block">💎</span>
+            </div>
+            <h2 className="text-4xl sm:text-6xl font-bold text-amber-900 mb-8 font-handwriting">
+              I Still Have It
+            </h2>
+            <div className="bg-white/90 backdrop-blur-sm p-8 sm:p-12 rounded-3xl shadow-2xl border-4 border-amber-400">
+              <p className="text-xl sm:text-2xl text-gray-800 leading-relaxed font-serif italic">
+                "That letter is one of my most precious possessions.
+                <br />
+                <br />
+                I still have it.
+                <br />
+                I still read it.
+                <br />
+                I still treasure every word.
+                <br />
+                <br />
+                <span className="text-3xl font-bold text-rose-600 not-italic">
+                  It reminds me why I'm the luckiest person alive.
+                </span>
+                <br />
+                <br />
+                Because I have someone who cares enough to write.
+                <br />
+                Someone who loves me enough to give.
+                <br />
+                Someone who makes every moment special.
+                <br />
+                <br />
+                <span className="text-2xl font-bold text-amber-800 not-italic">
+                  I have YOU, Pooja.
+                </span>
+                <br />
+                <br />
+                And that letter from December 26?
+                <br />
+                <span className="text-xl text-rose-700 not-italic">
+                  It's proof that I'm living a dream I never want to wake up from.
+                </span>
+                <br />
+                <br />
+                Thank you for that gift.
+                <br />
+                Thank you for that letter.
+                <br />
+                <span className="text-3xl font-bold text-pink-600 not-italic">
+                  Thank you for being YOU. ❤️
+                </span>
+                "
+              </p>
+              <p className="text-right text-3xl text-amber-700 font-handwriting mt-8">
+                - Your Kanna 🥰
+              </p>
+            </div>
+
+            <button
+              onClick={() => handleNextStep('gifts')}
+              className="mt-8 bg-gradient-to-r from-amber-600 to-rose-600 text-white px-10 py-4 rounded-full text-xl font-bold hover:from-amber-700 hover:to-rose-700 transition shadow-2xl flex items-center gap-2 mx-auto"
+            >
+              <ArrowLeft className="w-6 h-6" />
+              Back to Gift Room
+            </button>
+          </div>
+        )}
+
+        {/* Floating Gift Icons Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-10">
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-4xl animate-heart-float"
+              style={{
+                left: `${Math.random() * 100}%`,
+                bottom: `-10%`,
+                animationDuration: `${Math.random() * 3 + 5}s`,
+                animationDelay: `${Math.random() * 2}s`,
+              }}
+            >
+              {i % 3 === 0 ? '💌' : i % 3 === 1 ? '🎁' : '💝'}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // 19. Four Hearts, One Family
   const FourHeartsOneFamilyScene = () => {
     const [phase, setPhase] = useState('intro'); // intro, hearts, unite, family
 
@@ -4443,6 +4778,7 @@ Aakash`
       {step === 'four_hearts_family' && <FourHeartsOneFamilyScene />}
       {step === 'our_story' && <OurStoryScene />}
       {step === 'ten_days_silence' && <TenDaysOfSilenceScene />}
+      {step === 'her_first_letter' && <HerFirstLetterScene />}
     </div>
   );
 }
