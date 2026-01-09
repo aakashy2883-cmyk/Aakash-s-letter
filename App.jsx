@@ -322,33 +322,36 @@ const TimelineMarker = ({ icon: Icon, title, message }) => {
 
 /* --- Milestone Data (unchanged but used in Constellation) --- */
 const MilestoneData = [
-  { date: 'Aug 29', special: true, color: '#FFD700' },
-  { date: 'Aug 31', special: false, color: '#000000' },
-  { date: 'Sept 5', special: false, color: '#A0A0A0' },
-  { date: 'Sept 6', special: false, color: '#404040' },
-  { date: 'Sept 7', special: false, color: '#008000' },
-  { date: 'Sept 8', special: true, color: '#20B2AA' },
-  { date: 'Sept 15', special: false, color: '#A0A0A0' },
-  { date: 'Sept 16', special: false, color: '#A52A2A' },
-  { date: 'Sept 26', special: false, color: '#800080' },
-  { date: 'Sept 27', special: false, color: '#FFFF00' },
-  { date: 'Sept 28', special: true, color: '#008000' },
-  { date: 'Oct 6', special: true, color: '#800080' },
-  { date: 'Oct 18', special: false, color: '#0000FF' },
-  { date: 'Nov 1', special: false, color: '#FF0000' },
-  { date: 'Nov 2', special: false, color: '#00008B' },
-  { date: 'Nov 3', special: false, color: '#FFD700' },
-  { date: 'Nov 8', special: false, color: '#800000' },
-  { date: 'Nov 9', special: false, color: '#FF0000' },
-  { date: 'Nov 15', special: true, color: '#008000' },
-  { date: 'Nov 16', special: false, color: '#20B2AA' },
-  { date: 'Nov 21', special: false, color: '#A0A0A0' },
-  { date: 'Nov 22', special: false, color: '#A52A2A' },
-  { date: 'Nov 23', special: false, color: '#FF0000' },
-  { date: 'Dec 1', special: false, color: '#A0A0A0' },
-  { date: 'Dec 26', special: false, color: '#00008B' },
-  { date: 'Dec 27', special: true, color: '#14B8A6' },
-  { date: 'Dec 28', special: false, color: '#000000' }
+  { date: 'Aug 29 2025', special: true, color: '#FFD700' },
+  { date: 'Aug 31 2025', special: false, color: '#000000' },
+  { date: 'Sept 5 2025', special: false, color: '#A0A0A0' },
+  { date: 'Sept 6 2025', special: false, color: '#404040' },
+  { date: 'Sept 7 2025', special: false, color: '#008000' },
+  { date: 'Sept 8 2025', special: true, color: '#20B2AA' },
+  { date: 'Sept 15 2025', special: false, color: '#A0A0A0' },
+  { date: 'Sept 16 2025', special: false, color: '#A52A2A' },
+  { date: 'Sept 26 2025', special: false, color: '#800080' },
+  { date: 'Sept 27 2025', special: false, color: '#FFFF00' },
+  { date: 'Sept 28 2025', special: true, color: '#008000' },
+  { date: 'Oct 6 2025', special: true, color: '#800080' },
+  { date: 'Oct 18 2025', special: false, color: '#0000FF' },
+  { date: 'Nov 1 2025', special: false, color: '#FF0000' },
+  { date: 'Nov 2 2025', special: false, color: '#00008B' },
+  { date: 'Nov 3 2025', special: false, color: '#FFD700' },
+  { date: 'Nov 8 2025', special: false, color: '#800000' },
+  { date: 'Nov 9 2025', special: false, color: '#FF0000' },
+  { date: 'Nov 15 2025', special: true, color: '#008000' },
+  { date: 'Nov 16 2025', special: false, color: '#20B2AA' },
+  { date: 'Nov 21 2025', special: false, color: '#A0A0A0' },
+  { date: 'Nov 22 2025', special: false, color: '#A52A2A' },
+  { date: 'Nov 23 2025', special: false, color: '#FF0000' },
+  { date: 'Dec 1 2025', special: false, color: '#A0A0A0' },
+  { date: 'Dec 26 2025', special: false, color: '#00008B' },
+  { date: 'Dec 27 2025', special: true, color: '#14B8A6' },
+  { date: 'Dec 28 2025', special: false, color: '#000000' },
+  { date: 'Jan 07 2026', special: false, color: '#FAF6F6' },
+  { date: 'Jan 08 2026', special: false, color: '#E736BB' }
+
 ];
 
 /* --- Main App --- */
@@ -1036,7 +1039,7 @@ const GiftSelection = () => (
     const [hoveredDate, setHoveredDate] = useState(null);
 
     // Better distributed scatter points with more spacing (numbers interpreted as percentages)
-    // Total: 27 points for 27 milestone dates
+    // Total: 29 points for 29 milestone dates (updated for Jan 07 & Jan 08 2026)
     const getNodePosition = (index) => {
       const scatterPoints = [
         { x: 12, y: 15 }, { x: 38, y: 8 }, { x: 62, y: 18 }, { x: 88, y: 12 },
@@ -1045,7 +1048,7 @@ const GiftSelection = () => (
         { x: 82, y: 72 }, { x: 52, y: 88 }, { x: 22, y: 85 }, { x: 8, y: 78 },
         { x: 92, y: 28 }, { x: 78, y: 92 }, { x: 32, y: 5 }, { x: 85, y: 82 },
         { x: 52, y: 52 }, { x: 72, y: 8 }, { x: 48, y: 92 }, { x: 12, y: 48 },
-        { x: 35, y: 65 }, { x: 58, y: 42 }, { x: 25, y: 22 }
+        { x: 35, y: 65 }, { x: 58, y: 42 }, { x: 25, y: 22 }, { x: 15, y: 38 }, { x: 65, y: 25 }
       ];
       return scatterPoints[index] || { x: 50, y: 50 };
     };
