@@ -350,12 +350,419 @@ const MilestoneData = [
   { date: 'Dec 27 2025', special: true, color: '#14B8A6' },
   { date: 'Dec 28 2025', special: false, color: '#000000' },
   { date: 'Jan 07 2026', special: false, color: '#FAF6F6' },
-  { date: 'Jan 08 2026', special: false, color: '#E736BB' }
+  { date: 'Jan 08 2026', special: false, color: '#E736BB' },
+  { date: 'Jan 21 2026', special: false, color: '#f7fb06ff' },
+  { date: 'Jan 24 2026', special: false, color: '#96f4f0ff' }
 
 ];
 
+/* --- Authentication Screen Component --- */
+const AuthenticationScreen = ({ onSuccess }) => {
+  const [authStage, setAuthStage] = useState(1); // 1 = catch hearts, 2 = connect stars
+  const [caughtLetters, setCaughtLetters] = useState([]);
+  const [fallingHearts, setFallingHearts] = useState([]);
+  const [gameActive, setGameActive] = useState(true);
+  const [basketPosition, setBasketPosition] = useState(50);
+  const [connectedStars, setConnectedStars] = useState([]);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [stage1Complete, setStage1Complete] = useState(false);
+  const gameAreaRef = useRef(null);
+
+  const TARGET_WORD = 'KANNA';
+  const DECOY_LETTERS = ['X', 'Z', 'M', 'L', 'P', 'R', 'S', 'T', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'O', 'Q', 'U', 'V', 'W', 'Y'];
+
+  // Special dates (the correct ones to click in order) - these are your special: true dates
+  const SPECIAL_DATES = [
+    { id: 1, date: 'Aug 29', x: 15, y: 20, isSpecial: true },
+    { id: 2, date: 'Sept 8', x: 78, y: 25, isSpecial: true },
+    { id: 3, date: 'Sept 28', x: 42, y: 42, isSpecial: true },
+    { id: 4, date: 'Oct 6', x: 88, y: 60, isSpecial: true },
+    { id: 5, date: 'Nov 15', x: 22, y: 75, isSpecial: true },
+    { id: 6, date: 'Dec 27', x: 65, y: 88, isSpecial: true }
+  ];
+
+  // Decoy dates (wrong choices) - these blend in with special dates
+  const DECOY_DATES = [
+    { id: 101, date: 'Aug 31', x: 50, y: 15, isSpecial: false },
+    { id: 102, date: 'Sept 5', x: 30, y: 30, isSpecial: false },
+    { id: 103, date: 'Sept 16', x: 62, y: 35, isSpecial: false },
+    { id: 104, date: 'Oct 18', x: 10, y: 50, isSpecial: false },
+    { id: 105, date: 'Nov 2', x: 55, y: 55, isSpecial: false },
+    { id: 106, date: 'Nov 22', x: 75, y: 72, isSpecial: false },
+    { id: 107, date: 'Dec 1', x: 38, y: 80, isSpecial: false },
+    { id: 108, date: 'Dec 26', x: 85, y: 82, isSpecial: false }
+  ];
+
+  // All stars combined (special + decoys)
+  const ALL_STARS = [...SPECIAL_DATES, ...DECOY_DATES];
+
+  // Stage 1: Falling Hearts Game
+  useEffect(() => {
+    if (authStage !== 1 || !gameActive) return;
+
+    const spawnHeart = () => {
+      const nextNeededLetter = TARGET_WORD[caughtLetters.length];
+      const isTargetLetter = Math.random() < 0.55; // 55% chance of target letter - more frequent!
+
+      let letter;
+      if (isTargetLetter && nextNeededLetter) {
+        letter = nextNeededLetter;
+      } else {
+        letter = DECOY_LETTERS[Math.floor(Math.random() * DECOY_LETTERS.length)];
+      }
+
+      const newHeart = {
+        id: Date.now() + Math.random(),
+        letter,
+        x: Math.random() * 80 + 10, // 10-90%
+        y: -10,
+        isTarget: letter === nextNeededLetter
+      };
+
+      setFallingHearts(prev => [...prev, newHeart]);
+    };
+
+    const spawnInterval = setInterval(spawnHeart, 1400); // Balanced spawn rate
+    return () => clearInterval(spawnInterval);
+  }, [authStage, gameActive, caughtLetters.length]);
+
+  // Move hearts down
+  useEffect(() => {
+    if (authStage !== 1 || !gameActive) return;
+
+    const moveInterval = setInterval(() => {
+      setFallingHearts(prev => {
+        const updated = prev.map(heart => ({
+          ...heart,
+          y: heart.y + 1.2 // Slower falling speed
+        })).filter(heart => heart.y < 100);
+        return updated;
+      });
+    }, 50);
+
+    return () => clearInterval(moveInterval);
+  }, [authStage, gameActive]);
+
+  // Check for catches
+  useEffect(() => {
+    if (authStage !== 1) return;
+
+    const catchZone = { minY: 75, maxY: 98 };
+    const basketWidth = 20; // Wider catch zone
+    const basketLeft = basketPosition - basketWidth / 2;
+    const basketRight = basketPosition + basketWidth / 2;
+
+    setFallingHearts(prev => {
+      let caught = null;
+      const remaining = prev.filter(heart => {
+        if (heart.y >= catchZone.minY && heart.y <= catchZone.maxY) {
+          if (heart.x >= basketLeft && heart.x <= basketRight) {
+            caught = heart;
+            return false;
+          }
+        }
+        return true;
+      });
+
+      if (caught) {
+        const nextNeeded = TARGET_WORD[caughtLetters.length];
+        if (caught.letter === nextNeeded) {
+          const newCaught = [...caughtLetters, caught.letter];
+          setCaughtLetters(newCaught);
+
+          if (newCaught.join('') === TARGET_WORD) {
+            setGameActive(false);
+            setTimeout(() => {
+              setStage1Complete(true);
+              setTimeout(() => setAuthStage(2), 1500);
+            }, 500);
+          }
+        } else {
+          // Wrong letter caught - reset with animation
+          setCaughtLetters([]);
+        }
+      }
+
+      return remaining;
+    });
+  }, [fallingHearts, basketPosition, caughtLetters, authStage]);
+
+  // Handle mouse/touch movement for basket
+  const handleMouseMove = (e) => {
+    if (!gameAreaRef.current || authStage !== 1) return;
+    const rect = gameAreaRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    setBasketPosition(Math.max(10, Math.min(90, x)));
+  };
+
+  const handleTouchMove = (e) => {
+    if (!gameAreaRef.current || authStage !== 1) return;
+    const rect = gameAreaRef.current.getBoundingClientRect();
+    const touch = e.touches[0];
+    const x = ((touch.clientX - rect.left) / rect.width) * 100;
+    setBasketPosition(Math.max(10, Math.min(90, x)));
+  };
+
+  // Stage 2: Connect stars
+  const handleStarClick = (star) => {
+    if (authStage !== 2) return;
+
+    // If it's a decoy (non-special) star, reset!
+    if (!star.isSpecial) {
+      setConnectedStars([]);
+      return;
+    }
+
+    const expectedIndex = connectedStars.length;
+    const expectedStar = SPECIAL_DATES[expectedIndex];
+
+    if (star.id === expectedStar?.id) {
+      const newConnected = [...connectedStars, star];
+      setConnectedStars(newConnected);
+
+      if (newConnected.length === SPECIAL_DATES.length) {
+        setShowSuccess(true);
+        setTimeout(() => {
+          sessionStorage.setItem('loveLetterAuth', 'true');
+          onSuccess();
+        }, 2000);
+      }
+    } else {
+      // Wrong special star order - reset
+      setConnectedStars([]);
+    }
+  };
+
+  return (
+    <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex flex-col items-center justify-center relative overflow-hidden">
+      {/* Twinkling stars background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(50)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              opacity: Math.random() * 0.7 + 0.3
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Stage indicator */}
+      <div className="absolute top-8 left-1/2 transform -translate-x-1/2 flex items-center gap-4 z-20">
+        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold transition-all duration-500 ${authStage >= 1 ? 'bg-pink-500 text-white' : 'bg-gray-700 text-gray-400'} ${stage1Complete ? 'ring-4 ring-green-400' : ''}`}>
+          {stage1Complete ? '✓' : '1'}
+        </div>
+        <div className={`w-16 h-1 transition-all duration-500 ${stage1Complete ? 'bg-pink-500' : 'bg-gray-700'}`} />
+        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold transition-all duration-500 ${authStage >= 2 ? 'bg-pink-500 text-white' : 'bg-gray-700 text-gray-400'}`}>
+          2
+        </div>
+      </div>
+
+      {/* Stage 1: Catch Hearts */}
+      {authStage === 1 && (
+        <div
+          ref={gameAreaRef}
+          className="relative w-full max-w-lg h-[70vh] mx-auto cursor-none touch-none"
+          onMouseMove={handleMouseMove}
+          onTouchMove={handleTouchMove}
+        >
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-center z-10">
+            <h2 className="text-3xl sm:text-4xl font-bold text-pink-300 mb-2 font-handwriting">
+              Catch Our Love
+            </h2>
+            <p className="text-pink-200 text-sm sm:text-base mb-4">
+              Catch the hearts to spell the magic word...
+            </p>
+            <div className="flex justify-center gap-2">
+              {TARGET_WORD.split('').map((letter, i) => (
+                <div
+                  key={i}
+                  className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center text-xl sm:text-2xl font-bold transition-all duration-300 ${
+                    caughtLetters[i]
+                      ? 'bg-pink-500 text-white scale-110'
+                      : 'bg-gray-800/50 text-gray-500 border-2 border-dashed border-pink-500/50'
+                  }`}
+                >
+                  {caughtLetters[i] || '?'}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Falling hearts */}
+          {fallingHearts.map(heart => (
+            <div
+              key={heart.id}
+              className={`absolute transition-transform ${heart.isTarget ? 'text-pink-400' : 'text-gray-500'}`}
+              style={{
+                left: `${heart.x}%`,
+                top: `${heart.y}%`,
+                transform: 'translate(-50%, -50%)'
+              }}
+            >
+              <div className="relative">
+                <span className="text-6xl sm:text-7xl">💕</span>
+                <span className={`absolute inset-0 flex items-center justify-center text-2xl sm:text-3xl font-bold ${heart.isTarget ? 'text-white' : 'text-gray-300'}`}>
+                  {heart.letter}
+                </span>
+              </div>
+            </div>
+          ))}
+
+          {/* Basket */}
+          <div
+            className="absolute bottom-4 transition-all duration-75"
+            style={{ left: `${basketPosition}%`, transform: 'translateX(-50%)' }}
+          >
+            <div className="text-6xl sm:text-7xl">🧺</div>
+          </div>
+
+          {/* Stage 1 Complete Animation */}
+          {stage1Complete && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-20">
+              <div className="text-center animate-bounce">
+                <span className="text-6xl">💕</span>
+                <p className="text-2xl text-pink-300 font-bold mt-4">KANNA!</p>
+                <p className="text-pink-200">Stage 1 Complete!</p>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Stage 2: Connect Constellation */}
+      {authStage === 2 && (
+        <div className="relative w-full max-w-2xl h-[70vh] mx-auto px-4">
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-center z-10">
+            <h2 className="text-3xl sm:text-4xl font-bold text-pink-300 mb-2 font-handwriting">
+              Connect Our Moments
+            </h2>
+            <p className="text-pink-200 text-sm sm:text-base">
+              Connect our special dates in order...
+            </p>
+            <p className="text-pink-300 text-xs mt-2">
+              {connectedStars.length} / {SPECIAL_DATES.length} connected
+            </p>
+          </div>
+
+          {/* SVG for connection lines */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
+            {connectedStars.map((star, index) => {
+              if (index === 0) return null;
+              const prevStar = connectedStars[index - 1];
+              return (
+                <line
+                  key={`line-${index}`}
+                  x1={`${prevStar.x}%`}
+                  y1={`${prevStar.y}%`}
+                  x2={`${star.x}%`}
+                  y2={`${star.y}%`}
+                  stroke="url(#goldGradient)"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  className="animate-pulse"
+                />
+              );
+            })}
+            <defs>
+              <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#FFD700" />
+                <stop offset="50%" stopColor="#FFA500" />
+                <stop offset="100%" stopColor="#FF69B4" />
+              </linearGradient>
+            </defs>
+          </svg>
+
+          {/* Stars - ALL stars show dates, but only YOU know which are special! */}
+          {ALL_STARS.map((star) => {
+            const isConnected = connectedStars.some(s => s.id === star.id);
+
+            return (
+              <button
+                key={star.id}
+                onClick={() => handleStarClick(star)}
+                className={`absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 z-10 group ${
+                  isConnected
+                    ? 'scale-125'
+                    : 'hover:scale-110'
+                }`}
+                style={{ left: `${star.x}%`, top: `${star.y}%` }}
+              >
+                <div className="relative flex flex-col items-center">
+                  <span className={`text-2xl sm:text-3xl transition-all duration-300 ${
+                    isConnected
+                      ? 'text-yellow-300 drop-shadow-[0_0_10px_rgba(255,215,0,0.8)]'
+                      : 'text-white/80 group-hover:text-white'
+                  }`}>
+                    {isConnected ? '⭐' : '✨'}
+                  </span>
+                  {/* Show date on ALL stars */}
+                  <span className={`text-[10px] sm:text-xs whitespace-nowrap mt-1 transition-all duration-300 ${
+                    isConnected
+                      ? 'text-yellow-300 font-bold'
+                      : 'text-pink-200/60 group-hover:text-pink-200'
+                  }`}>
+                    {star.date}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+
+          {/* Hint */}
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center px-4">
+            <p className="text-pink-300/70 text-sm italic">
+              {connectedStars.length === 0 && "Click our special dates in order... only we know which ones matter 💕"}
+              {connectedStars.length === 1 && "You remember when things got real..."}
+              {connectedStars.length === 2 && "Keep following our story..."}
+              {connectedStars.length === 3 && "You know us so well..."}
+              {connectedStars.length === 4 && "Almost there, my love..."}
+              {connectedStars.length === 5 && "One more special moment..."}
+            </p>
+            <p className="text-pink-400/50 text-xs mt-2">
+              {connectedStars.length} / 6 special dates connected
+            </p>
+          </div>
+
+          {/* Success Animation */}
+          {showSuccess && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-30">
+              <div className="text-center">
+                <div className="text-8xl animate-bounce mb-4">💕</div>
+                <h3 className="text-4xl font-bold text-pink-300 font-handwriting mb-2">
+                  Welcome Home, Lovers!
+                </h3>
+                <p className="text-pink-200">Your love story awaits...</p>
+                <div className="mt-6 flex justify-center gap-2">
+                  {[...Array(7)].map((_, i) => (
+                    <span key={i} className="text-2xl animate-bounce" style={{ animationDelay: `${i * 0.1}s` }}>
+                      💕
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Footer hint */}
+      <div className="absolute bottom-4 text-center text-pink-300/50 text-xs">
+        This love story is protected by our hearts 💕
+      </div>
+    </div>
+  );
+};
+
 /* --- Main App --- */
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return sessionStorage.getItem('loveLetterAuth') === 'true';
+  });
   const [step, setStep] = useState('parachute');
   const [openedGifts, setOpenedGifts] = useState({
     bouquet: false,
@@ -1048,7 +1455,8 @@ const GiftSelection = () => (
         { x: 82, y: 72 }, { x: 52, y: 88 }, { x: 22, y: 85 }, { x: 8, y: 78 },
         { x: 92, y: 28 }, { x: 78, y: 92 }, { x: 32, y: 5 }, { x: 85, y: 82 },
         { x: 52, y: 52 }, { x: 72, y: 8 }, { x: 48, y: 92 }, { x: 12, y: 48 },
-        { x: 35, y: 65 }, { x: 58, y: 42 }, { x: 25, y: 22 }, { x: 15, y: 38 }, { x: 65, y: 25 }
+        { x: 35, y: 65 }, { x: 58, y: 42 }, { x: 25, y: 22 }, { x: 15, y: 38 }, { x: 65, y: 25 },
+        {x:16,y:28},{x:32,y:45}
       ];
       return scatterPoints[index] || { x: 50, y: 50 };
     };
@@ -4564,6 +4972,11 @@ Aakash`
   };
 
   /* ---------- Main Router ---------- */
+
+  // Show authentication screen if not authenticated
+  if (!isAuthenticated) {
+    return <AuthenticationScreen onSuccess={() => setIsAuthenticated(true)} />;
+  }
 
   return (
     <div className="font-sans antialiased text-gray-900 select-none">
