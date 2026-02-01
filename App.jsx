@@ -353,7 +353,8 @@ const MilestoneData = [
   { date: 'Jan 08 2026', special: false, color: '#E736BB' },
   { date: 'Jan 21 2026', special: false, color: '#f7fb06ff' },
   { date: 'Jan 24 2026', special: false, color: '#96f4f0ff' },
-  { date: 'Jan 25 2026', special: false, color: '#ef3f18fb' }
+  { date: 'Jan 25 2026', special: false, color: '#ef3f18fb' },
+  { date: 'Jan 30 2026', special: false, color: '#f80787fb' }
 
 ];
 
@@ -1457,7 +1458,7 @@ const GiftSelection = () => (
         { x: 92, y: 28 }, { x: 78, y: 92 }, { x: 32, y: 5 }, { x: 85, y: 82 },
         { x: 52, y: 52 }, { x: 72, y: 8 }, { x: 48, y: 92 }, { x: 12, y: 48 },
         { x: 35, y: 65 }, { x: 58, y: 42 }, { x: 25, y: 22 }, { x: 15, y: 38 }, { x: 65, y: 25 },
-        {x:16,y:28},{x:50,y:45},{x:60,y:50}
+        {x:16,y:28},{x:50,y:45},{x:60,y:50},{x:49,y:34}
       ];
       return scatterPoints[index] || { x: 50, y: 50 };
     };
